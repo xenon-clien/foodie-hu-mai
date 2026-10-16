@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+  <meta name="theme-color" content="#FF385C">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  
+  <title>Foodie Hu Mai — Domino's, Zomato, Swiggy &amp; Magicpin Best Rates &amp; 100% Working Coupons</title>
+  <meta name="description" content="India's #1 community food price matcher. Compare live food delivery bills across Domino's, Zomato, Swiggy, and Magicpin with 100% genuine verified promo codes.">
+  
+  <!-- Favicon & Icons -->
+  <link rel="icon" type="image/svg+xml" href="logo-icon.svg">
+  <link rel="apple-touch-icon" href="logo-icon.svg">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Live Activity Ticker -->
+  <div class="ticker-bar">
+    <div class="ticker-content">
+      <div class="ticker-pulse"></div>
+      <span>⚡ LIVE: <strong id="liveSavingsStat">1,496 orders optimized today • Total ₹1,96,400 saved</strong>!</span>
+    </div>
+    <div class="header-right-badges">
+      <span class="personal-bachat-pill" id="personalBachatBadge">💰 Meri Bachat: ₹0</span>
+      <div class="city-pill" id="citySelectorBtn">
+        📍 <span id="currentCityLabel">Ludhiana</span> ▼
+      </div>
+    </div>
+  </div>
+
+  <!-- Live Flash Bug Radar (NEW FEATURE) -->
+  <div class="flash-radar-banner">
+    <div class="radar-dot"></div>
+    <span>🚨 <strong>FLASH DEAL:</strong> Domino's Official App 2 Pizzas @ ₹99 each (Code: <strong>DOMNEW</strong> Flat ₹100 OFF) | Magicpin 50% BOGO active!</span>
+  </div>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="#" class="brand-logo-wrap" id="brandHomeBtn">
+        <img src="logo.svg" alt="Foodie Hu Mai Logo" class="brand-svg-logo">
+      </a>
+      
+      <div class="nav-links">
+        <a href="#" class="nav-link active" data-nav="home">🏠 Home Hub</a>
+        <a href="#dominosSpotlight" class="nav-link" data-nav="dominosSpotlight">🍕 Domino's</a>
+        <a href="#foodSearchSection" class="nav-link" data-nav="foodSearchSection">🍔 Dishes</a>
+        <a href="#hotDealsSection" class="nav-link" data-nav="hotDealsSection">🔥 50%-70% Deals</a>
+        <a href="#comparator" class="nav-link" data-nav="comparator">⚖️ Compare Bill</a>
+        <a href="#coupons" class="nav-link" data-nav="coupons">🏷️ Coupons</a>
+        <a href="#dominosSpotlight" class="nav-cta" data-nav="dominosSpotlight">
+          <span>🍕 Domino's @ ₹99</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero">
+    <h1 class="hero-title">
+      Khao Dil Khol Ke, <br>
+      <span class="hero-highlight">Bachao Har Order Pe! 🍕</span>
+    </h1>
+    <p class="hero-subtitle">
+      Domino's, Zomato, Swiggy aur Magicpin ke live rates compare karo, hidden platform charges expose karo aur 100% working discount codes se bill turant kam karo!
+    </p>
+
+    <!-- NEW UNIQUE FEATURE: Quick Mood / Dish Selector -->
+    <div class="dish-selector-wrap">
+      <div class="dish-selector-label">🎯 Aaj kya khane ka mood hai? (Tap to Auto-Compare):</div>
+      <div class="dish-chips-row">
+        <button class="dish-chip active" data-amount="485" data-dish="Domino's Peppy Paneer" data-dish-id="d_dominos_pizza">
+          <span>🍕 Domino's Peppy Paneer (~₹485)</span>
+        </button>
+        <button class="dish-chip" data-amount="419" data-dish="Behrouz Dum Biryani" data-dish-id="d_biryani">
+          <span>🍗 Behrouz Biryani (~₹419)</span>
+        </button>
+        <button class="dish-chip" data-amount="199" data-dish="Burger" data-dish-id="d_burger">
+          <span>🍔 Burger King (~₹199)</span>
+        </button>
+        <button class="dish-chip" data-amount="240" data-dish="Thali" data-dish-id="d_thali">
+          <span>🍱 Punjabi Thali (~₹240)</span>
+        </button>
+        <button class="dish-chip" data-amount="270" data-dish="Kurkure Momos" data-dish-id="d_momos">
+          <span>🥟 Kurkure Momos (~₹270)</span>
+        </button>
+        <button class="dish-chip" data-amount="499" data-dish="Party">
+          <span>🎉 Group Feast (~₹499)</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Delivery Helper Note -->
+    <div class="mobile-location-helper">
+      <span>📍 <strong>Mobile Delivery Tip:</strong> Swiggy ya Domino's links open hone par apna delivery area (<strong>Ludhiana</strong>) select karein ya <em>'Use My Current Location'</em> tap karein, tabhi restaurant live menu &amp; delivery show karta hai!</span>
+    </div>
+  </header>
+
+  <!-- ============================================================== -->
+  <!-- SWIGGY-STYLE MODULAR HUB (VISIBLE ON HOME SCREEN)               -->
+  <!-- ============================================================== -->
+  <section class="swiggy-hub-section" id="swiggyHomeHub">
+    <div class="swiggy-hub-header">
+      <h3 class="swiggy-hub-title">✨ Kya Explore Karna Chahte Hain?</h3>
+      <p class="swiggy-hub-subtitle">Swiggy style me sabhi features ke alag-alag dedicated sections hain — Tap to open:</p>
+    </div>
+
+    <div class="swiggy-hub-grid">
+      <!-- 1. Domino's Hub -->
+      <div class="swiggy-hub-tile" data-open-section="dominosSpotlight">
+        <div class="swiggy-tile-top">
+          <div class="swiggy-tile-icon-box" style="background:#EFF6FF;color:#0078AE;">🍕</div>
+          <span class="swiggy-tile-badge" style="background:#EFF6FF;color:#0078AE;border:1px solid #BFDBFE;">Rank #1 Sasta</span>
+        </div>
+        <div class="swiggy-tile-title">Domino's Showdown Hub</div>
+        <div class="swiggy-tile-desc">₹485 Peppy Paneer @ ₹335 (Save ₹150) • Everyday Value 2 Pizzas @ ₹99 each • GET30 Web Code</div>
+        <div class="swiggy-tile-cta"><span>Open Domino's Hub</span><span class="arrow">→</span></div>
+      </div>
+
+      <!-- 2. Dish Matcher -->
+      <div class="swiggy-hub-tile" data-open-section="foodSearchSection">
+        <div class="swiggy-tile-top">
+          <div class="swiggy-tile-icon-box" style="background:#FEF2F2;color:#DC2626;">🍔</div>
+          <span class="swiggy-tile-badge" style="background:#FEF2F2;color:#DC2626;border:1px solid #FECACA;">5-App Live Radar</span>
+        </div>
+        <div class="swiggy-tile-title">5-Platform Dish Matcher</div>
+        <div class="swiggy-tile-desc">Search Biryani, Burgers, Momos, Pizza &amp; compare exact net bills across Zomato, Swiggy &amp; Magicpin.</div>
+        <div class="swiggy-tile-cta"><span>Compare Dish Rates</span><span class="arrow">→</span></div>
+      </div>
+
+      <!-- 3. Hot Deals -->
+      <div class="swiggy-hub-tile" data-open-section="hotDealsSection">
+        <div class="swiggy-tile-top">
+          <div class="swiggy-tile-icon-box" style="background:#FFFBEB;color:#D97706;">🔥</div>
+          <span class="swiggy-tile-badge" style="background:#FFFBEB;color:#D97706;border:1px solid #FDE68A;">50% - 70% OFF</span>
+        </div>
+        <div class="swiggy-tile-title">Top 50%-70% Restaurant Deals</div>
+        <div class="swiggy-tile-desc">Curated restaurant meals where max discount is pre-verified &amp; auto-applied. Zero searching needed.</div>
+        <div class="swiggy-tile-cta"><span>Explore 50%-70% Deals</span><span class="arrow">→</span></div>
+      </div>
+
+      <!-- 4. Bill Comparator -->
+      <div class="swiggy-hub-tile" data-open-section="comparator">
+        <div class="swiggy-tile-top">
+          <div class="swiggy-tile-icon-box" style="background:#ECFDF5;color:#059669;">⚖️</div>
+          <span class="swiggy-tile-badge" style="background:#ECFDF5;color:#059669;border:1px solid #A7F3D0;">Fee Calculator</span>
+        </div>
+        <div class="swiggy-tile-title">Custom Bill Comparator</div>
+        <div class="swiggy-tile-desc">Enter any cart amount (e.g. ₹299, ₹499) to compare delivery fees, platform charges &amp; coupon deductions.</div>
+        <div class="swiggy-tile-cta"><span>Calculate Cart Bill</span><span class="arrow">→</span></div>
+      </div>
+
+      <!-- 5. Working Coupons -->
+      <div class="swiggy-hub-tile" data-open-section="coupons">
+        <div class="swiggy-tile-top">
+          <div class="swiggy-tile-icon-box" style="background:#F5F3FF;color:#7C3AED;">🏷️</div>
+          <span class="swiggy-tile-badge" style="background:#F5F3FF;color:#7C3AED;border:1px solid #DDD6FE;">41+ Verified</span>
+        </div>
+        <div class="swiggy-tile-title">Verified Secret Coupons</div>
+        <div class="swiggy-tile-desc">Domino's GET30, Pizza Hut HUT125, KFC KFCHOME, Swiggy TRYNEW &amp; Zomato STEALDEAL with 1-click copy.</div>
+        <div class="swiggy-tile-cta"><span>Browse 41+ Coupons</span><span class="arrow">→</span></div>
+      </div>
+
+      <!-- 6. Platform Fee Exposer -->
+      <div class="swiggy-hub-tile" data-open-section="calculator">
+        <div class="swiggy-tile-top">
+          <div class="swiggy-tile-icon-box" style="background:#FFF1F2;color:#E11D48;">📊</div>
+          <span class="swiggy-tile-badge" style="background:#FFF1F2;color:#E11D48;border:1px solid #FECDD3;">Hidden Fees</span>
+        </div>
+        <div class="swiggy-tile-title">Platform Fee Exposer</div>
+        <div class="swiggy-tile-desc">Interactive slider exposing how much delivery apps secretly charge you in platform &amp; surge fees per year.</div>
+        <div class="swiggy-tile-cta"><span>Expose Platform Fees</span><span class="arrow">→</span></div>
+      </div>
+
+      <!-- 7. Foodie Fintech -->
+      <div class="swiggy-hub-tile" data-open-section="cards">
+        <div class="swiggy-tile-top">
+          <div class="swiggy-tile-icon-box" style="background:#F0FDF4;color:#16A34A;">💳</div>
+          <span class="swiggy-tile-badge" style="background:#F0FDF4;color:#16A34A;border:1px solid #BBF7D0;">10% Cashback</span>
+        </div>
+        <div class="swiggy-tile-title">Foodie Fintech Hacks</div>
+        <div class="swiggy-tile-desc">Best food credit cards (HDFC Swiggy, Airtel Axis) &amp; 1-click Simpl/GPay instant rewards for extra ₹1,500/mo.</div>
+        <div class="swiggy-tile-cta"><span>View Card Hacks</span><span class="arrow">→</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Master Feature Navigation Pill Bar (Quick 1-tap switching) -->
+  <div class="master-section-nav-wrap">
+    <div class="master-section-nav" id="masterSectionNav">
+      <button type="button" class="section-nav-btn active" data-section="home">
+        <span>🏠 Home Hub</span>
+      </button>
+      <button type="button" class="section-nav-btn" data-section="dominosSpotlight">
+        <span>🍕 Domino's Hub</span>
+      </button>
+      <button type="button" class="section-nav-btn" data-section="foodSearchSection">
+        <span>🍔 Dish Matcher</span>
+      </button>
+      <button type="button" class="section-nav-btn" data-section="hotDealsSection">
+        <span>🔥 50%-70% Deals</span>
+      </button>
+      <button type="button" class="section-nav-btn" data-section="comparator">
+        <span>⚖️ Bill Comparator</span>
+      </button>
+      <button type="button" class="section-nav-btn" data-section="coupons">
+        <span>🏷️ Working Coupons</span>
+      </button>
+      <button type="button" class="section-nav-btn" data-section="calculator">
+        <span>📊 Platform Fee &amp; Cards</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <main class="main-wrapper">
+
+    <!-- Feature Back Bar (Provides 1-click 'Back to Home' when inside ANY single feature) -->
+    <div id="featureBackBar" class="feature-back-bar" style="display: none;">
+      <button type="button" class="back-home-btn" id="featureBackHomeBtn">
+        ← 🏠 Back to Home Hub
+      </button>
+      <div class="feature-back-meta">
+        <span>Active Feature:</span>
+        <strong id="activeFeatureTitle" style="color:var(--text-dark);">Domino's Hub</strong>
+      </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- NEW MASTER FEATURE: 50% - 60% OFF HOT RESTAURANTS RADAR        -->
+    <!-- ============================================================== -->
+    <section class="hot-deals-section" id="hotDealsSection">
+      <div class="dish-search-header" style="text-align:left;margin-bottom:20px;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px;">
+          <div>
+            <h2 style="display:flex;align-items:center;gap:10px;">
+              <span>🔥 Top Restaurants with 50% &amp; 60% OFF</span>
+              <span class="comp-tag" style="background:#DC2626;">Auto-Coupon Applied</span>
+            </h2>
+            <p style="margin-top:4px;">Aapko dhundna na pade! In top brands par coupon pehle se laga hua hai — Direct order kijiye:</p>
+          </div>
+          <div style="font-size:0.85rem;font-weight:800;color:#DC2626;background:#FEF2F2;padding:6px 14px;border-radius:20px;border:1px solid #FCA5A5;">
+            ⚡ 11 Restaurants Verified Today
+          </div>
+        </div>
+      </div>
+
+      <!-- Category Filter Bar for Deals -->
+      <div class="deals-filter-bar">
+        <button class="deal-tab-btn active" data-category="all">🔥 Sabhi 50-60% Deals (11)</button>
+        <button class="deal-tab-btn" data-category="pizza">🍕 Domino's &amp; Pizza (4)</button>
+        <button class="deal-tab-btn" data-category="biryani">🍗 Biryani &amp; Non-Veg (2)</button>
+        <button class="deal-tab-btn" data-category="veg">🥗 Pure Veg &amp; Thali (1)</button>
+        <button class="deal-tab-btn" data-category="snacks">🥟 Momos &amp; Rolls (3)</button>
+      </div>
+
+      <!-- Dynamic Cards Grid -->
+      <div class="deals-grid-container" id="hotDealsContainer"></div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- NEW MASTER FEATURE: DIRECT FOOD/DISH SEARCH & MULTI-APP MATCH  -->
+    <!-- ============================================================== -->
+    <section class="dish-search-container" id="foodSearchSection">
+      <div class="dish-search-header">
+        <h2>🍔 Search Any Dish &amp; Compare Live Rate Across Apps</h2>
+        <p>Type any food name (e.g. Domino's Pizza, Biryani, Butter Chicken, Momos, Burger) to see live rates &amp; slash prices with coupons!</p>
+      </div>
+
+      <div class="dish-input-wrapper">
+        <span class="dish-search-icon">🔍</span>
+        <input type="text" id="dishSearchInput" class="dish-main-search-input" placeholder="Type a dish or brand: e.g. Domino's Pizza, Hyderabadi Biryani, Burger King..." autocomplete="off">
+        
+        <!-- Autocomplete Dropdown List -->
+        <div class="dish-autocomplete-dropdown" id="dishDropdown"></div>
+      </div>
+
+      <!-- Live Dish Face-off & Coupon Slasher Display Card -->
+      <div id="dishFaceoffCardContainer"></div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- DOMINO'S PIZZA LIVE COMPARISON SPOTLIGHT RADAR                -->
+    <!-- ============================================================== -->
+    <section class="dominos-spotlight-card" id="dominosSpotlight">
+      <div class="dominos-spotlight-header">
+        <div class="dominos-spotlight-title-group">
+          <div class="dominos-tag-badge">🍕 5-PLATFORM LIVE SHOWDOWN RADAR</div>
+          <h2>Domino's Peppy Paneer (Medium): Kahan Milega Sabse Sasta?</h2>
+          <p>Official Menu Rate: <strong>₹485</strong> (100% live verified) • 5 Platforms ka real net bill comparison:</p>
+        </div>
+        <div class="dominos-live-savings-tag">
+          👑 Magicpin Pe Flat ₹117 Ki Bachat (₹335 vs Zomato ₹452)!
+        </div>
+      </div>
+
+      <div class="dominos-comparison-boxes">
+        <!-- 1. Magicpin Domino's Voucher (RANK #1 - SABSE SASTA) -->
+        <div class="dominos-box highlight-best">
+          <div class="dominos-box-badge" style="background:#10B981">👑 RANK #1: SABSE SASTA</div>
+          <div class="dominos-box-name">Magicpin Voucher</div>
+          <div class="dominos-box-deal">Domino's ₹485 Voucher with 50% Coins</div>
+          <div class="dominos-box-price" style="color:#34D399;">₹335 <span class="dominos-box-net">Net Payable</span></div>
+          <div class="dominos-box-perk">✅ Official Voucher • Code: <strong>DOMINOS50 (-₹150)</strong></div>
+          <div class="dominos-box-note">ℹ️ Magicpin voucher khareed kar Domino's me redeem karein. Direct ₹150 flat discount!</div>
+          <button type="button" class="dominos-cta-btn magicpin" onclick="openOrderGuide('DOMINOS50', 'Domino\'s Pizza Voucher', 'Magicpin', 485, 335, 'https://www.magicpin.in/search?q=dominos')">Buy on Magicpin (Guide) ↗</button>
+        </div>
+
+        <!-- 2. Domino's Official App (RANK #2) -->
+        <div class="dominos-box">
+          <div class="dominos-box-badge">🥈 RANK #2: DIRECT APP</div>
+          <div class="dominos-box-name">Domino's App / Web</div>
+          <div class="dominos-box-deal">Peppy Paneer (Medium) • Menu: ₹485</div>
+          <div class="dominos-box-price">₹385 <span class="dominos-box-net">Cart Net Bill</span></div>
+          <div class="dominos-box-perk">✅ ₹0 Fee, ₹0 Delivery • Code: <strong>DOMNEW (-₹100)</strong></div>
+          <div class="dominos-box-note">ℹ️ Domino's screen par pehle ₹485 dikhega. Cart me Code DOMNEW lagate hi bill ₹385 ho jata hai!</div>
+          <button type="button" class="dominos-cta-btn direct" onclick="openOrderGuide('DOMNEW', 'Domino\'s Peppy Paneer (Medium)', 'Domino\'s Official App', 485, 385, 'https://www.dominos.co.in/menu')">Order on Domino's App (Guide) ↗</button>
+        </div>
+
+        <!-- 3. ONDC Pincode (RANK #3) -->
+        <div class="dominos-box">
+          <div class="dominos-box-badge" style="background:#0284C7">🥉 RANK #3: GOVT ONDC</div>
+          <div class="dominos-box-name">ONDC / Pincode</div>
+          <div class="dominos-box-deal">Peppy Paneer (Medium) • Direct Jubilant</div>
+          <div class="dominos-box-price">₹412 <span class="dominos-box-net">Cart Net Bill</span></div>
+          <div class="dominos-box-perk">✅ Govt Subsidized Del (₹22) • Code: <strong>ONDC50 (-₹50)</strong></div>
+          <div class="dominos-box-note">ℹ️ ONDC pe zero platform fee hoti hai. Code ONDC50 lagane par ₹412 banta hai.</div>
+          <button type="button" class="dominos-cta-btn ondc" style="background:#0284C7;" onclick="openOrderGuide('ONDC50', 'Domino\'s Pizza on ONDC', 'ONDC (Pincode)', 485, 412, 'https://www.ondc.org')">Order on ONDC (Guide) ↗</button>
+        </div>
+
+        <!-- 4. Swiggy Delivery (RANK #4) -->
+        <div class="dominos-box">
+          <div class="dominos-box-badge" style="background:#FC8019">4️⃣ RANK #4: AGGREGATOR</div>
+          <div class="dominos-box-name">Swiggy Delivery</div>
+          <div class="dominos-box-deal">Peppy Paneer (Medium)</div>
+          <div class="dominos-box-price">₹431 <span class="dominos-box-net">Cart Net Bill</span></div>
+          <div class="dominos-box-perk">❌ Base ₹485 + ₹7 Fee + Del ₹35 - ₹120 (TRYNEW)</div>
+          <div class="dominos-box-note">ℹ️ Swiggy par menu rate ₹485 + extra fees lagti hain. Coupon TRYNEW ke baad ₹431 banta hai.</div>
+          <button type="button" class="dominos-cta-btn swiggy" onclick="openOrderGuide('TRYNEW', 'Domino\'s Pizza on Swiggy', 'Swiggy', 485, 431, 'https://www.swiggy.com/search?query=dominos')">View on Swiggy (Guide) ↗</button>
+        </div>
+
+        <!-- 5. Zomato Delivery (RANK #5 - SABSE MEHNGA) -->
+        <div class="dominos-box">
+          <div class="dominos-box-badge" style="background:#FF385C">5️⃣ RANK #5: SABSE MEHNGA</div>
+          <div class="dominos-box-name">Zomato Delivery</div>
+          <div class="dominos-box-deal">Peppy Paneer (Medium)</div>
+          <div class="dominos-box-price">₹452 <span class="dominos-box-net">Cart Net Bill</span></div>
+          <div class="dominos-box-perk">❌ Base ₹485 + ₹8 Fee + Del ₹35 - ₹100 (STEALDEAL)</div>
+          <div class="dominos-box-note">ℹ️ Zomato par ₹8 platform fee + delivery lagti hai. Coupon ke baad bhi ₹452 banta hai.</div>
+          <button type="button" class="dominos-cta-btn zomato" onclick="openOrderGuide('STEALDEAL', 'Domino\'s Pizza on Zomato', 'Zomato', 485, 452, 'https://www.zomato.com/search?q=dominos')">View on Zomato (Guide) ↗</button>
+        </div>
+      </div>
+
+      <!-- Direct Navigation Hack Tip -->
+      <div class="dominos-hack-tip">
+        <span style="font-size:1.3rem;">💡</span>
+        <div>
+          <strong>Secret Foodie Hack:</strong> Domino's website khulte hi by default unke mehnge pizzas (₹485 - ₹575) promote karta hai. 
+          Lekin agar aap unke menu mein upar <strong>"Pizza Mania"</strong> ya <strong>"Value Combos"</strong> tab par tap karenge, to wahan sabhi pizzas ₹79 - ₹99 se start hote hain! Cart mein koi bhi 2 pizzas add karte hi Domino's unka rate automatic ₹99 each kar deta hai!
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- FEATURE 1: LIVE BILL COMPARATOR (ZOMATO VS SWIGGY VS MAGICPIN) -->
+    <!-- ============================================================== -->
+    <section class="comparator-card" id="comparator">
+      <div class="comp-header">
+        <div class="comp-title-group">
+          <h2>
+            <span>⚖️ Custom Bill Amount Comparator</span>
+            <span class="comp-tag">Smart Live Comparison</span>
+          </h2>
+        </div>
+        <div style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">
+          💡 Calculates exact GST (5%), Platform fee &amp; Best auto-applied coupon
+        </div>
+      </div>
+
+      <!-- Controls Grid -->
+      <div class="comp-inputs-grid">
+        <div class="input-box">
+          <label for="cartInput">Aapka Food Amount (₹ Menu Total):</label>
+          <div class="currency-input-wrap">
+            <span class="currency-symbol">₹</span>
+            <input type="number" id="cartInput" class="input-field" value="350" min="50" max="5000" step="10">
+          </div>
+        </div>
+
+        <div class="input-box">
+          <label for="paymentSelect">Aapka Payment Method:</label>
+          <select id="paymentSelect" class="select-field">
+            <option value="all" selected>All / Normal (UPI &amp; Cash)</option>
+            <option value="gpay">Google Pay (GPay UPI)</option>
+            <option value="simpl">Simpl PayLater</option>
+            <option value="hdfc">HDFC Bank Debit/Credit</option>
+            <option value="icici">ICICI Bank Cards</option>
+            <option value="axis">Axis Bank Cards</option>
+            <option value="aubank">AU Small Finance Bank</option>
+          </select>
+        </div>
+
+        <div class="input-box">
+          <label for="orderTypeSelect">Order Type:</label>
+          <select id="orderTypeSelect" class="select-field">
+            <option value="solo" selected>Single Meal / Solo (1 Person)</option>
+            <option value="couple">Couple / 2 Persons</option>
+            <option value="party">Family / Group Party</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Live 3-Way Comparison Cards -->
+      <div class="comparison-grid" id="comparisonResultGrid">
+        <!-- Rendered dynamically by comparator.js & app.js -->
+      </div>
+
+      <!-- WhatsApp Viral Sharing Footer -->
+      <div class="comp-share-box">
+        <div class="comp-share-text">
+          <span>🎉</span>
+          <span id="savingsAnnouncementText">Mera abhi ₹112 bacha! Doston ko bhi batao:</span>
+        </div>
+        <a href="#" id="whatsappShareBtn" target="_blank" class="whatsapp-share-btn">
+          <span>📲 Share on WhatsApp</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- NEW UNIQUE FEATURE: YEARLY PLATFORM FEE EXPOSER CALCULATOR     -->
+    <!-- ============================================================== -->
+    <section class="fee-exposer-card" id="calculator">
+      <div class="fee-calc-left">
+        <h3>🔍 The "Platform Fee" Exposer Calculator</h3>
+        <p>Zomato aur Swiggy ne har order par ₹8 - ₹10 "Platform Fee" lagana shuru kiya hai. Sochiye aap saal mein kitna paisa faltu de dete ho:</p>
+        
+        <div class="slider-container">
+          <div class="slider-labels">
+            <span>Aap mahine mein kitni baar order karte ho?</span>
+            <span style="color:var(--primary-red);font-size:1.05rem;" id="ordersPerMonthDisplay">12 Orders/Month</span>
+          </div>
+          <input type="range" id="ordersSlider" class="fee-slider" min="1" max="40" value="12">
+        </div>
+      </div>
+
+      <div class="fee-result-box">
+        <div class="fee-wasted-label">Total Platform Fees Wasted in 1 Year:</div>
+        <div class="fee-wasted-amount" id="annualWastedFee">₹1,440</div>
+        <div class="fee-wasted-desc">
+          💡 Magicpin ya verified UPI cashback codes use karke yeh pura paisa bacha sakte ho!
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- FEATURE 2: 100% VERIFIED WORKING SECRET COUPONS HUB            -->
+    <!-- ============================================================== -->
+    <section id="coupons">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">🏷️ Active &amp; Verified Food Coupons</h2>
+          <p class="section-subtitle">Jo codes sach mein kaam karte hain — Koi fake ya expired codes nahi!</p>
+        </div>
+        <div style="font-size: 0.85rem; font-weight: 700; color: var(--savings-dark);">
+          ✅ Tested &amp; Active for October 2026
+        </div>
+      </div>
+
+      <!-- NEW UNIQUE FEATURE: Instant Coupon Search Bar -->
+      <div class="coupon-search-wrap">
+        <span class="search-icon-fixed">🔍</span>
+        <input type="text" id="couponSearchInput" class="coupon-search-input" placeholder="Search by restaurant, code (e.g., TRYNEW, HDFC, Domino's, Biryani, GPay)...">
+      </div>
+
+      <!-- Filter Tabs -->
+      <div class="filter-tabs">
+        <button class="tab-btn active" data-filter="universal">
+          <span>🔥 Normal / Universal (UPI &amp; COD)</span>
+        </button>
+        <button class="tab-btn" data-filter="upi">
+          <span>📱 UPI &amp; Wallets</span>
+        </button>
+        <button class="tab-btn" data-filter="bank">
+          <span>💳 Bank Cards Special</span>
+        </button>
+        <button class="tab-btn" data-filter="timing">
+          <span>🌙 Late Night &amp; Lunch Specials</span>
+        </button>
+        <button class="tab-btn" data-filter="all">
+          <span>⭐ Show All (41)</span>
+        </button>
+      </div>
+
+      <!-- Coupons Card Grid -->
+      <div class="coupons-grid" id="couponsContainer">
+        <!-- Dynamically rendered via coupons.js & app.js -->
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- FEATURE 3: FOODIE FINTECH & CASHBACK HACK (MONETIZATION)       -->
+    <!-- ============================================================== -->
+    <section class="fintech-banner" id="cards">
+      <div class="fintech-badge">⚡ THE FOODIE MONEY HACK</div>
+      <h2 class="fintech-title">Har Order Pe Flat 10% Extra Cashback Chahiye?</h2>
+      <p class="fintech-desc">
+        Delivery aur platform fees se tang aa chuke hain? India ke top food credit cards se bina kisi promo code ke har mahine ₹1,500 tak direct bank cashback paao:
+      </p>
+
+      <div class="card-perks-grid">
+        <div class="perk-box">
+          <div class="perk-val">10% OFF</div>
+          <div class="perk-label">HDFC Swiggy Card (Food, Instamart &amp; Dineout)</div>
+        </div>
+        <div class="perk-box">
+          <div class="perk-val">10% CASH</div>
+          <div class="perk-label">Airtel Axis Card (Zomato &amp; Swiggy Orders)</div>
+        </div>
+        <div class="perk-box">
+          <div class="perk-val">5% CASH</div>
+          <div class="perk-label">SBI Cashback Card (On ALL Online Delivery Apps)</div>
+        </div>
+      </div>
+
+      <a href="https://www.google.com/search?q=hdfc+swiggy+credit+card+apply" target="_blank" class="fintech-cta-btn">
+        <span>💳 Apply Now &amp; Save ₹1500/Month (Zero Joining Fee Offer)</span>
+        <span>→</span>
+      </a>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- FEATURE 4: SECRET SAVINGS HACKS                                -->
+    <!-- ============================================================== -->
+    <section>
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">💡 Secret Food Hacks &amp; Tricks</h2>
+          <p class="section-subtitle">Jo Zomato aur Swiggy aapse chupana chahte hain!</p>
+        </div>
+      </div>
+
+      <div class="hacks-grid">
+        <div class="hack-card">
+          <div class="hack-num">Hack #01</div>
+          <h3 class="hack-title">The "Cart Splitting" Trick</h3>
+          <p class="hack-content">
+            Agar aap 2 log ho aur ₹400 ka order karna hai, toh ₹200-₹200 ke do alag order karo aur dono par `TRYNEW` code lagao. Seedha ₹160 ka discount mil jayega!
+          </p>
+        </div>
+
+        <div class="hack-card">
+          <div class="hack-num">Hack #02</div>
+          <h3 class="hack-title">The Magicpin ONDC Loophole</h3>
+          <p class="hack-content">
+            Zomato par jo thali ₹280 ki hai, wahi same restaurant Magicpin par ₹210 mein bech raha hota hai kyunki wahan 30% commission nahi lagta.
+          </p>
+        </div>
+
+        <div class="hack-card">
+          <div class="hack-num">Hack #03</div>
+          <h3 class="hack-title">Platform Fee Exposer</h3>
+          <p class="hack-content">
+            Zomato aur Swiggy har order par ₹6 se ₹10 "Platform Fee" chupke se add karte hain. UPI cashback code lagakar aap is fee ko 100% nullify kar sakte ho.
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MOBILE-FIRST UX: STICKY BOTTOM SAVINGS BAR (Reverse-engineered from Swiggy/Zomato) -->
+  <div class="mobile-sticky-savings-bar" id="mobileStickyBar">
+    <div class="sticky-bar-inner">
+      <div class="sticky-info-group">
+        <span class="sticky-sub" id="stickyWinnerBadge">👑 BEST: MAGICPIN (SAVE ₹113)</span>
+        <span class="sticky-main-price" id="stickyPriceDisplay">₹213 Net Bill</span>
+      </div>
+      <a href="#comparator" class="sticky-order-btn" id="stickyActionBtn">
+        <span>Order Now ↗</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast-notice" id="toastNotice">
+    <span>✅</span>
+    <span id="toastMsg">Code Copied!</span>
+  </div>
+
+  <!-- Step-by-Step Cart Guidance Modal -->
+  <div class="cart-guide-overlay" id="cartGuideOverlay" style="display: none;">
+    <div class="cart-guide-modal">
+      <button class="cart-guide-close" id="cartGuideCloseBtn" aria-label="Close modal">&times;</button>
+      <div class="cart-guide-header">
+        <span class="cart-guide-icon" id="cartGuideIcon">🍕</span>
+        <div>
+          <h3 id="cartGuideTitle">Domino's Cart Discount Guide</h3>
+          <p id="cartGuideSubtitle">Official Menu Rate vs Cart Checkout Price</p>
+        </div>
+      </div>
+
+      <!-- Price Breakdown Pill -->
+      <div class="cart-guide-breakdown">
+        <div class="cgb-col">
+          <span class="cgb-label">Menu Screen Rate</span>
+          <span class="cgb-val menu" id="cartGuideMenuPrice">₹485</span>
+          <span class="cgb-sub">Screen par yahi dikhega</span>
+        </div>
+        <div class="cgb-arrow">➔</div>
+        <div class="cgb-col">
+          <span class="cgb-label">Coupon Discount</span>
+          <span class="cgb-val coupon" id="cartGuideDiscount">-₹100</span>
+          <span class="cgb-sub" id="cartGuideCodePill">Code: DOMNEW</span>
+        </div>
+        <div class="cgb-arrow">=</div>
+        <div class="cgb-col highlight">
+          <span class="cgb-label">Final Bill in Cart</span>
+          <span class="cgb-val final" id="cartGuideFinalPrice">₹385</span>
+          <span class="cgb-sub">Net Payable Amount</span>
+        </div>
+      </div>
+
+      <!-- Step by step instructions -->
+      <div class="cart-guide-steps">
+        <div class="cg-step">
+          <span class="cg-num">1</span>
+          <div>
+            <strong>Menu par Dish Add to Cart karein:</strong>
+            <p id="cartGuideStep1Text">Website open hone par official menu price (<strong>₹485</strong>) dikhega. Pehle ise <em>"Add to Cart"</em> karein.</p>
+          </div>
+        </div>
+        <div class="cg-step">
+          <span class="cg-num">2</span>
+          <div>
+            <strong>Cart / Checkout Page par jayein:</strong>
+            <p>Bottom se <em>"View Cart"</em> tap karein aur payment se pehle <em>"Apply Coupon"</em> section kholein.</p>
+          </div>
+        </div>
+        <div class="cg-step highlight">
+          <span class="cg-num">3</span>
+          <div>
+            <strong>Coupon Code Paste karein:</strong>
+            <div class="copy-coupon-field">
+              <span class="coupon-to-paste" id="cartGuideCouponText">DOMNEW</span>
+              <button type="button" class="copy-field-btn" id="cartGuideCopyBtn">📋 Copy Code</button>
+            </div>
+            <p style="margin-top:5px;" id="cartGuideStep3Text">Apply karte hi bill turant <strong>₹485 se girkar ₹385</strong> ho jayega!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Button -->
+      <div class="cart-guide-actions">
+        <a href="https://www.dominos.co.in/menu" target="_blank" class="cg-action-btn primary" id="cartGuideActionBtn">
+          <span id="cartGuideActionText">Domino's Pe Order Karein (Save ₹100)</span>
+          <span>↗</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <h4>Foodie Hu Mai 🍕</h4>
+        <p>India's First Community-Driven Food Price Matcher &amp; Verified Coupon Engine.</p>
+        <p style="margin-top: 8px; color: #64748B;">Made with ❤️ for Indian Food Lovers across Ludhiana, Delhi, Mumbai, Bengaluru &amp; Beyond.</p>
+      </div>
+      <div>
+        <h5 style="color: #fff; margin-bottom: 8px; font-size: 0.95rem;">Quick Links</h5>
+        <p><a href="#comparator" style="color: #94A3B8; text-decoration: none;">Live Comparator</a></p>
+        <p><a href="#coupons" style="color: #94A3B8; text-decoration: none;">Working Coupons</a></p>
+        <p><a href="#calculator" style="color: #94A3B8; text-decoration: none;">Platform Fee Exposer</a></p>
+        <p><a href="#cards" style="color: #94A3B8; text-decoration: none;">Credit Card Savings</a></p>
+      </div>
+    </div>
+    
+    <div class="footer-disclaimer">
+      <strong>Disclaimer:</strong> Foodie Hu Mai is an independent, community-driven price comparison and factual coupon aggregator. All brand names, logos, trademarks (including Zomato, Swiggy, Magicpin, ONDC) belong to their respective owners and are used purely for nominative and informative price comparison purposes under fair use.
+    </div>
+  </footer>
+
+  <!-- Swiggy-Style Mobile Bottom App Bar -->
+  <nav class="mobile-app-bottom-bar" id="mobileBottomBar">
+    <button type="button" class="mobile-bottom-tab active" data-tab="home">
+      <span class="tab-icon">🏠</span>
+      <span>Home</span>
+    </button>
+    <button type="button" class="mobile-bottom-tab" data-tab="dominosSpotlight">
+      <span class="tab-icon">🍕</span>
+      <span>Domino's</span>
+    </button>
+    <button type="button" class="mobile-bottom-tab" data-tab="foodSearchSection">
+      <span class="tab-icon">🍔</span>
+      <span>Dishes</span>
+    </button>
+    <button type="button" class="mobile-bottom-tab" data-tab="comparator">
+      <span class="tab-icon">⚖️</span>
+      <span>Compare</span>
+    </button>
+    <button type="button" class="mobile-bottom-tab" data-tab="coupons">
+      <span class="tab-icon">🏷️</span>
+      <span>Coupons</span>
+    </button>
+  </nav>
+
+  <!-- Scripts -->
+  <script src="deals.js"></script>
+  <script src="dishes.js"></script>
+  <script src="coupons.js"></script>
+  <script src="comparator.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
