@@ -2,7 +2,6 @@
   "name": "foodie-hu-mai",
   "version": "1.0.0",
   "description": "Foodie Hu Mai - India's 1st Community Food Price Matcher & Verified Coupon Engine",
-  "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "test": "node test.js"

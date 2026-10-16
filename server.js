@@ -64,7 +64,7 @@ function saveOrderLog(record) {
 // ==========================================
 // HTTP SERVER LOGIC
 // ==========================================
-const server = http.createServer((req, res) => {
+const requestHandler = (req, res) => {
   const parsedUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
   const pathname = parsedUrl.pathname;
   const method = req.method;
@@ -238,16 +238,20 @@ const server = http.createServer((req, res) => {
       res.end(content);
     }
   });
-});
+};
 
-server.listen(PORT, () => {
-  console.log(`====================================================`);
-  console.log(`🛡️ FOODIE HU MAI - Secure Hardened Server is LIVE!`);
-  console.log(`🌐 Local URL: http://localhost:${PORT}`);
-  console.log(`📊 Order Tracking API: http://localhost:${PORT}/api/orders-log`);
-  console.log(`====================================================`);
-});
+const server = http.createServer(requestHandler);
+
+if (require.main === module) {
+  server.listen(PORT, () => {
+    console.log(`====================================================`);
+    console.log(`🛡️ FOODIE HU MAI - Secure Hardened Server is LIVE!`);
+    console.log(`🌐 Local URL: http://localhost:${PORT}`);
+    console.log(`📊 Order Tracking API: http://localhost:${PORT}/api/orders-log`);
+    console.log(`====================================================`);
+  });
+}
 
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = server;
+  module.exports = requestHandler;
 }
