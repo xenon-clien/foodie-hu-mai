@@ -2,12 +2,9 @@
 // Accurately reverse-engineers Domino's vs Swiggy vs Zomato vs Magicpin bill structures
 
 const ComparatorEngine = {
-  // Detects whether a city is a direct EatSure serviceable metro
+  // Detects whether a city is an EatSure serviceable hub
   isMetroCity(city) {
-    if (!city) return false;
-    const c = String(city).toLowerCase();
-    const metros = ["delhi", "ncr", "gurgaon", "noida", "mumbai", "bengaluru", "bangalore", "pune", "hyderabad", "chennai", "kolkata"];
-    return metros.some(m => c.includes(m));
+    return true; // EatSure operates across 80+ Indian cities
   },
 
   // Calculates fee structures and best applicable discount
@@ -150,8 +147,8 @@ const ComparatorEngine = {
       },
       eatsure: {
         platform: "EatSure (Direct)",
-        serviceable: isEatSureServiceable,
-        serviceableNote: isEatSureServiceable ? "Available for direct delivery" : `Direct app not serving in ${city || 'this city'} • Order via Swiggy/Zomato`,
+        serviceable: true,
+        serviceableNote: "Available for direct brand delivery via EatSure App & Web",
         base: eatsureBase,
         gst: eatsureGST,
         platformFee: eatsurePlatform,
@@ -159,10 +156,10 @@ const ComparatorEngine = {
         delivery: eatsureDelivery,
         discount: eatsureDiscount,
         promoCode: "SURE50",
-        promoHeadline: isEatSureServiceable ? "Flat 50% OFF + Zero Delivery Fee" : "Metro Only (Delhi/Mumbai/Blr)",
+        promoHeadline: "Flat 50% OFF + Zero Delivery Fee",
         finalPrice: eatsureFinal,
-        isWinner: isEatSureServiceable && winner.name.includes("EatSure"),
-        deepLink: isEatSureServiceable ? "https://www.eatsure.com" : "https://www.swiggy.com/search?query=behrouz+biryani"
+        isWinner: winner.name.includes("EatSure"),
+        deepLink: "https://www.eatsure.com"
       },
       magicpin: {
         platform: "Magicpin",
@@ -353,7 +350,7 @@ const ComparatorEngine = {
       dominos: { base: dBase, gross: dGross, discount: dDiscount, promo: dPromo, finalPrice: dFinal, deepLink: "https://www.dominos.co.in" },
       zomato: { base: zomatoBase, gross: zGross, discount: zDiscount, promo: zPromo, finalPrice: zFinal, deepLink: "https://www.zomato.com/search?q=" + encodeURIComponent(dish.name) },
       swiggy: { base: swiggyBase, gross: sGross, discount: sDiscount, promo: sPromo, finalPrice: sFinal, deepLink: "https://www.swiggy.com/search?query=" + encodeURIComponent(dish.name) },
-      eatsure: { base: eBase, gross: eGross, discount: eDiscount, promo: ePromo, finalPrice: eFinal, serviceable: isEatSureServiceable, serviceableNote: isEatSureServiceable ? "Available" : `EatSure direct not in ${city || 'this area'}`, deepLink: isEatSureServiceable ? "https://www.eatsure.com" : "https://www.swiggy.com/search?query=" + encodeURIComponent(dish.name) },
+      eatsure: { base: eBase, gross: eGross, discount: eDiscount, promo: ePromo, finalPrice: eFinal, serviceable: true, serviceableNote: "Available via EatSure Direct", deepLink: "https://www.eatsure.com" },
       magicpin: { base: magicpinBase, gross: mGross, discount: mDiscount, promo: mPromo, finalPrice: mFinal, deepLink: "https://www.magicpin.in/search?q=" + encodeURIComponent(dish.name) },
       ondc: { base: oBase, gross: oGross, discount: oDiscount, promo: { code: "ONDC50" }, finalPrice: oFinal, deepLink: "https://www.ondc.org" }
     };

@@ -463,14 +463,13 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
           ` : `
           <!-- EatSure (Direct) -->
-          <div class="platform-card ${(comparison.eatsure.finalPrice === winnerObj.finalPrice && comparison.eatsure.serviceable) ? 'winner' : ''}">
-            ${(comparison.eatsure.finalPrice === winnerObj.finalPrice && comparison.eatsure.serviceable) ? `<div class="winner-crown">👑 WINNER (SAVE ₹${comparison.totalSaved})</div>` : ''}
+          <div class="platform-card ${comparison.eatsure.finalPrice === winnerObj.finalPrice ? 'winner' : ''}">
+            ${comparison.eatsure.finalPrice === winnerObj.finalPrice ? `<div class="winner-crown">👑 WINNER (SAVE ₹${comparison.totalSaved})</div>` : ''}
             <div class="platform-top">
               <div class="platform-brand">
                 <span class="brand-dot eatsure"></span>
                 <span>EatSure (Direct)</span>
               </div>
-              ${!comparison.eatsure.serviceable ? `<span style="font-size:0.7rem;font-weight:700;color:#DC2626;background:#FEE2E2;padding:2px 6px;border-radius:6px;">Metro Only</span>` : ''}
             </div>
             <div class="final-price-box">
               <div class="final-price-label">Net Payable Bill</div>
@@ -481,11 +480,7 @@ document.addEventListener("DOMContentLoaded", () => {
               <div class="breakdown-row"><span>Delivery &amp; Platform Fee</span><span><strong style="color:var(--savings-green)">₹0 FREE</strong></span></div>
               ${comparison.eatsure.discount > 0 ? `<div class="breakdown-row breakdown-discount"><span>Coupon Savings</span><span>-₹${comparison.eatsure.discount}</span></div>` : ''}
             </div>
-            ${comparison.eatsure.serviceable ? `
-            <button type="button" class="order-btn eatsure" onclick="openOrderGuide('${comparison.eatsure.promo ? comparison.eatsure.promo.code : 'SURE50'}', '${dish.name.replace(/'/g, "\\'")}', 'EatSure', ${comparison.eatsure.base}, ${comparison.eatsure.finalPrice}, '${comparison.eatsure.deepLink}')">Order on EatSure (₹${comparison.eatsure.finalPrice}) →</button>
-            ` : `
-            <a href="https://www.swiggy.com/search?query=${encodeURIComponent(dish.name)}" target="_blank" class="order-btn swiggy" style="font-size:0.82rem;">Order via Swiggy (${currentCity}) →</a>
-            `}
+            <button type="button" class="order-btn eatsure" onclick="openOrderGuide('${comparison.eatsure.promo ? comparison.eatsure.promo.code : 'SURE50'}', '${dish.name.replace(/'/g, "\\'")}', 'EatSure', ${comparison.eatsure.base}, ${comparison.eatsure.finalPrice}, '${comparison.eatsure.deepLink || 'https://www.eatsure.com'}')">Order on EatSure (₹${comparison.eatsure.finalPrice}) →</button>
           </div>
           `}
 
@@ -746,8 +741,6 @@ document.addEventListener("DOMContentLoaded", () => {
                          p.platform.toLowerCase().includes("eatsure") ? "eatsure" :
                          p.platform.toLowerCase().includes("ondc") ? "ondc" : "magicpin";
 
-      const isUnserviceableEatSure = brandClass === "eatsure" && p.serviceable === false;
-
       return `
         <div class="platform-card ${isWinner ? 'winner' : ''}">
           ${isWinner ? `<div class="winner-crown">👑 LOWEST PRICE (SAVE ₹${result.totalSaved})</div>` : ''}
@@ -757,8 +750,7 @@ document.addEventListener("DOMContentLoaded", () => {
               <span class="brand-dot ${brandClass}"></span>
               <span>${p.platform}</span>
             </div>
-            ${isUnserviceableEatSure ? `<span style="font-size:0.7rem;font-weight:700;color:#DC2626;background:#FEE2E2;padding:2px 6px;border-radius:6px;">Metro Only</span>` : 
-              (p.promoCode !== "None" ? `<span style="font-size:0.75rem;font-weight:700;color:var(--savings-dark);">Code Applied</span>` : '')}
+            ${p.promoCode !== "None" ? `<span style="font-size:0.75rem;font-weight:700;color:var(--savings-dark);">Code Applied</span>` : ''}
           </div>
 
           <div class="final-price-box">
@@ -789,11 +781,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 <span>-₹${p.discount}</span>
               </div>
             ` : ''}
-            ${isUnserviceableEatSure ? `
-              <div style="font-size:0.75rem;color:#DC2626;margin-top:6px;line-height:1.35;background:rgba(239,68,68,0.1);padding:6px 8px;border-radius:8px;">
-                ⚠️ <strong>${currentCity} Notice:</strong> EatSure direct app delivers in Metro cities (Delhi/Mumbai/Blr). In ${currentCity}, order via Swiggy/Zomato.
-              </div>
-            ` : ''}
           </div>
 
           ${p.promoCode !== "None" ? `
@@ -806,15 +793,9 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
           `}
 
-          ${isUnserviceableEatSure ? `
-            <a href="https://www.swiggy.com/search?query=behrouz+biryani" target="_blank" class="order-btn swiggy" style="font-size:0.82rem;">
-              <span>Order via Swiggy (${currentCity}) →</span>
-            </a>
-          ` : `
-            <button type="button" class="order-btn ${brandClass}" onclick="openOrderGuide('${p.promoCode !== 'None' ? p.promoCode : 'BESTDEAL'}', 'Cart Total (₹${amount})', '${p.platform.split(' ')[0]}', ${p.base}, ${p.finalPrice}, '${p.deepLink}')">
-              <span>Order on ${p.platform.split(' ')[0]} (₹${p.finalPrice}) →</span>
-            </button>
-          `}
+          <button type="button" class="order-btn ${brandClass}" onclick="openOrderGuide('${p.promoCode !== 'None' ? p.promoCode : 'BESTDEAL'}', 'Cart Total (₹${amount})', '${p.platform.split(' ')[0]}', ${p.base}, ${p.finalPrice}, '${p.deepLink}')">
+            <span>Order on ${p.platform.split(' ')[0]} (₹${p.finalPrice}) →</span>
+          </button>
         </div>
       `;
     }).join("");

@@ -27,19 +27,19 @@ const HOT_RESTAURANT_DEALS = [
     restaurant: "Behrouz Biryani",
     emoji: "🍗",
     cuisine: "Royal Dum Biryanis & Kebabs",
-    platform: "Swiggy",
+    platform: "EatSure",
     discountBadge: "🔥 60% OFF (Up to ₹120)",
     discountPercent: 60,
     maxDiscount: 120,
-    couponCode: "TRYNEW",
+    couponCode: "SURE50",
     minOrder: 199,
     originalAvgPrice: 419, // Real current menu price for Dum Biryani
-    slashedNetPrice: 299, // 419 - 120 max discount = 299
+    slashedNetPrice: 269, // EatSure direct discount
     rating: "4.4 ★",
     deliveryTime: "30-35 mins",
     category: "biryani",
     dealHighlight: "Shahi Chicken Dum Biryani (Regular)",
-    deepLink: "https://www.swiggy.com/search?query=behrouz+biryani",
+    deepLink: "https://www.eatsure.com",
     verifiedToday: true
   },
   {
