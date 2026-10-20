@@ -1,163 +1,63 @@
 // Foodie Hu Mai - Client Application Logic
-// Interactive bill comparison, dynamic coupon filtering, instant search, fee calculator & personal savings
+// Ultra-Simple 6-Year-Old Friendly Interface + CashKaro-Style Guided Order Assistant
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Elements - Comparator
+  // ==========================================
+  // DOM ELEMENT REFERENCES
+  // ==========================================
+
+  // Tab Content Shells
+  const tabContentFood = document.getElementById("tabContentFood");
+  const tabContentCompare = document.getElementById("tabContentCompare");
+  const tabContentDeals = document.getElementById("tabContentDeals");
+
+  // Tab Buttons
+  const navTabs = document.querySelectorAll(".simple-tabs .nav-tab");
+  const mobileBottomTabs = document.querySelectorAll(".mobile-app-bottom-bar .mobile-bottom-tab");
+  const brandHomeBtn = document.getElementById("brandHomeBtn");
+  const howItWorksBtn = document.getElementById("howItWorksBtn");
+
+  // Food Picker Elements
+  const foodCards = document.querySelectorAll(".giant-food-grid .food-card");
+  const dishFaceoffCardContainer = document.getElementById("dishFaceoffCardContainer");
+  const dishSearchInput = document.getElementById("dishSearchInput");
+  const searchGoBtn = document.getElementById("searchGoBtn");
+  const dishDropdown = document.getElementById("dishDropdown");
+
+  // Comparator Elements
   const cartInput = document.getElementById("cartInput");
   const paymentSelect = document.getElementById("paymentSelect");
   const orderTypeSelect = document.getElementById("orderTypeSelect");
   const comparisonResultGrid = document.getElementById("comparisonResultGrid");
-  const savingsAnnouncementText = document.getElementById("savingsAnnouncementText");
   const whatsappShareBtn = document.getElementById("whatsappShareBtn");
-  const dishChips = document.querySelectorAll(".dish-chip");
+  const presetBtns = document.querySelectorAll(".preset-pills .preset-btn");
 
-  // Elements - Mobile Sticky Bar
-  const stickyWinnerBadge = document.getElementById("stickyWinnerBadge");
-  const stickyPriceDisplay = document.getElementById("stickyPriceDisplay");
-  const stickyActionBtn = document.getElementById("stickyActionBtn");
-
-  // Elements - Coupons & Search
-  const couponsContainer = document.getElementById("couponsContainer");
-  const filterTabs = document.querySelectorAll(".tab-btn");
-  const couponSearchInput = document.getElementById("couponSearchInput");
-
-  // Elements - Fee Calculator
+  // Fee Exposer Elements
   const ordersSlider = document.getElementById("ordersSlider");
   const ordersPerMonthDisplay = document.getElementById("ordersPerMonthDisplay");
   const annualWastedFee = document.getElementById("annualWastedFee");
 
-  // Elements - Badges & Ticker
-  const toastNotice = document.getElementById("toastNotice");
-  const toastMsg = document.getElementById("toastMsg");
+  // Hot Deals & Coupons Elements
+  const hotDealsContainer = document.getElementById("hotDealsContainer");
+  const dealTabBtns = document.querySelectorAll(".deal-tab-btn");
+  const couponsContainer = document.getElementById("couponsContainer");
+  const couponFilterTabs = document.querySelectorAll(".filter-tabs .tab-btn");
+
+  // Top Bar & Badges
   const citySelectorBtn = document.getElementById("citySelectorBtn");
   const currentCityLabel = document.getElementById("currentCityLabel");
   const personalBachatBadge = document.getElementById("personalBachatBadge");
+  const topBachatAmt = document.getElementById("topBachatAmt");
+  const toastNotice = document.getElementById("toastNotice");
+  const toastMsg = document.getElementById("toastMsg");
 
-  // Elements - Dish Search & Faceoff
-  const dishSearchInput = document.getElementById("dishSearchInput");
-  const dishDropdown = document.getElementById("dishDropdown");
-  const dishFaceoffCardContainer = document.getElementById("dishFaceoffCardContainer");
+  // Mobile Sticky Bar
+  const mobileStickyBar = document.getElementById("mobileStickyBar");
+  const stickyWinnerBadge = document.getElementById("stickyWinnerBadge");
+  const stickyPriceDisplay = document.getElementById("stickyPriceDisplay");
+  const stickyActionBtn = document.getElementById("stickyActionBtn");
 
-  let currentFilter = "guaranteed";
-  let currentSearchQuery = "";
-  let selectedDish = (typeof DISHES_DATA !== "undefined" && DISHES_DATA.length > 0) ? DISHES_DATA[0] : null;
-  let activeDishCoupon = null;
-
-  // ==========================================
-  // SECURITY SANITIZER (DOM XSS DEFENSE)
-  // ==========================================
-  function escapeHTML(str) {
-    if (typeof str !== 'string') return String(str || '');
-    return str
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
-  }
-
-  // ==========================================
-  // REAL SUCCESSFUL ORDER TRACKING (INTERNAL SECURE LOGGING ONLY)
-  // Only records when a genuine order payment succeeds
-  // ==========================================
-  window.recordRealSuccessfulOrder = function(orderPayload) {
-    if (!orderPayload || !orderPayload.transactionId || orderPayload.paymentStatus !== "SUCCESS") {
-      return Promise.reject(new Error("Invalid payment confirmation"));
-    }
-    const city = currentCityLabel ? currentCityLabel.textContent : "Ludhiana";
-    return fetch("/api/record-successful-order", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        ...orderPayload,
-        city
-      })
-    })
-    .then(res => res.json())
-    .catch(() => {});
-  };
-
-  // ==========================================
-  // 1. PERSONAL BACHAT TRACKER (LocalStorage)
-  // ==========================================
-  function loadPersonalBachat() {
-    const saved = parseInt(localStorage.getItem("foodie_personal_bachat")) || 0;
-    personalBachatBadge.textContent = `💰 Meri Bachat: ₹${saved.toLocaleString('en-IN')}`;
-  }
-
-  function addPersonalSavings(amount) {
-    let current = parseInt(localStorage.getItem("foodie_personal_bachat")) || 0;
-    current += amount;
-    localStorage.setItem("foodie_personal_bachat", current);
-    personalBachatBadge.textContent = `💰 Meri Bachat: ₹${current.toLocaleString('en-IN')}`;
-    personalBachatBadge.style.transform = "scale(1.15)";
-    setTimeout(() => {
-      personalBachatBadge.style.transform = "scale(1)";
-    }, 300);
-  }
-
-  loadPersonalBachat();
-
-  // ==========================================
-  // HOT 50% - 60% OFF RESTAURANTS RADAR
-  // ==========================================
-  const hotDealsContainer = document.getElementById("hotDealsContainer");
-  const dealTabBtns = document.querySelectorAll(".deal-tab-btn");
-  let currentDealCategory = "all";
-
-  function renderHotDeals() {
-    if (!hotDealsContainer) return;
-    if (typeof HOT_RESTAURANT_DEALS === "undefined") return;
-
-    let list = HOT_RESTAURANT_DEALS;
-    if (currentDealCategory !== "all") {
-      list = list.filter(d => d.category === currentDealCategory);
-    }
-
-    hotDealsContainer.innerHTML = list.map(deal => {
-      const savings = deal.originalAvgPrice - deal.slashedNetPrice;
-
-      return `
-        <div class="deal-restaurant-card">
-          <div class="deal-badge-floating">${deal.discountBadge}</div>
-          
-          <div>
-            <div class="deal-rest-header">
-              <span class="deal-rest-emoji">${deal.emoji}</span>
-              <div>
-                <div class="deal-rest-name">${deal.restaurant}</div>
-                <div class="deal-rest-sub">${deal.cuisine} • <strong style="color:var(--text-dark)">${deal.rating}</strong> (${deal.deliveryTime})</div>
-              </div>
-            </div>
-
-            <div class="deal-meal-highlight">
-              ✨ <strong>Popular Deal:</strong> ${deal.dealHighlight}
-            </div>
-
-            <div class="deal-price-slashed-box">
-              <div class="slashed-price-left">
-                <span class="deal-original-striked">Avg: ₹${deal.originalAvgPrice}</span>
-                <span class="deal-final-slashed">₹${deal.slashedNetPrice} <span style="font-size:0.75rem;color:var(--text-muted);font-weight:600;">Net Bill</span></span>
-              </div>
-              <div class="deal-coupon-applied-tag">
-                <span>🏷️ ${deal.couponCode}</span>
-                <span>Applied</span>
-              </div>
-            </div>
-          </div>
-
-          <a href="${deal.deepLink}" target="_blank" class="deal-order-direct-btn" onclick="directAutoOrder('${deal.couponCode}', '${deal.restaurant}', '${deal.platform}', ${savings}, ${deal.originalAvgPrice}, ${deal.slashedNetPrice}, '${deal.deepLink}')">
-            <span>⚡ Order on ${deal.platform} (Save ₹${savings})</span>
-            <span>↗</span>
-          </a>
-        </div>
-      `;
-    }).join("");
-  }
-
-  // ==========================================
-  // CART DISCOUNT & STEP-BY-STEP ORDER GUIDANCE MODAL
-  // ==========================================
+  // Order Assistant Modal Elements
   const cartGuideOverlay = document.getElementById("cartGuideOverlay");
   const cartGuideCloseBtn = document.getElementById("cartGuideCloseBtn");
   const cartGuideIcon = document.getElementById("cartGuideIcon");
@@ -174,6 +74,179 @@ document.addEventListener("DOMContentLoaded", () => {
   const cartGuideActionBtn = document.getElementById("cartGuideActionBtn");
   const cartGuideActionText = document.getElementById("cartGuideActionText");
 
+  // Passbook Modal Elements
+  const passbookModal = document.getElementById("passbookModal");
+  const passbookCloseBtn = document.getElementById("passbookCloseBtn");
+  const passbookTotalDisplay = document.getElementById("passbookTotalDisplay");
+  const pbOrdersCount = document.getElementById("pbOrdersCount");
+  const pbFeeSaved = document.getElementById("pbFeeSaved");
+  const pbLevelBadge = document.getElementById("pbLevelBadge");
+  const passbookShareBtn = document.getElementById("passbookShareBtn");
+
+  // State Variables
+  let currentTab = "food";
+  let currentCouponFilter = "guaranteed";
+  let currentDealCategory = "all";
+  let selectedDish = (typeof DISHES_DATA !== "undefined" && DISHES_DATA.length > 0) ? DISHES_DATA[0] : null;
+
+  // ==========================================
+  // SECURITY SANITIZER (DOM XSS DEFENSE)
+  // ==========================================
+  function escapeHTML(str) {
+    if (typeof str !== "string") return String(str || "");
+    return str
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  // ==========================================
+  // TOAST NOTIFICATIONS
+  // ==========================================
+  window.showToast = function(message) {
+    if (!toastNotice || !toastMsg) return;
+    toastMsg.textContent = message;
+    toastNotice.classList.add("show");
+    setTimeout(() => {
+      toastNotice.classList.remove("show");
+    }, 3200);
+  };
+
+  // ==========================================
+  // 1. SIMPLE 3-TAB SWITCHER (ULTRA-EASY NAV)
+  // ==========================================
+  window.switchTab = function(tabName, scrollUp = true) {
+    currentTab = tabName;
+
+    // Toggle Content Shells
+    if (tabContentFood) tabContentFood.style.display = (tabName === "food") ? "block" : "none";
+    if (tabContentCompare) tabContentCompare.style.display = (tabName === "compare") ? "block" : "none";
+    if (tabContentDeals) tabContentDeals.style.display = (tabName === "deals") ? "block" : "none";
+
+    // Update Top Nav Tabs
+    navTabs.forEach(tab => {
+      if (tab.dataset.tab === tabName) {
+        tab.classList.add("active");
+      } else {
+        tab.classList.remove("active");
+      }
+    });
+
+    // Update Mobile Bottom Bar Tabs
+    mobileBottomTabs.forEach(tab => {
+      if (tab.dataset.tab === tabName) {
+        tab.classList.add("active");
+      } else {
+        tab.classList.remove("active");
+      }
+    });
+
+    if (scrollUp) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
+  // Bind Top Nav Tabs
+  navTabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+      switchTab(tab.dataset.tab, false);
+    });
+  });
+
+  // Bind Mobile Bottom Tabs
+  mobileBottomTabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+      switchTab(tab.dataset.tab, false);
+    });
+  });
+
+  // Brand Logo Click -> Reset to Khana Chuno
+  if (brandHomeBtn) {
+    brandHomeBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      switchTab("food", true);
+    });
+  }
+
+  // How it works button
+  if (howItWorksBtn) {
+    howItWorksBtn.addEventListener("click", () => {
+      showToast("💡 3 Simple Steps: 1. Khana Chuno ➔ 2. Sabse Sasta App Dekho ➔ 3. 1-Tap me Order karke ₹100+ Bachao!");
+    });
+  }
+
+  // ==========================================
+  // 2. MERI BACHAT PASSBOOK (LOCALSTORAGE)
+  // ==========================================
+  function loadPersonalBachat() {
+    const saved = parseInt(localStorage.getItem("foodie_personal_bachat")) || 0;
+    if (topBachatAmt) {
+      topBachatAmt.textContent = `₹${saved.toLocaleString("en-IN")}`;
+    }
+  }
+
+  function addPersonalSavings(amount) {
+    let current = parseInt(localStorage.getItem("foodie_personal_bachat")) || 0;
+    current += amount;
+    localStorage.setItem("foodie_personal_bachat", current);
+    loadPersonalBachat();
+    if (personalBachatBadge) {
+      personalBachatBadge.style.transform = "scale(1.15)";
+      setTimeout(() => {
+        personalBachatBadge.style.transform = "scale(1)";
+      }, 300);
+    }
+  }
+
+  window.openPassbookModal = function() {
+    if (!passbookModal) return;
+    const currentSavings = parseInt(localStorage.getItem("foodie_personal_bachat")) || 120;
+    const ordersCount = Math.max(1, Math.floor(currentSavings / 60));
+    const feeSaved = ordersCount * 10;
+
+    if (passbookTotalDisplay) passbookTotalDisplay.textContent = `₹${currentSavings.toLocaleString("en-IN")}`;
+    if (pbOrdersCount) pbOrdersCount.textContent = ordersCount;
+    if (pbFeeSaved) pbFeeSaved.textContent = `₹${feeSaved}`;
+
+    if (pbLevelBadge) {
+      if (currentSavings > 1000) pbLevelBadge.textContent = "VIP Foodie 🥇";
+      else if (currentSavings > 300) pbLevelBadge.textContent = "Smart Saver 🥈";
+      else pbLevelBadge.textContent = "Foodie Starter 🥉";
+    }
+
+    if (passbookShareBtn) {
+      const shareText = `Maine Foodie Hu Mai app se apne food orders par ₹${currentSavings} bachaye! Check karo yahan: https://foodie-hu-mai.vercel.app`;
+      passbookShareBtn.href = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`;
+    }
+
+    passbookModal.style.display = "flex";
+  };
+
+  if (personalBachatBadge) {
+    personalBachatBadge.addEventListener("click", openPassbookModal);
+  }
+
+  if (passbookCloseBtn) {
+    passbookCloseBtn.addEventListener("click", () => {
+      passbookModal.style.display = "none";
+    });
+  }
+
+  if (passbookModal) {
+    passbookModal.addEventListener("click", (e) => {
+      if (e.target === passbookModal) {
+        passbookModal.style.display = "none";
+      }
+    });
+  }
+
+  loadPersonalBachat();
+
+  // ==========================================
+  // 3. CASHKARO-STYLE 3-STEP ORDER ASSISTANT MODAL
+  // ==========================================
   window.openOrderGuide = function(code, restaurant, platform, menuPrice, finalPrice, deepLink) {
     if (!cartGuideOverlay) {
       if (deepLink) window.open(deepLink, "_blank");
@@ -181,52 +254,55 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const discount = Math.max(0, menuPrice - finalPrice);
-    
+    const effectiveCode = (code && code !== "None" && code.trim() !== "") ? code : "BESTDEAL";
+
     // Copy coupon code to clipboard immediately
-    if (code && code !== "None" && navigator.clipboard) {
-      navigator.clipboard.writeText(code).catch(() => {});
+    if (effectiveCode && navigator.clipboard) {
+      navigator.clipboard.writeText(effectiveCode).catch(() => {});
     }
 
     // Add personal savings count
-    addPersonalSavings(discount);
+    addPersonalSavings(discount > 0 ? discount : 60);
 
-    // Populate modal content
+    // Platform Icon
     const pLower = (platform || "").toLowerCase();
     let pIcon = "🍕";
     if (pLower.includes("domino")) pIcon = "🍕";
     else if (pLower.includes("swiggy")) pIcon = "🛵";
     else if (pLower.includes("zomato")) pIcon = "🍅";
-    else if (pLower.includes("hut")) pIcon = "🍕";
-    else if (pLower.includes("kfc")) pIcon = "🍗";
     else if (pLower.includes("eatsure") || pLower.includes("faasos") || pLower.includes("behrouz")) pIcon = "🍱";
     else if (pLower.includes("magicpin")) pIcon = "🛍️";
     else if (pLower.includes("ondc")) pIcon = "🇮🇳";
     else pIcon = "🍔";
 
     if (cartGuideIcon) cartGuideIcon.textContent = pIcon;
-    if (cartGuideTitle) cartGuideTitle.textContent = `${platform} Cart Discount Guide`;
-    if (cartGuideSubtitle) cartGuideSubtitle.textContent = `${restaurant} • Real Menu Price vs Cart Checkout`;
+    if (cartGuideTitle) cartGuideTitle.textContent = `${platform} Order Assistant`;
+    if (cartGuideSubtitle) cartGuideSubtitle.textContent = `${restaurant} • Real Menu Price vs Net Checkout Bill`;
     if (cartGuideMenuPrice) cartGuideMenuPrice.textContent = `₹${menuPrice}`;
-    if (cartGuideDiscount) cartGuideDiscount.textContent = `-₹${discount}`;
-    if (cartGuideCodePill) cartGuideCodePill.textContent = code ? `Code: ${code}` : "BESTDEAL";
+    if (cartGuideDiscount) cartGuideDiscount.textContent = discount > 0 ? `-₹${discount}` : "Pre-Applied";
+    if (cartGuideCodePill) cartGuideCodePill.textContent = effectiveCode ? `Code: ${effectiveCode}` : "✨ Auto-Discount";
     if (cartGuideFinalPrice) cartGuideFinalPrice.textContent = `₹${finalPrice}`;
-    if (cartGuideCouponText) cartGuideCouponText.textContent = code || "BESTDEAL";
+    if (cartGuideCouponText) cartGuideCouponText.textContent = effectiveCode;
 
     if (cartGuideStep1Text) {
-      cartGuideStep1Text.innerHTML = `${platform} open hone par official menu price (<strong>₹${menuPrice}</strong>) dikhega. Pehle dish ko <em>"Add to Cart"</em> karein.`;
+      cartGuideStep1Text.innerHTML = `${platform} open hone par menu rate (<strong>₹${menuPrice}</strong>) dikhega. Pehle dish ko <em>"Add to Cart"</em> karein.`;
     }
+
     if (cartGuideStep3Text) {
       if (pLower.includes("domino")) {
-        cartGuideStep3Text.innerHTML = `Domino's Cart me 'Apply Coupon' me <strong>${code || 'CART50'}</strong> paste karein, ya 2 Pizzas @ ₹99 Everyday Value deal chunein!`;
+        cartGuideStep3Text.innerHTML = `Domino's cart me code <strong>${effectiveCode}</strong> paste karein ya Everyday Value deal chunein. Bill turant gir jayega!`;
       } else if (pLower.includes("swiggy")) {
-        cartGuideStep3Text.innerHTML = `Swiggy cart me jakar 'Apply Coupon' me <strong>${code || 'TRYNEW'}</strong> paste karein. Bill turant <strong>₹${menuPrice} se girkar ₹${finalPrice}</strong> ho jayega!`;
+        cartGuideStep3Text.innerHTML = `Swiggy cart me code <strong>${effectiveCode}</strong> paste karein. Bill turant <strong>₹${menuPrice} se girkar ₹${finalPrice}</strong> ho jayega!`;
       } else if (pLower.includes("zomato")) {
-        cartGuideStep3Text.innerHTML = `Zomato checkout par promo code <strong>${code || 'STEALDEAL'}</strong> lagayein aur ₹${discount} bachat paayein!`;
+        cartGuideStep3Text.innerHTML = `Zomato checkout par promo code <strong>${effectiveCode}</strong> apply karein aur ₹${discount} bachat paayein!`;
       } else {
-        cartGuideStep3Text.innerHTML = `Apply karte hi bill turant <strong>₹${menuPrice} se girkar ₹${finalPrice}</strong> ho jayega!`;
+        cartGuideStep3Text.innerHTML = `Cart me code paste karte hi bill turant <strong>₹${menuPrice} se girkar ₹${finalPrice}</strong> ho jayega!`;
       }
     }
-    if (cartGuideActionText) cartGuideActionText.textContent = `Proceed to ${platform} (Save ₹${discount})`;
+
+    if (cartGuideActionText) {
+      cartGuideActionText.textContent = `Proceed to ${platform} (Save ₹${discount > 0 ? discount : 60}) ↗`;
+    }
     if (cartGuideActionBtn) cartGuideActionBtn.href = deepLink || "#";
 
     cartGuideOverlay.style.display = "flex";
@@ -251,14 +327,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const code = cartGuideCouponText ? cartGuideCouponText.textContent : "DOMNEW";
       if (navigator.clipboard) {
         navigator.clipboard.writeText(code).then(() => {
-          showToast(`✅ Code "${code}" copied to clipboard!`);
+          showToast(`✅ Code "${code}" clipboard me copy ho gaya!`);
         }).catch(() => {});
       }
     });
   }
 
-  // Universal Guided Ordering Engine (CashKaro-Style Activation)
-  window.directAutoOrder = function(code, restaurant, platform, savings, menuPrice = 0, finalPrice = 0, deepLink = '') {
+  window.directAutoOrder = function(code, restaurant, platform, savings, menuPrice = 0, finalPrice = 0, deepLink = "") {
     const mPrice = menuPrice || (finalPrice ? finalPrice + savings : 350);
     const fPrice = finalPrice || Math.max(0, mPrice - (savings || 75));
     const effectiveCode = (code && code !== "None" && code.trim() !== "") ? code : "BESTDEAL";
@@ -266,124 +341,77 @@ document.addEventListener("DOMContentLoaded", () => {
     openOrderGuide(effectiveCode, restaurant || "Your Dish", platform || "Food App", mPrice, fPrice, deepLink);
   };
 
-  // Passbook Modal Elements & Wiring
-  const passbookModal = document.getElementById("passbookModal");
-  const passbookCloseBtn = document.getElementById("passbookCloseBtn");
-  const passbookTotalDisplay = document.getElementById("passbookTotalDisplay");
-  const pbOrdersCount = document.getElementById("pbOrdersCount");
-  const pbFeeSaved = document.getElementById("pbFeeSaved");
-  const pbLevelBadge = document.getElementById("pbLevelBadge");
-  const passbookShareBtn = document.getElementById("passbookShareBtn");
-
-  function openPassbookModal() {
-    if (!passbookModal) return;
-    const currentSavings = parseInt(localStorage.getItem("personal_savings_amt")) || 120;
-    const ordersCount = Math.max(1, Math.floor(currentSavings / 60));
-    const feeSaved = ordersCount * 10;
-
-    if (passbookTotalDisplay) passbookTotalDisplay.textContent = `₹${currentSavings}`;
-    if (pbOrdersCount) pbOrdersCount.textContent = ordersCount;
-    if (pbFeeSaved) pbFeeSaved.textContent = `₹${feeSaved}`;
-
-    if (pbLevelBadge) {
-      if (currentSavings > 1000) pbLevelBadge.textContent = "VIP Foodie 🥇";
-      else if (currentSavings > 300) pbLevelBadge.textContent = "Smart Saver 🥈";
-      else pbLevelBadge.textContent = "Foodie Starter 🥉";
-    }
-
-    if (passbookShareBtn) {
-      const shareText = `Maine Foodie Hu Mai app se apne food orders par ₹${currentSavings} bachaye! Check karo yahan: https://foodie-hu-mai.vercel.app`;
-      passbookShareBtn.href = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`;
-    }
-
-    passbookModal.style.display = "flex";
-  }
-
-  if (personalBachatBadge) {
-    personalBachatBadge.style.cursor = "pointer";
-    personalBachatBadge.title = "Click to open Meri Bachat Passbook";
-    personalBachatBadge.addEventListener("click", openPassbookModal);
-  }
-
-  if (passbookCloseBtn) {
-    passbookCloseBtn.addEventListener("click", () => {
-      passbookModal.style.display = "none";
-    });
-  }
-
-  if (passbookModal) {
-    passbookModal.addEventListener("click", (e) => {
-      if (e.target === passbookModal) {
-        passbookModal.style.display = "none";
-      }
-    });
-  }
-
-  dealTabBtns.forEach(btn => {
-    btn.addEventListener("click", () => {
-      dealTabBtns.forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-      currentDealCategory = btn.dataset.category;
-      renderHotDeals();
-    });
-  });
-
-  renderHotDeals();
-
   // ==========================================
-  // DISH SEARCH & LIVE RATE MATCHER WITH COUPONS
+  // 4. STEP 1: GIANT FOOD CARD PICKER & STEP 2: WINNER ARENA
   // ==========================================
   function renderDishFaceoff(dish, appliedCoupon = null) {
     if (!dish || !dishFaceoffCardContainer) return;
     selectedDish = dish;
+
     const currentCity = currentCityLabel ? currentCityLabel.textContent.trim() : "Ludhiana";
     const comparison = ComparatorEngine.compareDish(dish, appliedCoupon, paymentSelect ? paymentSelect.value : "all", currentCity);
 
-    // Winner details
-    const winnerKey = comparison.winner.toLowerCase().includes('domino') ? 'dominos' :
-                      comparison.winner.toLowerCase().includes('eatsure') ? 'eatsure' :
-                      comparison.winner.toLowerCase().includes('magic') ? 'magicpin' :
-                      comparison.winner.toLowerCase().includes('ondc') ? 'ondc' :
-                      comparison.winner.toLowerCase().includes('swiggy') ? 'swiggy' : 'zomato';
-    const winnerObj = comparison[winnerKey] || comparison.magicpin;
+    // Identify Winner Object
+    const winnerKey = comparison.winner.toLowerCase().includes("domino") ? "dominos" :
+                      comparison.winner.toLowerCase().includes("eatsure") ? "eatsure" :
+                      comparison.winner.toLowerCase().includes("magic") ? "magicpin" :
+                      comparison.winner.toLowerCase().includes("ondc") ? "ondc" :
+                      comparison.winner.toLowerCase().includes("swiggy") ? "swiggy" : "zomato";
+    const winnerObj = comparison[winnerKey] || comparison.magicpin || comparison.dominos || comparison.swiggy;
+
+    // Mobile sticky bar update
+    if (mobileStickyBar && stickyWinnerBadge && stickyPriceDisplay && stickyActionBtn) {
+      mobileStickyBar.style.display = "block";
+      stickyWinnerBadge.textContent = `👑 SABSE SASTA: ${comparison.winner.toUpperCase()}`;
+      stickyPriceDisplay.textContent = `₹${winnerObj.finalPrice} Net Bill (Save ₹${comparison.totalSaved})`;
+      stickyActionBtn.onclick = () => {
+        openOrderGuide(winnerObj.promo ? winnerObj.promo.code : "BESTDEAL", dish.name, comparison.winner, winnerObj.gross || winnerObj.base, winnerObj.finalPrice, winnerObj.deepLink);
+      };
+    }
 
     const couponOptions = [
       { code: "", label: "⚡ Auto-Best Discount" },
-      { code: "GET30", label: "GET30 (⚡ Domino's Web & App Live: Flat ₹30 OFF)" },
-      { code: "DOMNEW", label: "DOMNEW (📱 Domino's 1st Mobile App Order: ₹100 OFF)" },
-      { code: "DOM50", label: "DOM50 (50% OFF Domino's Medium/Large)" },
-      { code: "DOMINOS50", label: "DOMINOS50 (50% OFF Magicpin Domino's)" },
       { code: "EDV99", label: "EDV99 (Everyday Value 2 Pizzas @ ₹99)" },
+      { code: "DOMNEW", label: "DOMNEW (Domino's Mobile App: Flat ₹100 OFF)" },
+      { code: "GET30", label: "GET30 (Domino's Live: Flat ₹30 OFF)" },
+      { code: "DOMINOS50", label: "DOMINOS50 (50% OFF Magicpin Domino's)" },
       { code: "TRYNEW", label: "TRYNEW (60% OFF up to ₹120)" },
       { code: "STEALDEAL", label: "STEALDEAL (40% OFF up to ₹100)" },
-      { code: "JUMBO", label: "JUMBO (Flat ₹150 OFF)" },
-      { code: "SWIGGYIT", label: "SWIGGYIT (25% OFF)" },
-      { code: "HDFC100", label: "HDFC100 (Flat ₹100 OFF on Cards)" },
-      { code: "CHAI50", label: "CHAI50 (30% OFF Snacks)" }
+      { code: "HDFC100", label: "HDFC100 (Flat ₹100 OFF on Cards)" }
     ];
 
     dishFaceoffCardContainer.innerHTML = `
       <div class="dish-faceoff-card">
-        <div class="dish-faceoff-header">
-          <div class="dish-faceoff-meta">
-            <span class="dish-faceoff-emoji">${dish.emoji}</span>
-            <div>
-              <div class="dish-faceoff-title">${dish.name}</div>
-              <div class="dish-faceoff-rest">Available at: <strong>${dish.popularRest}</strong> • ${dish.category}</div>
+        
+        <!-- Olympic Winner Highlight Podium Banner -->
+        <div class="winner-hero-banner">
+          <div class="whb-badge">🥇 100% SABSE SASTA WINNER</div>
+          <div class="whb-main-row">
+            <div class="whb-left">
+              <span class="whb-emoji">${dish.emoji}</span>
+              <div>
+                <h3 class="whb-title">${comparison.winner}</h3>
+                <p class="whb-dish-info">${dish.name} • ${dish.popularRest}</p>
+              </div>
+            </div>
+            <div class="whb-right">
+              <div class="whb-price-box">
+                <span class="whb-strike">Screen Rate: ₹${winnerObj.gross || winnerObj.base}</span>
+                <span class="whb-final">₹${winnerObj.finalPrice} <small>Net Bill</small></span>
+              </div>
+              <div class="whb-save-tag">Aapka Bachat: Flat ₹${comparison.totalSaved} 🎉</div>
             </div>
           </div>
-          <div style="text-align:right;">
-            <span class="price-strike-original">₹${winnerObj.gross}</span>
-            <span class="price-slashed-active">₹${winnerObj.finalPrice}</span>
-            <div style="font-size:0.78rem;font-weight:800;color:var(--savings-dark);">👑 ${comparison.winner} (SAVE ₹${comparison.totalSaved})</div>
-          </div>
+          <button type="button" class="whb-order-btn" onclick="openOrderGuide('${winnerObj.promo ? winnerObj.promo.code : 'BESTDEAL'}', '${dish.name.replace(/'/g, "\\'")}', '${comparison.winner}', ${winnerObj.gross || winnerObj.base}, ${winnerObj.finalPrice}, '${winnerObj.deepLink}')">
+            ⚡ Order on ${comparison.winner} &amp; Save ₹${comparison.totalSaved} ➔
+          </button>
         </div>
 
         <!-- Interactive Coupon Slasher Bar -->
         <div class="coupon-slasher-bar">
           <div class="slasher-left">
             <span>🏷️</span>
-            <span>Apply Coupon to Slash Price:</span>
+            <span>Coupon Badlo &amp; Rate Dekho:</span>
           </div>
           <div class="slasher-controls">
             <select class="coupon-select-inline" id="dishCouponSelector">
@@ -395,12 +423,12 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
         </div>
 
-        <!-- Multi-Platform Comparison Grid for this dish -->
+        <!-- All Platform Transparent Comparison Cards -->
         <div class="comparison-grid">
           ${comparison.isDominos ? `
-          <!-- Domino's Official App (Direct Jubilant) -->
+          <!-- Domino's Official App -->
           <div class="platform-card ${comparison.dominos.finalPrice === winnerObj.finalPrice ? 'winner' : ''}">
-            ${comparison.dominos.finalPrice === winnerObj.finalPrice ? `<div class="winner-crown">👑 WINNER (SAVE ₹${comparison.totalSaved})</div>` : ''}
+            ${comparison.dominos.finalPrice === winnerObj.finalPrice ? `<div class="winner-crown">👑 1st Choice (Save ₹${comparison.totalSaved})</div>` : ''}
             <div class="platform-top">
               <div class="platform-brand">
                 <span class="brand-dot dominos"></span>
@@ -412,17 +440,16 @@ document.addEventListener("DOMContentLoaded", () => {
               <div class="final-price-value">₹${comparison.dominos.finalPrice}</div>
             </div>
             <div class="breakdown-list">
-              <div class="breakdown-row"><span>Official Menu Price</span><span>₹${comparison.dominos.base}</span></div>
-              <div class="breakdown-row"><span>Platform &amp; Delivery</span><span><strong style="color:var(--savings-green)">₹0 FREE</strong></span></div>
+              <div class="breakdown-row"><span>Menu Sticker Price</span><span>₹${comparison.dominos.base}</span></div>
+              <div class="breakdown-row"><span>Delivery &amp; Platform Fee</span><span><strong style="color:var(--savings-green)">₹0 FREE</strong></span></div>
               ${comparison.dominos.discount > 0 ? `<div class="breakdown-row breakdown-discount"><span>Coupon Promo</span><span>-₹${comparison.dominos.discount}</span></div>` : ''}
-              <div style="font-size:0.75rem;color:#38BDF8;margin-top:6px;line-height:1.35;background:rgba(56,189,248,0.1);padding:6px 8px;border-radius:8px;">ℹ️ Domino's screen par pehle official rate ₹${comparison.dominos.base} dikhega. Cart me Coupon paste karte hi bill ₹${comparison.dominos.finalPrice} ho jata hai!</div>
             </div>
-            <button type="button" class="order-btn dominos" onclick="openOrderGuide('${comparison.dominos.promo ? comparison.dominos.promo.code : 'DOMNEW'}', '${dish.name.replace(/'/g, "\\'")}', 'Domino\'s Official App', ${comparison.dominos.base}, ${comparison.dominos.finalPrice}, '${comparison.dominos.deepLink}')">Order on Domino's App (Guide) →</button>
+            <button type="button" class="order-btn dominos" onclick="openOrderGuide('${comparison.dominos.promo ? comparison.dominos.promo.code : 'DOMNEW'}', '${dish.name.replace(/'/g, "\\'")}', 'Domino\'s Official App', ${comparison.dominos.base}, ${comparison.dominos.finalPrice}, '${comparison.dominos.deepLink}')">Order on Domino's (₹${comparison.dominos.finalPrice}) →</button>
           </div>
           ` : `
           <!-- EatSure (Direct) -->
           <div class="platform-card ${(comparison.eatsure.finalPrice === winnerObj.finalPrice && comparison.eatsure.serviceable) ? 'winner' : ''}">
-            ${(comparison.eatsure.finalPrice === winnerObj.finalPrice && comparison.eatsure.serviceable) ? `<div class="winner-crown">👑 WINNER (SAVE ₹${comparison.totalSaved})</div>` : ''}
+            ${(comparison.eatsure.finalPrice === winnerObj.finalPrice && comparison.eatsure.serviceable) ? `<div class="winner-crown">👑 1st Choice (Save ₹${comparison.totalSaved})</div>` : ''}
             <div class="platform-top">
               <div class="platform-brand">
                 <span class="brand-dot eatsure"></span>
@@ -431,21 +458,16 @@ document.addEventListener("DOMContentLoaded", () => {
               ${!comparison.eatsure.serviceable ? `<span style="font-size:0.7rem;font-weight:700;color:#DC2626;background:#FEE2E2;padding:2px 6px;border-radius:6px;">Metro Only</span>` : ''}
             </div>
             <div class="final-price-box">
-              <div class="final-price-label">Payable Rate</div>
+              <div class="final-price-label">Net Payable Bill</div>
               <div class="final-price-value">₹${comparison.eatsure.finalPrice}</div>
             </div>
             <div class="breakdown-list">
-              <div class="breakdown-row"><span>Dish Base Rate</span><span>₹${comparison.eatsure.base}</span></div>
-              <div class="breakdown-row"><span>Fees & Delivery</span><span><strong style="color:var(--savings-green)">₹0 FREE</strong></span></div>
+              <div class="breakdown-row"><span>Menu Sticker Price</span><span>₹${comparison.eatsure.base}</span></div>
+              <div class="breakdown-row"><span>Delivery &amp; Platform Fee</span><span><strong style="color:var(--savings-green)">₹0 FREE</strong></span></div>
               ${comparison.eatsure.discount > 0 ? `<div class="breakdown-row breakdown-discount"><span>Coupon Savings</span><span>-₹${comparison.eatsure.discount}</span></div>` : ''}
-              ${!comparison.eatsure.serviceable ? `
-                <div style="font-size:0.75rem;color:#DC2626;margin-top:6px;line-height:1.35;background:rgba(239,68,68,0.1);padding:6px 8px;border-radius:8px;">
-                  ⚠️ <strong>${currentCity} Notice:</strong> EatSure standalone direct app sirf Metro cities (Delhi/Mumbai/Blr) me deliver karta hai. ${currentCity} me yeh dish Swiggy/Zomato pe milti hai!
-                </div>
-              ` : ''}
             </div>
             ${comparison.eatsure.serviceable ? `
-            <a href="${comparison.eatsure.deepLink}" target="_blank" class="order-btn eatsure" onclick="directAutoOrder('${comparison.eatsure.promo ? comparison.eatsure.promo.code : 'SURE50'}', '${dish.name.replace(/'/g, "\\'")}', 'EatSure', ${comparison.totalSaved || 75})">Order on EatSure →</a>
+            <button type="button" class="order-btn eatsure" onclick="openOrderGuide('${comparison.eatsure.promo ? comparison.eatsure.promo.code : 'SURE50'}', '${dish.name.replace(/'/g, "\\'")}', 'EatSure', ${comparison.eatsure.base}, ${comparison.eatsure.finalPrice}, '${comparison.eatsure.deepLink}')">Order on EatSure (₹${comparison.eatsure.finalPrice}) →</button>
             ` : `
             <a href="https://www.swiggy.com/search?query=${encodeURIComponent(dish.name)}" target="_blank" class="order-btn swiggy" style="font-size:0.82rem;">Order via Swiggy (${currentCity}) →</a>
             `}
@@ -454,7 +476,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
           <!-- Magicpin -->
           <div class="platform-card ${comparison.magicpin.finalPrice === winnerObj.finalPrice ? 'winner' : ''}">
-            ${comparison.magicpin.finalPrice === winnerObj.finalPrice ? `<div class="winner-crown">👑 WINNER (SAVE ₹${comparison.totalSaved})</div>` : ''}
+            ${comparison.magicpin.finalPrice === winnerObj.finalPrice ? `<div class="winner-crown">👑 1st Choice (Save ₹${comparison.totalSaved})</div>` : ''}
             <div class="platform-top">
               <div class="platform-brand">
                 <span class="brand-dot magicpin"></span>
@@ -462,41 +484,20 @@ document.addEventListener("DOMContentLoaded", () => {
               </div>
             </div>
             <div class="final-price-box">
-              <div class="final-price-label">Payable Rate</div>
+              <div class="final-price-label">Net Payable Bill</div>
               <div class="final-price-value">₹${comparison.magicpin.finalPrice}</div>
             </div>
             <div class="breakdown-list">
               <div class="breakdown-row"><span>Dish Base Rate</span><span>₹${dish.magicpinBase}</span></div>
-              <div class="breakdown-row"><span>GST & Delivery</span><span>₹${comparison.magicpin.gross - dish.magicpinBase}</span></div>
+              <div class="breakdown-row"><span>GST &amp; Delivery</span><span>₹${comparison.magicpin.gross - dish.magicpinBase}</span></div>
               ${comparison.magicpin.discount > 0 ? `<div class="breakdown-row breakdown-discount"><span>Coupon Savings</span><span>-₹${comparison.magicpin.discount}</span></div>` : ''}
             </div>
-            <a href="${comparison.magicpin.deepLink}" target="_blank" class="order-btn magicpin" onclick="directAutoOrder('${comparison.magicpin.promo ? comparison.magicpin.promo.code : 'DOMINOS50'}', '${dish.name.replace(/'/g, "\\'")}', 'Magicpin', ${comparison.totalSaved || 60})">Order on Magicpin →</a>
-          </div>
-
-          <!-- ONDC -->
-          <div class="platform-card ${comparison.ondc.finalPrice === winnerObj.finalPrice ? 'winner' : ''}">
-            ${comparison.ondc.finalPrice === winnerObj.finalPrice ? `<div class="winner-crown">👑 WINNER (SAVE ₹${comparison.totalSaved})</div>` : ''}
-            <div class="platform-top">
-              <div class="platform-brand">
-                <span class="brand-dot ondc"></span>
-                <span>ONDC (Pincode)</span>
-              </div>
-            </div>
-            <div class="final-price-box">
-              <div class="final-price-label">Payable Rate</div>
-              <div class="final-price-value">₹${comparison.ondc.finalPrice}</div>
-            </div>
-            <div class="breakdown-list">
-              <div class="breakdown-row"><span>Dish Base Rate</span><span>₹${comparison.ondc.base}</span></div>
-              <div class="breakdown-row"><span>Subsidized Del</span><span>₹22</span></div>
-              ${comparison.ondc.discount > 0 ? `<div class="breakdown-row breakdown-discount"><span>ONDC Promo</span><span>-₹${comparison.ondc.discount}</span></div>` : ''}
-            </div>
-            <a href="${comparison.ondc.deepLink}" target="_blank" class="order-btn ondc" onclick="directAutoOrder('ONDC50', '${dish.name.replace(/'/g, "\\'")}', 'ONDC (Pincode)', ${comparison.totalSaved || 50})">Order on ONDC →</a>
+            <button type="button" class="order-btn magicpin" onclick="openOrderGuide('${comparison.magicpin.promo ? comparison.magicpin.promo.code : 'DOMINOS50'}', '${dish.name.replace(/'/g, "\\'")}', 'Magicpin', ${comparison.magicpin.gross}, ${comparison.magicpin.finalPrice}, '${comparison.magicpin.deepLink}')">Order on Magicpin (₹${comparison.magicpin.finalPrice}) →</button>
           </div>
 
           <!-- Swiggy -->
           <div class="platform-card ${comparison.swiggy.finalPrice === winnerObj.finalPrice ? 'winner' : ''}">
-            ${comparison.swiggy.finalPrice === winnerObj.finalPrice ? `<div class="winner-crown">👑 WINNER (SAVE ₹${comparison.totalSaved})</div>` : ''}
+            ${comparison.swiggy.finalPrice === winnerObj.finalPrice ? `<div class="winner-crown">👑 1st Choice (Save ₹${comparison.totalSaved})</div>` : ''}
             <div class="platform-top">
               <div class="platform-brand">
                 <span class="brand-dot swiggy"></span>
@@ -504,20 +505,20 @@ document.addEventListener("DOMContentLoaded", () => {
               </div>
             </div>
             <div class="final-price-box">
-              <div class="final-price-label">Payable Rate</div>
+              <div class="final-price-label">Net Payable Bill</div>
               <div class="final-price-value">₹${comparison.swiggy.finalPrice}</div>
             </div>
             <div class="breakdown-list">
               <div class="breakdown-row"><span>Dish Base Rate</span><span>₹${dish.swiggyBase}</span></div>
-              <div class="breakdown-row"><span>GST, Platform & Del</span><span>₹${comparison.swiggy.gross - dish.swiggyBase}</span></div>
+              <div class="breakdown-row"><span>Fees &amp; Delivery</span><span>₹${comparison.swiggy.gross - dish.swiggyBase}</span></div>
               ${comparison.swiggy.discount > 0 ? `<div class="breakdown-row breakdown-discount"><span>Coupon Savings</span><span>-₹${comparison.swiggy.discount}</span></div>` : ''}
             </div>
-            <a href="${comparison.swiggy.deepLink}" target="_blank" class="order-btn swiggy" onclick="directAutoOrder('${comparison.swiggy.promo ? comparison.swiggy.promo.code : 'TRYNEW'}', '${dish.name.replace(/'/g, "\\'")}', 'Swiggy', ${comparison.totalSaved || 50})">Order on Swiggy →</a>
+            <button type="button" class="order-btn swiggy" onclick="openOrderGuide('${comparison.swiggy.promo ? comparison.swiggy.promo.code : 'TRYNEW'}', '${dish.name.replace(/'/g, "\\'")}', 'Swiggy', ${dish.swiggyBase}, ${comparison.swiggy.finalPrice}, '${comparison.swiggy.deepLink}')">Order on Swiggy (₹${comparison.swiggy.finalPrice}) →</button>
           </div>
 
           <!-- Zomato -->
           <div class="platform-card ${comparison.zomato.finalPrice === winnerObj.finalPrice ? 'winner' : ''}">
-            ${comparison.zomato.finalPrice === winnerObj.finalPrice ? `<div class="winner-crown">👑 WINNER (SAVE ₹${comparison.totalSaved})</div>` : ''}
+            ${comparison.zomato.finalPrice === winnerObj.finalPrice ? `<div class="winner-crown">👑 1st Choice (Save ₹${comparison.totalSaved})</div>` : ''}
             <div class="platform-top">
               <div class="platform-brand">
                 <span class="brand-dot zomato"></span>
@@ -525,17 +526,38 @@ document.addEventListener("DOMContentLoaded", () => {
               </div>
             </div>
             <div class="final-price-box">
-              <div class="final-price-label">Payable Rate</div>
+              <div class="final-price-label">Net Payable Bill</div>
               <div class="final-price-value">₹${comparison.zomato.finalPrice}</div>
             </div>
             <div class="breakdown-list">
               <div class="breakdown-row"><span>Dish Base Rate</span><span>₹${dish.zomatoBase}</span></div>
-              <div class="breakdown-row"><span>GST, Platform & Del</span><span>₹${comparison.zomato.gross - dish.zomatoBase}</span></div>
+              <div class="breakdown-row"><span>Fees &amp; Delivery</span><span>₹${comparison.zomato.gross - dish.zomatoBase}</span></div>
               ${comparison.zomato.discount > 0 ? `<div class="breakdown-row breakdown-discount"><span>Coupon Savings</span><span>-₹${comparison.zomato.discount}</span></div>` : ''}
             </div>
-            <a href="${comparison.zomato.deepLink}" target="_blank" class="order-btn zomato" onclick="directAutoOrder('${comparison.zomato.promo ? comparison.zomato.promo.code : 'STEALDEAL'}', '${dish.name.replace(/'/g, "\\'")}', 'Zomato', ${comparison.totalSaved || 50})">Order on Zomato →</a>
+            <button type="button" class="order-btn zomato" onclick="openOrderGuide('${comparison.zomato.promo ? comparison.zomato.promo.code : 'STEALDEAL'}', '${dish.name.replace(/'/g, "\\'")}', 'Zomato', ${dish.zomatoBase}, ${comparison.zomato.finalPrice}, '${comparison.zomato.deepLink}')">Order on Zomato (₹${comparison.zomato.finalPrice}) →</button>
           </div>
+
+          <!-- ONDC -->
+          <div class="platform-card ${comparison.ondc.finalPrice === winnerObj.finalPrice ? 'winner' : ''}">
+            ${comparison.ondc.finalPrice === winnerObj.finalPrice ? `<div class="winner-crown">👑 1st Choice (Save ₹${comparison.totalSaved})</div>` : ''}
+            <div class="platform-top">
+              <div class="platform-brand">
+                <span class="brand-dot ondc"></span>
+                <span>ONDC (Direct Network)</span>
+              </div>
+            </div>
+            <div class="final-price-box">
+              <div class="final-price-label">Net Payable Bill</div>
+              <div class="final-price-value">₹${comparison.ondc.finalPrice}</div>
+            </div>
+            <div class="breakdown-list">
+              <div class="breakdown-row"><span>Dish Base Rate</span><span>₹${comparison.ondc.base}</span></div>
+              <div class="breakdown-row"><span>Subsidized Del</span><span>₹22</span></div>
+              ${comparison.ondc.discount > 0 ? `<div class="breakdown-row breakdown-discount"><span>ONDC Promo</span><span>-₹${comparison.ondc.discount}</span></div>` : ''}
+            </div>
+            <button type="button" class="order-btn ondc" onclick="openOrderGuide('ONDC50', '${dish.name.replace(/'/g, "\\'")}', 'ONDC (Pincode)', ${comparison.ondc.base}, ${comparison.ondc.finalPrice}, '${comparison.ondc.deepLink}')">Order on ONDC (₹${comparison.ondc.finalPrice}) →</button>
           </div>
+
         </div>
       </div>
     `;
@@ -548,12 +570,42 @@ document.addEventListener("DOMContentLoaded", () => {
       applyDishCouponBtn.addEventListener("click", () => {
         const chosen = dishCouponSelector.value;
         renderDishFaceoff(selectedDish, chosen);
-        showToast(chosen ? `Coupon "${chosen}" applied! Price slashed.` : "Auto-applied best discount for this dish!");
+        showToast(chosen ? `Coupon "${chosen}" lagaya! Rate update ho gaya.` : "Auto-best discount lag gaya!");
       });
     }
   }
 
-  // Dish Autocomplete Dropdown Handling
+  // Hook up Giant Food Cards
+  foodCards.forEach(card => {
+    card.addEventListener("click", () => {
+      foodCards.forEach(c => c.classList.remove("active"));
+      card.classList.add("active");
+
+      const dishId = card.dataset.dishId;
+      const amount = parseFloat(card.dataset.amount) || 350;
+
+      if (typeof DISHES_DATA !== "undefined") {
+        const match = DISHES_DATA.find(d => d.id === dishId);
+        if (match) {
+          renderDishFaceoff(match);
+          if (dishSearchInput) dishSearchInput.value = match.name;
+        }
+      }
+
+      if (cartInput) {
+        cartInput.value = amount;
+      }
+      renderComparison();
+
+      // Smooth scroll to faceoff arena
+      const arena = document.getElementById("dishFaceoffCardContainer");
+      if (arena) {
+        arena.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+    });
+  });
+
+  // Autocomplete Dish Search Box
   if (dishSearchInput && dishDropdown) {
     dishSearchInput.addEventListener("input", (e) => {
       const q = e.target.value.toLowerCase().trim();
@@ -573,7 +625,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (matches.length === 0) {
         dishDropdown.innerHTML = `
           <div style="padding:16px;text-align:center;color:var(--text-muted);font-size:0.85rem;">
-            Dish not found in quick catalog. Calculating using custom estimator...
+            Khana nahi mila. Custom bill compare karne ke liye 'Bill Compare' tab dekhein!
           </div>
         `;
         dishDropdown.classList.add("show");
@@ -586,16 +638,16 @@ document.addEventListener("DOMContentLoaded", () => {
             <span class="dropdown-item-emoji">${d.emoji}</span>
             <div>
               <div class="dropdown-item-title">${d.name}</div>
-              <div class="dropdown-item-sub">${d.popularRest}</div>
+              <div class="dropdown-item-sub">${d.popularRest} • ${d.category}</div>
             </div>
           </div>
-          <span class="dropdown-item-badge">From ₹${d.magicpinBase}</span>
+          <span class="dropdown-item-badge">₹${d.magicpinBase || 250}+</span>
         </div>
       `).join("");
 
       dishDropdown.classList.add("show");
 
-      // Dropdown item click listeners
+      // Dropdown item click
       dishDropdown.querySelectorAll(".dropdown-item").forEach(item => {
         item.addEventListener("click", () => {
           const dishId = item.dataset.id;
@@ -603,18 +655,25 @@ document.addEventListener("DOMContentLoaded", () => {
           if (dish) {
             dishSearchInput.value = dish.name;
             dishDropdown.classList.remove("show");
+            switchTab("food", false);
             renderDishFaceoff(dish);
-            showToast(`Loaded ${dish.name}! Real rates calculated across Zomato, Swiggy & Magicpin.`);
+            showToast(`Loaded ${dish.name}! Real rates calculated across platforms.`);
           }
         });
       });
     });
 
-    // Close dropdown on outside click
+    // Close on outside click
     document.addEventListener("click", (e) => {
       if (!dishSearchInput.contains(e.target) && !dishDropdown.contains(e.target)) {
         dishDropdown.classList.remove("show");
       }
+    });
+  }
+
+  if (searchGoBtn && dishSearchInput) {
+    searchGoBtn.addEventListener("click", () => {
+      dishSearchInput.focus();
     });
   }
 
@@ -624,41 +683,23 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ==========================================
-  // 2. BILL COMPARATOR INITIALIZATION & LOGIC
+  // 5. TAB 2: BILL COMPARATOR ENGINE
   // ==========================================
   function renderComparison() {
-    const amount = parseFloat(cartInput.value) || 299;
-    const payment = paymentSelect.value;
-    const orderType = orderTypeSelect.value;
+    if (!comparisonResultGrid || !cartInput) return;
 
+    const amount = parseFloat(cartInput.value) || 350;
+    const payment = paymentSelect ? paymentSelect.value : "all";
+    const orderType = orderTypeSelect ? orderTypeSelect.value : "solo";
     const currentCity = currentCityLabel ? currentCityLabel.textContent.trim() : "Ludhiana";
+
     const result = ComparatorEngine.calculate(amount, payment, orderType, currentCity);
 
-    // Update announcement & WhatsApp button
-    if (result.totalSaved > 0) {
-      savingsAnnouncementText.innerHTML = `Mera abhi <strong>₹${result.totalSaved} bacha</strong>! Winner: <strong>${result.winner}</strong> 🏆`;
-    } else {
-      savingsAnnouncementText.innerHTML = `Teeno apps ka rate compare ho gaya! Doston ke sath share karein:`;
-    }
-    whatsappShareBtn.href = ComparatorEngine.generateWhatsAppShare(result);
-
-    // Update Mobile Sticky Bottom Savings Bar
-    const winnerObj = (result.dominos && result.dominos.isWinner) ? result.dominos :
-                      (result.eatsure && result.eatsure.isWinner) ? result.eatsure :
-                      (result.magicpin && result.magicpin.isWinner) ? result.magicpin :
-                      (result.ondc && result.ondc.isWinner) ? result.ondc :
-                      (result.swiggy && result.swiggy.isWinner) ? result.swiggy : result.zomato;
-
-    if (stickyWinnerBadge && stickyPriceDisplay && stickyActionBtn) {
-      stickyWinnerBadge.textContent = `👑 BEST: ${result.winner.toUpperCase()} (SAVE ₹${result.totalSaved})`;
-      stickyPriceDisplay.textContent = `₹${winnerObj.finalPrice} Net Bill`;
-      stickyActionBtn.href = winnerObj.deepLink;
-      stickyActionBtn.onclick = () => {
-        addPersonalSavings(result.totalSaved || 50);
-      };
+    // Update WhatsApp Share Link
+    if (whatsappShareBtn) {
+      whatsappShareBtn.href = ComparatorEngine.generateWhatsAppShare(result);
     }
 
-    // Render 6 Platform Cards (Including Domino's Official App)
     const platforms = [result.dominos, result.eatsure, result.magicpin, result.ondc, result.swiggy, result.zomato].filter(Boolean);
 
     comparisonResultGrid.innerHTML = platforms.map(p => {
@@ -714,7 +755,7 @@ document.addEventListener("DOMContentLoaded", () => {
             ` : ''}
             ${isUnserviceableEatSure ? `
               <div style="font-size:0.75rem;color:#DC2626;margin-top:6px;line-height:1.35;background:rgba(239,68,68,0.1);padding:6px 8px;border-radius:8px;">
-                ⚠️ <strong>${currentCity} Notice:</strong> EatSure standalone direct app sirf Metro cities (Delhi/Mumbai/Blr) me deliver karta hai. ${currentCity} me Rebel Foods (Behrouz/Faasos) Swiggy ya Zomato pe milte hain!
+                ⚠️ <strong>${currentCity} Notice:</strong> EatSure standalone direct app sirf Metro cities (Delhi/Mumbai/Blr) me deliver karta hai. ${currentCity} me yeh dishes Swiggy/Zomato pe milti hain!
               </div>
             ` : ''}
           </div>
@@ -734,107 +775,129 @@ document.addEventListener("DOMContentLoaded", () => {
               <span>Order via Swiggy (${currentCity}) →</span>
             </a>
           ` : `
-            <a href="${p.deepLink}" target="_blank" class="order-btn ${brandClass}" onclick="directAutoOrder('${p.promoCode !== 'None' ? p.promoCode : ''}', 'Your Order', '${p.platform.split(' ')[0]}', ${result.totalSaved || 50})">
-              <span>Order on ${p.platform.split(' ')[0]} (₹${p.finalPrice})</span>
-              <span>→</span>
-            </a>
+            <button type="button" class="order-btn ${brandClass}" onclick="openOrderGuide('${p.promoCode !== 'None' ? p.promoCode : 'BESTDEAL'}', 'Custom Bill (₹${amount})', '${p.platform.split(' ')[0]}', ${p.base}, ${p.finalPrice}, '${p.deepLink}')">
+              <span>Order on ${p.platform.split(' ')[0]} (₹${p.finalPrice}) →</span>
+            </button>
           `}
         </div>
       `;
     }).join("");
   }
 
-  // Quick Mood / Dish Chips Handling
-  dishChips.forEach(chip => {
-    chip.addEventListener("click", () => {
-      dishChips.forEach(c => c.classList.remove("active"));
-      chip.classList.add("active");
-      const amount = chip.dataset.amount;
-      const dish = chip.dataset.dish;
-      const dishId = chip.dataset.dishId;
-      cartInput.value = amount;
-      renderComparison();
-
-      // If dishId is provided or if dish name matches, also switch and scroll to Dish Faceoff!
-      if (typeof DISHES_DATA !== "undefined") {
-        let match = dishId ? DISHES_DATA.find(d => d.id === dishId) : null;
-        if (!match && dish) {
-          match = DISHES_DATA.find(d => d.name.toLowerCase().includes(dish.toLowerCase()) || (d.keywords && d.keywords.some(k => k.toLowerCase().includes(dish.toLowerCase()))));
-        }
-        if (match) {
-          if (dishSearchInput) dishSearchInput.value = match.name;
-          renderDishFaceoff(match);
-          const faceoffEl = document.getElementById("foodSearchSection");
-          if (faceoffEl) {
-            faceoffEl.scrollIntoView({ behavior: "smooth" });
-          }
-        }
+  window.setBillAmount = function(amt) {
+    if (cartInput) {
+      cartInput.value = amt;
+    }
+    presetBtns.forEach(btn => {
+      if (parseInt(btn.textContent.replace(/[^0-9]/g, '')) === amt) {
+        btn.classList.add("active");
+      } else {
+        btn.classList.remove("active");
       }
-
-      showToast(`Switched to ${dish} (~₹${amount})! Live rates compared.`);
     });
-  });
-
-  // Event Listeners for Comparator Inputs
-  cartInput.addEventListener("input", () => {
-    dishChips.forEach(c => c.classList.remove("active"));
     renderComparison();
-  });
-  paymentSelect.addEventListener("change", renderComparison);
-  orderTypeSelect.addEventListener("change", renderComparison);
+    showToast(`Bill set to ₹${amt}! Rates calculated.`);
+  };
 
-  // Initial render of comparator
+  if (cartInput) {
+    cartInput.addEventListener("input", renderComparison);
+  }
+  if (paymentSelect) {
+    paymentSelect.addEventListener("change", renderComparison);
+  }
+  if (orderTypeSelect) {
+    orderTypeSelect.addEventListener("change", renderComparison);
+  }
+
   renderComparison();
 
-  // ==========================================
-  // 3. YEARLY PLATFORM FEE EXPOSER CALCULATOR
-  // ==========================================
+  // Platform Fee Slider
   if (ordersSlider) {
     ordersSlider.addEventListener("input", (e) => {
       const count = parseInt(e.target.value) || 12;
-      ordersPerMonthDisplay.textContent = `${count} Orders/Month`;
-      // Average hidden platform fee + surge = ₹10 per order
+      if (ordersPerMonthDisplay) ordersPerMonthDisplay.textContent = `${count} Orders/Month`;
       const annualWasted = count * 10 * 12;
-      annualWastedFee.textContent = `₹${annualWasted.toLocaleString('en-IN')}`;
+      if (annualWastedFee) annualWastedFee.textContent = `₹${annualWasted.toLocaleString('en-IN')}`;
     });
   }
 
   // ==========================================
-  // 4. VERIFIED COUPONS RENDERING, FILTERING & SEARCH
+  // 6. TAB 3: SUPER DEALS (50%-60% OFF)
   // ==========================================
-  function renderCoupons() {
-    let list = COUPONS_DATA;
+  function renderHotDeals() {
+    if (!hotDealsContainer) return;
+    if (typeof HOT_RESTAURANT_DEALS === "undefined") return;
 
-    // Apply category filter
-    if (currentFilter !== "all") {
-      list = list.filter(c => c.category === currentFilter);
+    let list = HOT_RESTAURANT_DEALS;
+    if (currentDealCategory !== "all") {
+      list = list.filter(d => d.category === currentDealCategory);
     }
 
-    // Apply instant search filter
-    if (currentSearchQuery.trim() !== "") {
-      const q = currentSearchQuery.toLowerCase().trim();
-      list = list.filter(c => 
-        c.code.toLowerCase().includes(q) ||
-        c.platform.toLowerCase().includes(q) ||
-        c.description.toLowerCase().includes(q) ||
-        c.paymentMethod.toLowerCase().includes(q) ||
-        c.discountHeadline.toLowerCase().includes(q)
-      );
-    }
+    hotDealsContainer.innerHTML = list.map(deal => {
+      const savings = deal.originalAvgPrice - deal.slashedNetPrice;
 
-    if (list.length === 0) {
-      couponsContainer.innerHTML = `
-        <div style="grid-column: 1/-1; text-align: center; padding: 40px; background: #FFF; border-radius: 20px; border: 1px dashed var(--border-light);">
-          <div style="font-size: 2.2rem; margin-bottom: 8px;">🔍</div>
-          <h4 style="font-size: 1.1rem; font-weight: 800; color: var(--text-dark);">Koi Coupon Match Nahi Hua</h4>
-          <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Search term badal kar dekhein ya "Show All" par click karein.</p>
+      return `
+        <div class="deal-restaurant-card">
+          <div class="deal-badge-floating">${deal.discountBadge}</div>
+          
+          <div>
+            <div class="deal-rest-header">
+              <span class="deal-rest-emoji">${deal.emoji}</span>
+              <div>
+                <div class="deal-rest-name">${deal.restaurant}</div>
+                <div class="deal-rest-sub">${deal.cuisine} • <strong style="color:var(--text-dark)">${deal.rating}</strong> (${deal.deliveryTime})</div>
+              </div>
+            </div>
+
+            <div class="deal-meal-highlight">
+              ✨ <strong>Popular Deal:</strong> ${deal.dealHighlight}
+            </div>
+
+            <div class="deal-price-slashed-box">
+              <div class="slashed-price-left">
+                <span class="deal-original-striked">Avg: ₹${deal.originalAvgPrice}</span>
+                <span class="deal-final-slashed">₹${deal.slashedNetPrice} <span style="font-size:0.75rem;color:var(--text-muted);font-weight:600;">Net Bill</span></span>
+              </div>
+              <div class="deal-coupon-applied-tag">
+                <span>🏷️ ${deal.couponCode}</span>
+                <span>Applied</span>
+              </div>
+            </div>
+          </div>
+
+          <button type="button" class="deal-order-direct-btn" onclick="directAutoOrder('${deal.couponCode}', '${deal.restaurant}', '${deal.platform}', ${savings}, ${deal.originalAvgPrice}, ${deal.slashedNetPrice}, '${deal.deepLink}')">
+            <span>⚡ Order on ${deal.platform} (Save ₹${savings}) ➔</span>
+          </button>
         </div>
       `;
-      return;
+    }).join("");
+  }
+
+  dealTabBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      dealTabBtns.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      currentDealCategory = btn.dataset.category;
+      renderHotDeals();
+    });
+  });
+
+  renderHotDeals();
+
+  // ==========================================
+  // 7. VERIFIED PROMO CODES HUB & COMMUNITY VOTES
+  // ==========================================
+  function renderCoupons() {
+    if (!couponsContainer) return;
+    if (typeof COUPONS_DATA === "undefined") return;
+
+    let list = COUPONS_DATA;
+    if (currentCouponFilter !== "all") {
+      list = list.filter(c => c.category === currentCouponFilter);
     }
 
     couponsContainer.innerHTML = list.map(c => {
-      const platformClass = c.platform.toLowerCase().replace(/[^a-z0-9]/g, '');
+      const platformClass = c.platform.toLowerCase().replace(/[^a-z0-9]/g, "");
       const savedUpvotes = parseInt(localStorage.getItem(`vote_up_${c.id}`)) || c.usesToday;
       const isGuar = !!c.isGuaranteed;
 
@@ -858,7 +921,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="coupon-conditions">
               <div class="condition-item">
                 <span>📌</span>
-                <span>Minimum Order: <strong>₹${c.minOrder}</strong></span>
+                <span>Min Order: <strong>₹${c.minOrder}</strong></span>
               </div>
               <div class="condition-item">
                 <span>💳</span>
@@ -873,7 +936,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
           <div>
             <div class="coupon-action-row">
-              <div class="coupon-code-pill" onclick="${isGuar ? `showToast('Auto-Applied Deal! Menu mein direct discount pre-applied hai.')` : `copyCouponCode('${escapeHTML(c.code)}', '${escapeHTML(c.platform)}', ${c.discountPercent || c.discountAmount || 60})`}" title="${isGuar ? 'Direct Deal - No Code Needed' : 'Click to copy code'}">
+              <div class="coupon-code-pill" onclick="${isGuar ? `showToast('✨ Auto-Applied Deal! Menu me pehle se laga hua hai.')` : `copyCouponCode('${escapeHTML(c.code)}', '${escapeHTML(c.platform)}', ${c.discountPercent || c.discountAmount || 60})`}" title="${isGuar ? 'Direct Deal - No Code Needed' : 'Click to copy code'}">
                 <span>${escapeHTML(c.code)}</span>
                 <span class="copy-label">${isGuar ? '✨ Direct Deal' : '📋 Copy'}</span>
               </div>
@@ -892,7 +955,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <button class="vote-btn" onclick="voteCoupon('${c.id}', 'up', this)" title="Working">
                   👍 <span class="vote-count">${savedUpvotes}</span>
                 </button>
-                <button class="vote-btn" onclick="voteCoupon('${c.id}', 'down', this)" title="Report expired or not working">
+                <button class="vote-btn" onclick="voteCoupon('${c.id}', 'down', this)" title="Report expired">
                   👎
                 </button>
               </div>
@@ -903,30 +966,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }).join("");
   }
 
-  // Filter Tabs Event Handling
-  filterTabs.forEach(tab => {
+  couponFilterTabs.forEach(tab => {
     tab.addEventListener("click", () => {
-      filterTabs.forEach(t => t.classList.remove("active"));
+      couponFilterTabs.forEach(t => t.classList.remove("active"));
       tab.classList.add("active");
-      currentFilter = tab.dataset.filter;
+      currentCouponFilter = tab.dataset.filter;
       renderCoupons();
     });
   });
 
-  // Instant Coupon Search Event Handling
-  if (couponSearchInput) {
-    couponSearchInput.addEventListener("input", (e) => {
-      currentSearchQuery = e.target.value;
-      renderCoupons();
-    });
-  }
-
-  // Initial render of coupons
   renderCoupons();
 
-  // ==========================================
-  // 5. COPY TO CLIPBOARD & TOAST HANDLER
-  // ==========================================
+  // Copy coupon handler
   window.copyCouponCode = function(code, platform, approxSavings = 60) {
     addPersonalSavings(approxSavings);
 
@@ -951,15 +1002,7 @@ document.addEventListener("DOMContentLoaded", () => {
     showToast(`Code "${code}" copied! Open ${platform} to save ~₹${approxSavings}.`);
   }
 
-  function showToast(message) {
-    toastMsg.textContent = message;
-    toastNotice.classList.add("show");
-    setTimeout(() => {
-      toastNotice.classList.remove("show");
-    }, 3200);
-  }
-
-  // Community voting handler
+  // Community vote handler
   window.voteCoupon = function(id, type, btn) {
     if (type === "up") {
       const countSpan = btn.querySelector(".vote-count");
@@ -969,212 +1012,46 @@ document.addEventListener("DOMContentLoaded", () => {
       localStorage.setItem(`vote_up_${id}`, current);
       btn.style.color = "var(--savings-dark)";
       btn.style.borderColor = "var(--savings-green)";
-      showToast("✅ Shukriya! Verified working vote recorded.");
+      showToast("✅ Shukriya! Working coupon vote recorded.");
     } else {
       btn.style.color = "var(--primary-red)";
       btn.style.borderColor = "var(--primary-red)";
-      showToast("⚠️ Reported! Tip: '✨ 100% Guaranteed Deals' dekhein jisme bina coupon code dale discount milta hai.");
+      showToast("⚠️ Note: '✨ Guaranteed Deals' me bina coupon code dale discount milta hai!");
     }
   };
 
   // ==========================================
-  // 6. CITY SWITCHER INTERACTION
+  // 8. CITY SWITCHER
   // ==========================================
   const cities = ["Ludhiana", "Delhi NCR", "Chandigarh", "Mumbai", "Bengaluru", "Jaipur", "Lucknow"];
   let cityIndex = 0;
 
-  citySelectorBtn.addEventListener("click", () => {
-    cityIndex = (cityIndex + 1) % cities.length;
-    currentCityLabel.textContent = cities[cityIndex];
-    showToast(`Location updated to ${cities[cityIndex]}! Local restaurant offers reloaded.`);
-    if (selectedDish) {
-      renderDishFaceoff(selectedDish, activeDishCoupon);
-    }
-    renderComparison();
-  });
+  if (citySelectorBtn) {
+    citySelectorBtn.addEventListener("click", () => {
+      cityIndex = (cityIndex + 1) % cities.length;
+      if (currentCityLabel) currentCityLabel.textContent = cities[cityIndex];
+      showToast(`Location updated to ${cities[cityIndex]}! Local restaurant rates reloaded.`);
+      if (selectedDish) {
+        renderDishFaceoff(selectedDish);
+      }
+      renderComparison();
+    });
+  }
 
   // ==========================================
-  // 7. LIVE TICKER SIMULATION
+  // 9. LIVE SAVINGS TICKER SIMULATION
   // ==========================================
-  let baseOrders = 1496;
-  let baseSavings = 196400;
+  let baseOrders = 1540;
+  let baseSavings = 215000;
   setInterval(() => {
     baseOrders += Math.floor(Math.random() * 2) + 1;
     baseSavings += Math.floor(Math.random() * 120) + 40;
     const statElem = document.getElementById("liveSavingsStat");
     if (statElem) {
-      statElem.textContent = `${baseOrders.toLocaleString('en-IN')} orders optimized today • Total ₹${baseSavings.toLocaleString('en-IN')} saved`;
+      statElem.textContent = `⚡ ${baseOrders.toLocaleString('en-IN')}+ logon ne aaj ₹${baseSavings.toLocaleString('en-IN')} bachaye!`;
     }
-  }, 10000);
+  }, 9000);
 
-  // ==========================================
-  // 8. SWIGGY-STYLE MODULAR SECTION SWITCHER
-  // Home shows ONLY Hero & Swiggy Hub Tiles; Each feature opens as a clean separate screen
-  // ==========================================
-  const swiggyHomeHub = document.getElementById("swiggyHomeHub");
-  const featureBackBar = document.getElementById("featureBackBar");
-  const activeFeatureTitle = document.getElementById("activeFeatureTitle");
-  const featureBackHomeBtn = document.getElementById("featureBackHomeBtn");
-  const brandHomeBtn = document.getElementById("brandHomeBtn");
-  const sectionNavBtns = document.querySelectorAll(".section-nav-btn");
-  const mobileBottomTabs = document.querySelectorAll(".mobile-bottom-tab");
-
-  const SECTION_MAP = {
-    home: { name: "🏠 Home Hub", ids: [] },
-    dominosSpotlight: { name: "🍕 Domino's Showdown Hub", ids: ["dominosSpotlight"] },
-    foodSearchSection: { name: "🍔 5-Platform Dish Matcher", ids: ["foodSearchSection"] },
-    hotDealsSection: { name: "🔥 Top 50%-70% Restaurant Deals", ids: ["hotDealsSection"] },
-    comparator: { name: "⚖️ Custom Bill Amount Comparator", ids: ["comparator"] },
-    coupons: { name: "🏷️ Verified Secret Coupons Hub", ids: ["coupons"] },
-    calculator: { name: "📊 Platform Fee Exposer", ids: ["calculator"] },
-    cards: { name: "💳 Foodie Fintech & Cashback Hacks", ids: ["cards"] }
-  };
-
-  const ALL_FEATURE_SECTION_IDS = [
-    "hotDealsSection", 
-    "foodSearchSection", 
-    "dominosSpotlight", 
-    "comparator", 
-    "coupons", 
-    "calculator", 
-    "cards"
-  ];
-
-  function switchAppSection(targetKey, scrollIntoView = true) {
-    const config = SECTION_MAP[targetKey] || SECTION_MAP.home;
-
-    // Update active state on Section Nav Pill Buttons
-    sectionNavBtns.forEach(b => {
-      if (b.dataset.section === targetKey) {
-        b.classList.add("active");
-      } else {
-        b.classList.remove("active");
-      }
-    });
-
-    // Update active state on Mobile Bottom Tabs
-    mobileBottomTabs.forEach(tab => {
-      if (tab.dataset.tab === targetKey) {
-        tab.classList.add("active");
-      } else {
-        tab.classList.remove("active");
-      }
-    });
-
-    // Update Navbar link active states
-    document.querySelectorAll(".navbar .nav-link").forEach(l => {
-      if (l.dataset.nav === targetKey) {
-        l.classList.add("active");
-      } else {
-        l.classList.remove("active");
-      }
-    });
-
-    // 1. HOME SCREEN MODE: Show ONLY Hero & Swiggy Hub Tiles
-    if (targetKey === "home") {
-      if (swiggyHomeHub) swiggyHomeHub.style.display = "block";
-      if (featureBackBar) featureBackBar.style.display = "none";
-      ALL_FEATURE_SECTION_IDS.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.classList.add("homepage-section-hidden");
-      });
-      if (scrollIntoView) {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }
-      return;
-    }
-
-    // 2. DEDICATED FEATURE MODE: Hide Home Hub and show ONLY this feature
-    if (swiggyHomeHub) swiggyHomeHub.style.display = "none";
-    if (featureBackBar) {
-      featureBackBar.style.display = "flex";
-      if (activeFeatureTitle) activeFeatureTitle.textContent = config.name;
-    }
-
-    ALL_FEATURE_SECTION_IDS.forEach(id => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      if (config.ids.includes(id)) {
-        el.classList.remove("homepage-section-hidden");
-      } else {
-        el.classList.add("homepage-section-hidden");
-      }
-    });
-
-    if (scrollIntoView) {
-      const firstActive = document.getElementById(config.ids[0]);
-      if (firstActive) {
-        firstActive.scrollIntoView({ behavior: "smooth", block: "start" });
-      } else if (featureBackBar) {
-        featureBackBar.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-    }
-  }
-
-  // Bind Swiggy Hub Tiles (Clicking any tile opens that feature section directly)
-  document.querySelectorAll(".swiggy-hub-tile").forEach(tile => {
-    tile.addEventListener("click", () => {
-      const section = tile.dataset.openSection;
-      if (section) {
-        switchAppSection(section, true);
-      }
-    });
-  });
-
-  // Bind Back to Home Button
-  if (featureBackHomeBtn) {
-    featureBackHomeBtn.addEventListener("click", () => {
-      switchAppSection("home", true);
-    });
-  }
-
-  // Bind Brand Logo to return to Home Hub
-  if (brandHomeBtn) {
-    brandHomeBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      switchAppSection("home", true);
-    });
-  }
-
-  // Bind Master Section Navigation Pills
-  sectionNavBtns.forEach(btn => {
-    btn.addEventListener("click", () => {
-      const target = btn.dataset.section;
-      switchAppSection(target, true);
-    });
-  });
-
-  // Bind Mobile Bottom Tabs
-  mobileBottomTabs.forEach(tab => {
-    tab.addEventListener("click", () => {
-      const target = tab.dataset.tab;
-      switchAppSection(target, true);
-    });
-  });
-
-  // Connect Navbar links
-  document.querySelectorAll(".navbar .nav-link, .navbar .nav-cta").forEach(link => {
-    link.addEventListener("click", (e) => {
-      const navTarget = link.dataset.nav;
-      if (navTarget) {
-        e.preventDefault();
-        switchAppSection(navTarget, true);
-      }
-    });
-  });
-
-  // Connect Quick Mood Chips to open Dish Matcher or Domino's
-  document.querySelectorAll(".dish-chip").forEach(chip => {
-    chip.addEventListener("click", () => {
-      const dish = chip.dataset.dish || "";
-      if (dish.toLowerCase().includes("domino")) {
-        switchAppSection("dominosSpotlight", true);
-      } else {
-        switchAppSection("foodSearchSection", true);
-      }
-    });
-  });
-
-  // INITIAL LOAD: Open in clean Home Hub mode (Only Hero + Swiggy Hub Tiles visible!)
-  switchAppSection("home", false);
+  // Default: Start on 'food' tab
+  switchTab("food", false);
 });
