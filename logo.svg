@@ -1,91 +1,119 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 120" width="100%" height="100%">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 120" width="100%" height="100%">
   <defs>
-    <!-- Background Gradient for Icon -->
-    <linearGradient id="foodieGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+    <!-- Premium Brand Gradient -->
+    <linearGradient id="foodieBrandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#FF385C"/>
       <stop offset="50%" stop-color="#FF5A36"/>
       <stop offset="100%" stop-color="#FC8019"/>
     </linearGradient>
 
-    <!-- Savings Green Gradient -->
-    <linearGradient id="saveGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+    <!-- Emerald Savings Gradient -->
+    <linearGradient id="emeraldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#10B981"/>
       <stop offset="100%" stop-color="#059669"/>
     </linearGradient>
 
-    <!-- Badge Glow Filter -->
-    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#FF385C" flood-opacity="0.35"/>
+    <!-- Gold Shine Gradient -->
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FDE047"/>
+      <stop offset="100%" stop-color="#EAB308"/>
+    </linearGradient>
+
+    <!-- Soft Drop Shadow Filter -->
+    <filter id="logoGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#FF385C" flood-opacity="0.3"/>
+    </filter>
+    <filter id="coinGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#10B981" flood-opacity="0.35"/>
     </filter>
 
-    <filter id="tagShadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.2"/>
-    </filter>
+    <style>
+      @keyframes floatDome {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-3px); }
+      }
+      @keyframes steamRise {
+        0% { opacity: 0; transform: translateY(4px) scale(0.9); }
+        50% { opacity: 0.85; transform: translateY(-4px) scale(1.05); }
+        100% { opacity: 0; transform: translateY(-10px) scale(1.15); }
+      }
+      @keyframes pulseBadge {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.03); }
+      }
+      @keyframes rotateSpark {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      .anim-dome { animation: floatDome 3s ease-in-out infinite; }
+      .anim-steam-1 { animation: steamRise 2.4s ease-in-out infinite; }
+      .anim-steam-2 { animation: steamRise 2.4s ease-in-out infinite 0.8s; }
+      .anim-steam-3 { animation: steamRise 2.4s ease-in-out infinite 1.6s; }
+      .anim-badge { animation: pulseBadge 2.8s ease-in-out infinite; }
+      .anim-coin { animation: floatDome 2.5s ease-in-out infinite 0.5s; }
+    </style>
   </defs>
 
-  <!-- LOGO EMBLEM ICON (Left) -->
-  <g transform="translate(15, 10)">
-    <!-- Outer Glow Rounded Box -->
-    <rect x="0" y="0" width="100" height="100" rx="26" fill="url(#foodieGrad)" filter="url(#softGlow)"/>
+  <!-- ICON BADGE (Left) -->
+  <g transform="translate(14, 10)">
+    <!-- Base Rounded Container with Brand Gradient -->
+    <rect x="0" y="0" width="100" height="100" rx="26" fill="url(#foodieBrandGrad)" filter="url(#logoGlow)"/>
 
-    <!-- Cloche / Burger Serving Dome Shape -->
-    <!-- Dome base line / plate rim -->
-    <path d="M 18 72 Q 50 78 82 72 Q 86 78 82 81 Q 50 87 18 81 Q 14 78 18 72 Z" fill="#FFFFFF" opacity="0.95"/>
-    
-    <!-- Food Dome / Smiling Chef Cloche -->
-    <path d="M 23 68 C 23 40 40 28 50 28 C 60 28 77 40 77 68 Z" fill="#FFFFFF"/>
-    
-    <!-- Cloche Top Handle / Spark Knob -->
-    <circle cx="50" cy="24" r="6" fill="#FFFFFF"/>
-    <circle cx="50" cy="24" r="3.5" fill="#FF5A36"/>
-
-    <!-- The Happy "Foodie" Smile inside the dome -->
-    <path d="M 37 50 Q 50 63 63 50" fill="none" stroke="#FF385C" stroke-width="4.5" stroke-linecap="round"/>
-    
-    <!-- Happy Foodie Wink Eyes -->
-    <circle cx="36" cy="42" r="3.5" fill="#FF385C"/>
-    <!-- Wink right eye -->
-    <path d="M 60 43 Q 64 39 68 43" fill="none" stroke="#FF385C" stroke-width="3.5" stroke-linecap="round"/>
-
-    <!-- Savings Badge / Discount Tag Overlay (Bottom Right of Icon) -->
-    <g transform="translate(62, 58)" filter="url(#tagShadow)">
-      <circle cx="18" cy="18" r="18" fill="url(#saveGrad)"/>
-      <circle cx="18" cy="18" r="17" fill="none" stroke="#FFFFFF" stroke-width="1.5" opacity="0.6"/>
-      <!-- Rupee / Percentage hybrid symbol -->
-      <text x="18" y="24" font-family="'Inter', system-ui, -apple-system, sans-serif" font-size="16" font-weight="900" fill="#FFFFFF" text-anchor="middle">₹</text>
+    <!-- Animated Steam Waves from Hot Delicious Food -->
+    <g transform="translate(50, 18)" opacity="0.9">
+      <path class="anim-steam-1" d="M -16 6 Q -12 0 -16 -6 Q -20 -12 -16 -18" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
+      <path class="anim-steam-2" d="M 0 6 Q 4 0 0 -6 Q -4 -12 0 -18" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
+      <path class="anim-steam-3" d="M 16 6 Q 20 0 16 -6 Q 12 -12 16 -18" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
     </g>
 
-    <!-- Sparkle Stars -->
-    <path d="M 15 22 L 17 16 L 23 14 L 17 12 L 15 6 L 13 12 L 7 14 L 13 16 Z" fill="#FFD700"/>
+    <!-- Food Cloche / Serving Dome with Floating Animation -->
+    <g class="anim-dome">
+      <!-- Cloche Base Rim -->
+      <path d="M 18 72 Q 50 78 82 72 Q 86 78 82 81 Q 50 87 18 81 Q 14 78 18 72 Z" fill="#FFFFFF" opacity="0.95"/>
+      <!-- Cloche Dome -->
+      <path d="M 23 68 C 23 42 38 30 50 30 C 62 30 77 42 77 68 Z" fill="#FFFFFF"/>
+      <!-- Top Handle Ring -->
+      <circle cx="50" cy="25" r="5.5" fill="#FFFFFF"/>
+      <circle cx="50" cy="25" r="3" fill="#FF5A36"/>
+
+      <!-- Friendly Smile Cutout -->
+      <path d="M 38 52 Q 50 63 62 52" fill="none" stroke="#FF385C" stroke-width="4.5" stroke-linecap="round"/>
+      <!-- Foodie Eyes -->
+      <circle cx="36" cy="44" r="3" fill="#FF385C"/>
+      <path d="M 60 44 Q 63 41 66 44" fill="none" stroke="#FF385C" stroke-width="3" stroke-linecap="round"/>
+    </g>
+
+    <!-- Floating Savings Coin Badge (Bottom Right of Cloche) -->
+    <g class="anim-coin" transform="translate(62, 58)" filter="url(#coinGlow)">
+      <circle cx="18" cy="18" r="18" fill="url(#emeraldGrad)"/>
+      <circle cx="18" cy="18" r="16.5" fill="none" stroke="#FFFFFF" stroke-width="1.5" opacity="0.6"/>
+      <text x="18" y="24" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="16" font-weight="900" fill="#FFFFFF" text-anchor="middle">₹</text>
+    </g>
+
+    <!-- Gold Sparkle Accent -->
+    <path d="M 14 20 L 16 14 L 22 12 L 16 10 L 14 4 L 12 10 L 6 12 L 12 14 Z" fill="url(#goldGrad)"/>
   </g>
 
   <!-- BRAND TYPOGRAPHY (Right) -->
   <g transform="translate(132, 22)">
-    <!-- Main Word: FOODIE -->
-    <text x="0" y="50" font-family="'Outfit', 'Plus Jakarta Sans', system-ui, sans-serif" font-size="52" font-weight="900" letter-spacing="-1.5" fill="#111827">
+    <!-- Main Word: Foodie -->
+    <text x="0" y="52" font-family="'Outfit', -apple-system, sans-serif" font-size="54" font-weight="900" letter-spacing="-1.5" fill="#0F172A">
       Foodie
     </text>
 
-    <!-- Cute Red Tongue / Bite Accent near 'ie' -->
-    <circle cx="158" cy="18" r="4" fill="#FF385C"/>
-
-    <!-- Secondary Word Badge: HU MAI! -->
-    <g transform="translate(168, 6)">
-      <!-- Gradient Rounded Pill Badge -->
-      <rect x="0" y="2" width="188" height="50" rx="16" fill="url(#foodieGrad)" filter="url(#softGlow)"/>
-      
-      <!-- Text: HU MAI! -->
-      <text x="94" y="36" font-family="'Outfit', system-ui, sans-serif" font-size="30" font-weight="900" font-style="italic" letter-spacing="1" fill="#FFFFFF" text-anchor="middle">
+    <!-- Animated Badge: HU MAI! -->
+    <g class="anim-badge" transform="translate(174, 8)">
+      <rect x="0" y="0" width="186" height="50" rx="16" fill="url(#foodieBrandGrad)" filter="url(#logoGlow)"/>
+      <text x="88" y="34" font-family="'Outfit', sans-serif" font-size="28" font-weight="900" font-style="italic" letter-spacing="1" fill="#FFFFFF" text-anchor="middle">
         HU MAI!
       </text>
-
-      <!-- Lightning / Spark Icon inside badge -->
-      <path d="M 166 12 L 156 28 L 163 28 L 158 40 L 173 24 L 166 24 Z" fill="#FFEB3B"/>
+      <!-- Lightning Bolt Accent -->
+      <path d="M 158 11 L 148 27 L 155 27 L 150 39 L 165 23 L 158 23 Z" fill="url(#goldGrad)"/>
     </g>
 
-    <!-- Sub-tagline below -->
-    <text x="3" y="78" font-family="'Inter', system-ui, sans-serif" font-size="14.5" font-weight="700" letter-spacing="0.2" fill="#6B7280">
-      ZOMATO • SWIGGY • MAGICPIN <tspan fill="#10B981" font-weight="800">PRICE &amp; COUPON MATCHER</tspan>
+    <!-- Modern Subtitle / Slogan -->
+    <text x="2" y="78" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="13" font-weight="700" letter-spacing="0.4" fill="#64748B">
+      SWIGGY • ZOMATO • DOMINO'S • MAGICPIN <tspan fill="#10B981" font-weight="800">PRICE MATCHER</tspan>
     </text>
   </g>
 </svg>

@@ -1,6 +1,6 @@
 /* ==========================================================================
-   FOODIE HU MAI — Ultra-Simple, Modern & Child-Friendly Stylesheet
-   Designed so even a 6-year-old child can find the cheapest food in 1 tap!
+   FOODIE HU MAI — Professional Real-Time Food Delivery Price Matcher
+   Modern, ultra-responsive, consumer-fintech design (inspired by CRED & CashKaro)
    ========================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
@@ -76,7 +76,6 @@ body {
   color: var(--text-dark);
   line-height: 1.5;
   overflow-x: hidden;
-  padding-bottom: 84px; /* Space for mobile bottom bar */
   background-image: 
     radial-gradient(at 0% 0%, rgba(255, 56, 92, 0.04) 0px, transparent 50%),
     radial-gradient(at 100% 100%, rgba(252, 128, 25, 0.05) 0px, transparent 50%);
@@ -96,12 +95,12 @@ a {
 }
 
 /* ==========================================================================
-   TOP SIMPLE BAR (TICKER + CITY + WALLET)
+   TOP REAL-TIME ACTIVITY TICKER
    ========================================================================== */
 .top-simple-bar {
   background: #0F172A;
   color: #F8FAFC;
-  padding: 8px 16px;
+  padding: 8px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -139,7 +138,7 @@ a {
 .tsb-right {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   flex-shrink: 0;
 }
 
@@ -147,7 +146,7 @@ a {
 .wallet-badge {
   background: rgba(255, 255, 255, 0.12);
   color: #FFF;
-  padding: 4px 10px;
+  padding: 4px 12px;
   border-radius: 999px;
   font-size: 0.76rem;
   font-weight: 700;
@@ -167,36 +166,42 @@ a {
 }
 
 /* ==========================================================================
-   MAIN NAVIGATION (DESKTOP & TABLET TABS)
+   GLASSMORPHIC MAIN NAVIGATION
    ========================================================================== */
 .main-nav {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--border-light);
   position: sticky;
   top: 0;
   z-index: 99;
+  transition: all 0.2s ease;
 }
 
 .nav-shell {
-  max-width: 1120px;
+  max-width: 1160px;
   margin: 0 auto;
-  padding: 12px 16px;
+  padding: 12px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 20px;
 }
 
 .brand-badge {
   display: flex;
   align-items: center;
   text-decoration: none;
+  transition: transform 0.2s ease;
+}
+
+.brand-badge:hover {
+  transform: translateY(-1px);
 }
 
 .brand-logo-img {
-  height: 40px;
+  height: 42px;
   width: auto;
   display: block;
 }
@@ -211,13 +216,14 @@ a {
 }
 
 .nav-tab {
-  padding: 9px 18px;
+  padding: 8px 18px;
   border-radius: 999px;
   font-size: 0.88rem;
   font-weight: 700;
   color: var(--text-muted);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   white-space: nowrap;
+  display: inline-block;
 }
 
 .nav-tab:hover {
@@ -227,16 +233,22 @@ a {
 .nav-tab.active {
   background: var(--gradient-brand);
   color: #FFF;
-  box-shadow: 0 4px 12px rgba(255, 56, 92, 0.3);
+  box-shadow: 0 4px 12px rgba(255, 56, 92, 0.28);
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .nav-help-btn {
   background: #FFF;
-  border: 1px solid var(--border-light);
+  border: 1.5px solid var(--border-light);
   color: var(--text-body);
   font-size: 0.82rem;
   font-weight: 700;
-  padding: 8px 14px;
+  padding: 8px 16px;
   border-radius: 999px;
   transition: all 0.2s ease;
   white-space: nowrap;
@@ -249,35 +261,41 @@ a {
 }
 
 /* ==========================================================================
-   SIMPLE HERO SECTION & INSTANT SEARCH
+   SIMPLE HERO & OMNI SEARCH
    ========================================================================== */
 .simple-hero {
-  padding: 36px 16px 24px;
+  padding: 42px 20px 28px;
   text-align: center;
-  background: linear-gradient(180deg, rgba(255, 245, 246, 0.8) 0%, rgba(248, 250, 252, 0) 100%);
+  background: linear-gradient(180deg, rgba(255, 245, 246, 0.85) 0%, rgba(248, 250, 252, 0) 100%);
 }
 
 .hero-shell {
-  max-width: 760px;
+  max-width: 780px;
   margin: 0 auto;
 }
 
 .hero-pill {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   background: #FFF;
   border: 1px solid rgba(255, 56, 92, 0.2);
   color: var(--primary-red);
   font-size: 0.82rem;
   font-weight: 800;
-  padding: 6px 16px;
+  padding: 6px 18px;
   border-radius: 999px;
   box-shadow: var(--shadow-sm);
-  margin-bottom: 14px;
+  margin-bottom: 16px;
+}
+
+.hero-pill-sparkle {
+  color: #F59E0B;
 }
 
 .hero-heading {
   font-family: var(--font-heading);
-  font-size: 2.8rem;
+  font-size: 3rem;
   font-weight: 900;
   line-height: 1.15;
   letter-spacing: -0.02em;
@@ -295,19 +313,19 @@ a {
   font-size: 1.05rem;
   color: var(--text-body);
   line-height: 1.6;
-  margin-bottom: 24px;
+  margin-bottom: 26px;
 }
 
 .omni-search-box {
   position: relative;
-  max-width: 620px;
+  max-width: 640px;
   margin: 0 auto;
   display: flex;
   align-items: center;
   background: #FFF;
   border: 2px solid var(--border-light);
   border-radius: 999px;
-  padding: 6px 8px 6px 16px;
+  padding: 6px 8px 6px 18px;
   box-shadow: var(--shadow-md);
   transition: all 0.25s ease;
 }
@@ -344,18 +362,19 @@ a {
   color: #FFF;
   font-weight: 800;
   font-size: 0.9rem;
-  padding: 10px 22px;
+  padding: 11px 24px;
   border-radius: 999px;
   box-shadow: 0 4px 12px rgba(255, 56, 92, 0.25);
   transition: transform 0.15s ease;
+  white-space: nowrap;
 }
 
 .search-go-btn:hover {
-  transform: scale(1.03);
+  transform: scale(1.02);
 }
 
 .search-go-btn:active {
-  transform: scale(0.97);
+  transform: scale(0.98);
 }
 
 /* Autocomplete Dropdown */
@@ -427,35 +446,50 @@ a {
   border-radius: 999px;
 }
 
-/* ==========================================
-   CONTENT SHELL & STEP HEADERS
-   ========================================== */
+/* ==========================================================================
+   CONTENT SHELLS & STEP HEADERS
+   ========================================================================== */
 .content-shell {
-  max-width: 1120px;
+  max-width: 1160px;
   margin: 0 auto;
-  padding: 24px 16px 48px;
+  padding: 32px 20px 48px;
+  scroll-margin-top: 70px;
 }
 
 .step-header {
   margin-bottom: 20px;
 }
 
+.step-badge-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
 .step-number {
-  display: inline-block;
   background: var(--primary-red);
   color: #FFF;
-  font-size: 0.75rem;
+  font-size: 0.74rem;
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   padding: 4px 10px;
   border-radius: 999px;
-  margin-bottom: 8px;
+}
+
+.step-subtitle-tag {
+  background: #FFF5F6;
+  color: var(--primary-red);
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
 }
 
 .step-header h2 {
   font-family: var(--font-heading);
-  font-size: 1.6rem;
+  font-size: 1.65rem;
   font-weight: 800;
   color: var(--text-dark);
   line-height: 1.25;
@@ -468,7 +502,7 @@ a {
 }
 
 /* ==========================================================================
-   STEP 1: GIANT VISUAL FOOD CARDS (6-YEAR-OLD CHILD EASY)
+   SECTION 1: GIANT VISUAL FOOD CARDS
    ========================================================================== */
 .giant-food-grid {
   display: grid;
@@ -561,21 +595,117 @@ a {
 }
 
 /* ==========================================================================
-   STEP 2: THE WINNER ARENA & LIVE DISH FACEOFF
+   LIVE ARENA: INTERACTIVE PLACEHOLDER & ACTIVE WINNER BATTLE
    ========================================================================== */
 .faceoff-arena {
   margin-top: 16px;
 }
 
+/* Welcoming Clean Placeholder (When No Dish is selected yet) */
+.faceoff-placeholder-card {
+  background: #FFF;
+  border: 2px dashed var(--border-light);
+  border-radius: 24px;
+  padding: 48px 24px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.fpc-icon-wrap {
+  position: relative;
+  width: 76px;
+  height: 76px;
+  background: #FFF5F6;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.fpc-icon {
+  font-size: 2.6rem;
+  line-height: 1;
+}
+
+.fpc-pulse-ring {
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  right: -6px;
+  bottom: -6px;
+  border: 2px solid rgba(255, 56, 92, 0.25);
+  border-radius: 50%;
+  animation: pulseDot 2s infinite;
+}
+
+.faceoff-placeholder-card h3 {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+}
+
+.faceoff-placeholder-card p {
+  font-size: 0.94rem;
+  color: var(--text-muted);
+  max-width: 580px;
+  line-height: 1.55;
+  margin-bottom: 22px;
+}
+
+.fpc-quick-tags {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.fpc-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-subtle);
+}
+
+.fpc-tag {
+  background: #F8FAFC;
+  border: 1px solid var(--border-light);
+  color: var(--text-dark);
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 999px;
+  transition: all 0.15s ease;
+}
+
+.fpc-tag:hover {
+  background: #FFF5F6;
+  border-color: var(--primary-red);
+  color: var(--primary-red);
+  transform: translateY(-1px);
+}
+
+/* Active Dish Face-off Card */
 .dish-faceoff-card {
   background: #FFF;
   border: 1px solid var(--border-light);
   border-radius: 24px;
   padding: 24px;
   box-shadow: var(--shadow-md);
+  animation: slideFadeIn 0.3s ease;
 }
 
-/* Olympic Hero Winner Banner */
+@keyframes slideFadeIn {
+  0% { opacity: 0; transform: translateY(12px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Olympic Winner Highlight Banner */
 .winner-hero-banner {
   background: var(--gradient-winner);
   color: #FFF;
@@ -767,7 +897,7 @@ a {
 }
 
 /* ==========================================================================
-   PLATFORM COMPARISON GRID & CARDS
+   COMPARISON GRID & PLATFORM CARDS
    ========================================================================== */
 .comparison-grid {
   display: grid;
@@ -928,12 +1058,10 @@ a {
   transform: translateY(-1px);
 }
 
-/* ==========================================================================
-   DOMINO'S SPECIAL SECTION STRIP
-   ========================================================================== */
+/* Direct Ordering Spotlight Banner */
 .special-brand-strip {
-  margin-top: 24px;
-  background: linear-gradient(135deg, #0066A6 0%, #004B7A 100%);
+  margin-top: 28px;
+  background: linear-gradient(135deg, #1E293B 0%, #0F172A 100%);
   color: #FFF;
   border-radius: 20px;
   padding: 20px 24px;
@@ -942,7 +1070,7 @@ a {
   justify-content: space-between;
   gap: 16px;
   flex-wrap: wrap;
-  box-shadow: 0 8px 24px rgba(0, 102, 166, 0.2);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.15);
 }
 
 .sbs-left {
@@ -966,19 +1094,19 @@ a {
 
 .sbs-left p {
   font-size: 0.88rem;
-  color: rgba(255, 255, 255, 0.9);
-  line-height: 1.4;
+  color: #CBD5E1;
+  line-height: 1.45;
 }
 
 .sbs-btn {
-  background: #FFF;
-  color: #0066A6;
+  background: var(--gradient-brand);
+  color: #FFF;
   font-weight: 800;
   font-size: 0.92rem;
   padding: 12px 22px;
   border-radius: 12px;
   white-space: nowrap;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px rgba(255, 56, 92, 0.3);
   transition: transform 0.15s ease;
 }
 
@@ -987,7 +1115,7 @@ a {
 }
 
 /* ==========================================================================
-   TAB 2: BILL COMPARATOR (CUSTOM AMOUNT SLASHER)
+   SECTION 2: CUSTOM CART BILL CALCULATOR
    ========================================================================== */
 .simple-calc-box {
   background: #FFF;
@@ -1157,7 +1285,7 @@ a {
 }
 
 /* ==========================================================================
-   TAB 3: SUPER DEALS (50%-60% OFF) & VERIFIED COUPONS
+   SECTION 3: 50% - 60% SLASHED RESTAURANT DEALS
    ========================================================================== */
 .deals-filter-bar {
   display: flex;
@@ -1313,7 +1441,9 @@ a {
   transform: translateY(-1px);
 }
 
-/* Reality Alert Box */
+/* ==========================================================================
+   SECTION 4: VERIFIED PROMO CODES HUB
+   ========================================================================== */
 .reality-alert {
   background: #FFFBEB;
   border: 1px solid #FDE68A;
@@ -1373,7 +1503,6 @@ a {
   box-shadow: 0 4px 12px rgba(236, 72, 153, 0.25);
 }
 
-/* Coupons Grid */
 .coupons-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -1618,7 +1747,7 @@ a {
 }
 
 /* ==========================================================================
-   MODAL 1: CASHKARO-STYLE 3-STEP ORDER ASSISTANT
+   MODAL 1: ORDER ASSISTANT
    ========================================================================== */
 .cart-guide-overlay {
   position: fixed;
@@ -1710,7 +1839,6 @@ a {
   color: var(--text-muted);
 }
 
-/* Transparent Math Breakdown */
 .cart-guide-breakdown {
   display: flex;
   align-items: center;
@@ -1761,7 +1889,6 @@ a {
   color: var(--text-subtle);
 }
 
-/* 3 Simple Steps */
 .cart-guide-steps {
   display: flex;
   flex-direction: column;
@@ -1865,7 +1992,7 @@ a {
 }
 
 /* ==========================================================================
-   MODAL 2: MERI BACHAT PASSBOOK
+   MODAL 2: MY SAVINGS PASSBOOK
    ========================================================================== */
 .passbook-overlay {
   position: fixed;
@@ -2015,6 +2142,120 @@ a {
 }
 
 /* ==========================================================================
+   MODAL 3: HOW IT WORKS
+   ========================================================================== */
+.how-it-works-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.how-it-works-modal {
+  background: #FFF;
+  border-radius: 24px;
+  max-width: 500px;
+  width: 100%;
+  padding: 26px;
+  position: relative;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  animation: modalPop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.how-it-works-close {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  font-size: 1.6rem;
+  color: var(--text-subtle);
+  cursor: pointer;
+}
+
+.hiw-header {
+  margin-bottom: 20px;
+}
+
+.hiw-badge {
+  display: inline-block;
+  background: #ECFDF5;
+  color: var(--savings-dark);
+  font-size: 0.74rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 999px;
+  margin-bottom: 8px;
+}
+
+.hiw-header h3 {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  margin-bottom: 4px;
+}
+
+.hiw-header p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.hiw-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.hiw-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: #F8FAFC;
+  border: 1px solid var(--border-light);
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.hiw-icon {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.hiw-step strong {
+  display: block;
+  font-size: 0.95rem;
+  color: var(--text-dark);
+  margin-bottom: 4px;
+}
+
+.hiw-step p {
+  font-size: 0.82rem;
+  color: var(--text-body);
+  line-height: 1.45;
+}
+
+.hiw-btn {
+  width: 100%;
+  background: var(--gradient-brand);
+  color: #FFF;
+  font-weight: 800;
+  font-size: 0.95rem;
+  padding: 14px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(255, 56, 92, 0.25);
+}
+
+/* ==========================================================================
    TOAST NOTIFICATION
    ========================================================================== */
 .toast-notice {
@@ -2046,8 +2287,16 @@ a {
 }
 
 /* ==========================================================================
-   MOBILE BOTTOM BAR & STICKY SAVINGS BAR
+   MOBILE BOTTOM BAR & FLOATING STICKY ACTION PILL
    ========================================================================== */
+/* NEVER show on desktop screens! */
+@media (min-width: 769px) {
+  .mobile-app-bottom-bar,
+  .mobile-sticky-savings-bar {
+    display: none !important;
+  }
+}
+
 .mobile-app-bottom-bar {
   display: none;
   position: fixed;
@@ -2087,9 +2336,10 @@ a {
   background: #FFF5F6;
 }
 
+/* Small Floating Pill on Mobile */
 .mobile-sticky-savings-bar {
   position: fixed;
-  bottom: 64px;
+  bottom: 66px;
   left: 12px;
   right: 12px;
   background: #0F172A;
@@ -2121,7 +2371,7 @@ a {
 
 .sticky-main-price {
   font-family: var(--font-heading);
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 900;
 }
 
@@ -2129,10 +2379,23 @@ a {
   background: var(--savings-green);
   color: #FFF;
   font-weight: 800;
-  font-size: 0.85rem;
-  padding: 8px 16px;
+  font-size: 0.82rem;
+  padding: 8px 14px;
   border-radius: 999px;
   box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+}
+
+.sticky-close-btn {
+  background: rgba(255, 255, 255, 0.15);
+  color: #FFF;
+  font-size: 1rem;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }
 
 /* ==========================================================================
@@ -2141,12 +2404,12 @@ a {
 .site-footer {
   background: #0F172A;
   color: #CBD5E1;
-  padding: 48px 16px 36px;
+  padding: 48px 20px 36px;
   margin-top: 48px;
 }
 
 .footer-shell {
-  max-width: 1120px;
+  max-width: 1160px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
@@ -2167,7 +2430,7 @@ a {
 .footer-brand p {
   font-size: 0.85rem;
   color: #94A3B8;
-  max-width: 420px;
+  max-width: 440px;
 }
 
 .footer-links {
@@ -2176,6 +2439,7 @@ a {
   align-items: center;
   font-weight: 700;
   font-size: 0.88rem;
+  flex-wrap: wrap;
 }
 
 .footer-links a:hover {
@@ -2183,7 +2447,7 @@ a {
 }
 
 .footer-disclaimer {
-  max-width: 1120px;
+  max-width: 1160px;
   margin: 20px auto 0;
   font-size: 0.74rem;
   color: #64748B;
@@ -2191,7 +2455,7 @@ a {
 }
 
 /* ==========================================================================
-   RESPONSIVE MEDIA QUERIES (MOBILE FIRST COMPATIBILITY)
+   RESPONSIVE MEDIA QUERIES
    ========================================================================== */
 @media (max-width: 992px) {
   .giant-food-grid {
@@ -2209,6 +2473,10 @@ a {
 }
 
 @media (max-width: 768px) {
+  body {
+    padding-bottom: 74px; /* Space for mobile nav */
+  }
+
   .simple-tabs,
   .nav-help-btn {
     display: none;

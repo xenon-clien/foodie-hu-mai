@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
@@ -7,8 +7,8 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   
-  <title>Foodie Hu Mai 🍕 — Sabse Sasta Khana Kahan Milega? Live Rate Matcher</title>
-  <meta name="description" content="Domino's, Swiggy, aur Zomato me sabse sasta khana kahan hai? 1-Tap me compare karein aur har order par ₹100+ bachayein!">
+  <title>Foodie Hu Mai 🍕 — Real-Time Food Delivery Price Matcher &amp; Working Coupons</title>
+  <meta name="description" content="Compare live food delivery bills across Swiggy, Zomato, Domino's, Magicpin, EatSure & ONDC. Discover the lowest price in 1 tap and save ₹100+ on every order.">
   
   <link rel="icon" type="image/svg+xml" href="logo-icon.svg">
   <link rel="apple-touch-icon" href="logo-icon.svg">
@@ -16,83 +16,93 @@
 </head>
 <body>
 
-  <!-- Top Simple Ticker -->
+  <!-- Top Real-Time Activity Ticker -->
   <div class="top-simple-bar">
     <div class="tsb-left">
       <span class="tsb-pulse"></span>
-      <span id="liveSavingsStat">⚡ 1,540+ logon ne aaj ₹2,15,000 bachaye!</span>
+      <span id="liveSavingsStat">⚡ 1,540+ foodies saved ₹2,15,000 across India today!</span>
     </div>
     <div class="tsb-right">
-      <button type="button" class="city-badge" id="citySelectorBtn">
+      <button type="button" class="city-badge" id="citySelectorBtn" title="Click to switch city">
         📍 <span id="currentCityLabel">Ludhiana</span> ▼
       </button>
-      <button type="button" class="wallet-badge" id="personalBachatBadge">
-        💰 Meri Bachat: <strong id="topBachatAmt">₹0</strong>
+      <button type="button" class="wallet-badge" id="personalBachatBadge" title="Click to open your Savings Passbook">
+        💰 My Savings: <strong id="topBachatAmt">₹0</strong>
       </button>
     </div>
   </div>
 
-  <!-- Main Navigation -->
+  <!-- Unique Modern Glassmorphic Navigation Bar -->
   <header class="main-nav">
     <div class="nav-shell">
-      <a href="#" class="brand-badge" id="brandHomeBtn">
+      <a href="#" class="brand-badge" id="brandHomeBtn" title="Foodie Hu Mai Home">
         <img src="logo.svg" alt="Foodie Hu Mai Logo" class="brand-logo-img">
       </a>
 
-      <!-- 3 Main Simple Tabs for Desktop & Tablet -->
+      <!-- Quick Smooth Navigation Links -->
       <nav class="simple-tabs">
-        <button type="button" class="nav-tab active" data-tab="food">🍕 1. Khana Chuno</button>
-        <button type="button" class="nav-tab" data-tab="compare">⚖️ 2. Bill Compare</button>
-        <button type="button" class="nav-tab" data-tab="deals">🎁 3. Super Deals</button>
+        <a href="#foodSection" class="nav-tab active" data-target="foodSection">🍕 Food Matcher</a>
+        <a href="#compareSection" class="nav-tab" data-target="compareSection">⚖️ Bill Calculator</a>
+        <a href="#dealsSection" class="nav-tab" data-target="dealsSection">🔥 50%-60% Deals</a>
+        <a href="#couponsSection" class="nav-tab" data-target="couponsSection">🏷️ Promo Codes</a>
       </nav>
 
-      <button type="button" class="nav-help-btn" id="howItWorksBtn">
-        ❓ Kaise Kaam Karta Hai?
-      </button>
+      <!-- Right Action Pill -->
+      <div class="nav-actions">
+        <button type="button" class="nav-help-btn" id="howItWorksBtn">
+          ❓ How It Works
+        </button>
+      </div>
     </div>
   </header>
 
-  <!-- Big Hero Header -->
-  <div class="simple-hero">
+  <!-- Hero Section & Instant Search -->
+  <section class="simple-hero">
     <div class="hero-shell">
-      <div class="hero-pill">🚀 India Ka #1 Food Bachat Engine</div>
+      <div class="hero-pill">
+        <span class="hero-pill-sparkle">✨</span> India's #1 Real-Time Food Price Comparison Engine
+      </div>
       <h1 class="hero-heading">
-        Khana Wahi, <br>
-        <span class="gradient-text">Paisa Aadha! 🍕</span>
+        Same Food, <br>
+        <span class="gradient-text">Half The Bill. 🍕</span>
       </h1>
       <p class="hero-subtext">
-        Swiggy aur Zomato ke mehnge bill se bacho. 1-Tap me dekho <strong>Sabse Sasta Kahan Hai</strong> aur direct order karke ₹100+ bachao!
+        Stop overpaying on marked-up menus &amp; hidden platform charges. Compare live delivery rates across 
+        <strong>Swiggy, Zomato, Domino's, Magicpin, EatSure &amp; ONDC</strong> and save ₹100+ on every single meal.
       </p>
 
-      <!-- Instant Search Input (Super Easy) -->
+      <!-- Omni Search Input Box -->
       <div class="omni-search-box">
         <span class="search-emoji">🔍</span>
-        <input type="text" id="dishSearchInput" placeholder="Apna pasandeeda khana search karein (e.g. Pizza, Biryani, Burger, Momos)..." autocomplete="off">
-        <button type="button" class="search-go-btn" id="searchGoBtn">Dhundho</button>
+        <input type="text" id="dishSearchInput" placeholder="Search any food or restaurant (e.g. Pizza, Biryani, Burger, Domino's, Behrouz)..." autocomplete="off">
+        <button type="button" class="search-go-btn" id="searchGoBtn">Compare Rates</button>
         <div class="search-dropdown" id="dishDropdown"></div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- ============================================================== -->
-  <!-- TAB 1: KHANA CHUNO (FOOD PICKER & LIVE WINNER BATTLE)          -->
+  <!-- SECTION 1: LIVE FOOD MATCHER & WINNER ARENA                   -->
   <!-- ============================================================== -->
-  <main class="content-shell" id="tabContentFood">
-
-    <!-- Section Title -->
+  <section class="content-shell" id="foodSection">
+    
+    <!-- Step 1: Visual Food Cards -->
     <div class="step-header">
-      <span class="step-number">Step 1</span>
-      <h2>🎯 Aaj Kya Khane Ka Mood Hai? (Tap Karein)</h2>
-      <p>Kisi bhi food par tap karein, hum turant bataenge ki sabse sasta kahan mil raha hai:</p>
+      <div class="step-badge-wrap">
+        <span class="step-number">Step 1</span>
+        <span class="step-subtitle-tag">Tap to compare</span>
+      </div>
+      <h2>🎯 What are you craving today?</h2>
+      <p>Select any popular food item below or type in the search bar to reveal real-time rates across all 6 apps:</p>
     </div>
 
-    <!-- Giant Visual Food Cards (Even a 6-year-old taps easily) -->
+    <!-- Giant Visual Food Grid -->
     <div class="giant-food-grid">
-      <button type="button" class="food-card active" data-dish-id="d_dominos_pizza" data-amount="485">
+      <button type="button" class="food-card" data-dish-id="d_dominos_pizza" data-amount="485">
         <span class="food-emoji">🍕</span>
         <strong class="food-name">Peppy Paneer Pizza</strong>
         <span class="food-store">Domino's / Pizza Hut</span>
-        <span class="food-tag green">Bachat: ₹119 Tak</span>
+        <span class="food-tag green">Save up to ₹119</span>
       </button>
 
       <button type="button" class="food-card" data-dish-id="d_biryani" data-amount="419">
@@ -113,7 +123,7 @@
         <span class="food-emoji">🥟</span>
         <strong class="food-name">Kurkure Momos</strong>
         <span class="food-store">Wow! Momo / Street</span>
-        <span class="food-tag green">Flat ₹120 Sasta</span>
+        <span class="food-tag green">Flat ₹120 Cheaper</span>
       </button>
 
       <button type="button" class="food-card" data-dish-id="d_thali" data-amount="320">
@@ -127,51 +137,72 @@
         <span class="food-emoji">🌯</span>
         <strong class="food-name">Chicken Kathi Roll</strong>
         <span class="food-store">Faasos / Rolls King</span>
-        <span class="food-tag green">50% OFF Slashed</span>
+        <span class="food-tag green">50% Slashed</span>
       </button>
     </div>
 
-    <!-- Section Title: The Winner Arena -->
-    <div class="step-header" style="margin-top: 36px;">
-      <span class="step-number" style="background:#10B981;">Step 2</span>
-      <h2>🏆 Kaun Jeeta? (Live Rate Face-off)</h2>
-      <p>Same khana alag-alag apps par kitne ka mil raha hai — Dekhiye bina kisi jhooth ke:</p>
+    <!-- Step 2: Live Winner Arena -->
+    <div class="step-header" style="margin-top: 40px;">
+      <div class="step-badge-wrap">
+        <span class="step-number" style="background:#10B981;">Step 2</span>
+        <span class="step-subtitle-tag" style="background:#ECFDF5; color:#047857;">Live Price Battle</span>
+      </div>
+      <h2>🏆 Live Rate Face-Off — Who Wins?</h2>
+      <p>Real-time calculation including menu sticker rates, delivery fees, taxes, and auto-applied promo codes:</p>
     </div>
 
-    <!-- Live Dish Face-off Podium Container -->
+    <!-- Live Dish Face-off Container (Interactive Placeholder or Active Result) -->
     <div id="dishFaceoffCardContainer" class="faceoff-arena">
-      <!-- Rendered dynamically by app.js -->
-    </div>
-
-    <!-- Domino's Special Section Shortcut -->
-    <div class="special-brand-strip" id="dominosSpotlight">
-      <div class="sbs-left">
-        <span class="sbs-icon">🍕</span>
-        <div>
-          <h3>Domino's Secret Combo: 2 Pizzas @ ₹99 Each!</h3>
-          <p>Swiggy par yahi do pizza ₹320 ke aate hain. Domino's App se direct lene par sirf <strong>₹198</strong> lagte hain — <strong>Flat ₹122 Bachat</strong> bina kisi code ke!</p>
+      <!-- Default Interactive Placeholder State -->
+      <div class="faceoff-placeholder-card" id="faceoffEmptyState">
+        <div class="fpc-icon-wrap">
+          <span class="fpc-pulse-ring"></span>
+          <span class="fpc-icon">🍕</span>
+        </div>
+        <h3>Select a dish above to start live comparison</h3>
+        <p>Pick any of the 6 food cards or use the search bar. We will calculate the exact checkout price across Swiggy, Zomato, Domino's, Magicpin, EatSure &amp; ONDC instantly.</p>
+        <div class="fpc-quick-tags">
+          <span class="fpc-label">Try popular:</span>
+          <button type="button" class="fpc-tag" onclick="quickSelectDish('d_dominos_pizza')">🍕 Peppy Paneer Pizza</button>
+          <button type="button" class="fpc-tag" onclick="quickSelectDish('d_biryani')">🍗 Shahi Biryani</button>
+          <button type="button" class="fpc-tag" onclick="quickSelectDish('d_burger')">🍔 Burger Meal</button>
+          <button type="button" class="fpc-tag" onclick="quickSelectDish('d_momos')">🥟 Kurkure Momos</button>
         </div>
       </div>
-      <button type="button" class="sbs-btn" onclick="directAutoOrder('EDV99', 'Domino\'s Everyday Value', 'Domino\'s App', 122, 320, 198, 'https://pizzaonline.dominos.co.in')">
-        2 Pizzas @ ₹99 Order Karein ➔
+    </div>
+
+    <!-- Direct App Ordering Advantage Banner -->
+    <div class="special-brand-strip" id="directOrderingSpotlight">
+      <div class="sbs-left">
+        <span class="sbs-icon">💡</span>
+        <div>
+          <h3>Insider Foodie Hack: Direct Brand Apps Are Cheaper!</h3>
+          <p>Ordering directly from brand apps (Domino's, EatSure, Magicpin) frequently bypasses third-party platform markups and delivery fees, saving you ₹100 - ₹150 instantly.</p>
+        </div>
+      </div>
+      <button type="button" class="sbs-btn" onclick="directAutoOrder('EDV99', 'Domino\'s Everyday Value (2 Pizzas @ ₹99)', 'Domino\'s App', 122, 320, 198, 'https://pizzaonline.dominos.co.in')">
+        Domino's 2 Pizzas @ ₹99 ➔
       </button>
     </div>
 
-  </main>
+  </section>
 
   <!-- ============================================================== -->
-  <!-- TAB 2: BILL COMPARATOR (CUSTOM AMOUNT SLASHER)                 -->
+  <!-- SECTION 2: CUSTOM CART BILL CALCULATOR                         -->
   <!-- ============================================================== -->
-  <main class="content-shell" id="tabContentCompare" style="display: none;">
+  <section class="content-shell" id="compareSection">
     <div class="step-header">
-      <span class="step-number" style="background:#6366F1;">Custom Bill</span>
-      <h2>⚖️ Apna Food Bill Dalo &amp; Bachat Dekho</h2>
-      <p>Kitne rupaye ka khana order karna hai? Yahan amount likhiye, hum sabhi apps ka net bill calculate kar denge:</p>
+      <div class="step-badge-wrap">
+        <span class="step-number" style="background:#6366F1;">Bill Calculator</span>
+        <span class="step-subtitle-tag" style="background:#EEF2FF; color:#4338CA;">Custom Amount</span>
+      </div>
+      <h2>⚖️ Calculate Any Cart Amount Across Apps</h2>
+      <p>Have an existing food bill? Enter the total amount below to find out which platform offers the lowest checkout price:</p>
     </div>
 
     <div class="simple-calc-box">
       <div class="scb-input-row">
-        <label for="cartInput">Aapka Bill Amount (₹):</label>
+        <label for="cartInput">Your Food Bill Total (₹):</label>
         <div class="scb-input-wrap">
           <span class="currency">₹</span>
           <input type="number" id="cartInput" value="350" min="50" max="5000" step="10">
@@ -191,12 +222,12 @@
         </select>
       </div>
 
-      <!-- Quick Preset Buttons -->
+      <!-- Quick Amount Presets -->
       <div class="preset-pills">
         <button type="button" class="preset-btn" onclick="setBillAmount(199)">₹199 (Solo Meal)</button>
         <button type="button" class="preset-btn active" onclick="setBillAmount(350)">₹350 (Couple Meal)</button>
-        <button type="button" class="preset-btn" onclick="setBillAmount(499)">₹499 (Domino's Feast)</button>
-        <button type="button" class="preset-btn" onclick="setBillAmount(850)">₹850 (Family Party)</button>
+        <button type="button" class="preset-btn" onclick="setBillAmount(499)">₹499 (Party Combo)</button>
+        <button type="button" class="preset-btn" onclick="setBillAmount(850)">₹850 (Family Feast)</button>
       </div>
 
       <!-- Comparison Results Grid -->
@@ -204,41 +235,44 @@
         <!-- Rendered dynamically by comparator.js & app.js -->
       </div>
 
-      <!-- Share on WhatsApp -->
+      <!-- WhatsApp Share Banner -->
       <div class="whatsapp-banner">
-        <span>🎉 Mera bill ₹125 kam ho gaya! Doston ko bhi batao:</span>
-        <a href="#" id="whatsappShareBtn" target="_blank" class="wa-btn">📲 WhatsApp Pe Share Karein</a>
+        <span>🎉 Save your friends from overpaying! Share this live bill comparison:</span>
+        <a href="#" id="whatsappShareBtn" target="_blank" class="wa-btn">📲 Share on WhatsApp</a>
       </div>
     </div>
 
-    <!-- Platform Fee Exposer -->
+    <!-- Hidden Platform Fee Exposer -->
     <div class="fee-banner" id="calculator">
       <div class="fb-text">
-        <h3>🔍 Swiggy aur Zomato ki Chhupi Hui "Platform Fee"</h3>
-        <p>Delivery apps har order par ₹8 se ₹10 "Platform Fee" leti hain. Saal me aapka lagbhag <strong>₹1,440</strong> faltu kharch ho jata hai!</p>
+        <h3>🔍 The Hidden "Platform Fee" Trap</h3>
+        <p>Delivery aggregators charge ₹8 to ₹12 as platform fees on every single order. Across a year, an average consumer loses over <strong>₹1,440 in unnecessary fees</strong>!</p>
       </div>
       <div class="fb-badge">
         <span class="fb-num" id="annualWastedFee">₹1,440</span>
-        <span class="fb-lbl">Har Saal Faltu Charge</span>
+        <span class="fb-lbl">Annual Unnecessary Charges</span>
       </div>
       <input type="range" id="ordersSlider" min="1" max="40" value="12" style="display:none;">
       <span id="ordersPerMonthDisplay" style="display:none;">12</span>
     </div>
-  </main>
+  </section>
 
   <!-- ============================================================== -->
-  <!-- TAB 3: SUPER DEALS & WORKING CODES (ZERO CONFUSION)           -->
+  <!-- SECTION 3: 50% - 60% SLASHED RESTAURANT DEALS                 -->
   <!-- ============================================================== -->
-  <main class="content-shell" id="tabContentDeals" style="display: none;">
+  <section class="content-shell" id="dealsSection">
     <div class="step-header">
-      <span class="step-number" style="background:#F59E0B;">Offers</span>
-      <h2>🎁 Top 50% - 60% Slashed Restaurant Deals</h2>
-      <p>Yahan wahi deals hain jahan 50% discount <strong>menu par pehle se laga hua hai</strong> — Zero searching required:</p>
+      <div class="step-badge-wrap">
+        <span class="step-number" style="background:#F59E0B;">Curated Deals</span>
+        <span class="step-subtitle-tag" style="background:#FFFBEB; color:#B45309;">Pre-applied discounts</span>
+      </div>
+      <h2>🔥 Top 50% - 60% Slashed Restaurant Deals</h2>
+      <p>Verified hot deals where up to 60% discount is <strong>already pre-applied on the restaurant menu</strong> — no coupon hunting required:</p>
     </div>
 
-    <!-- Category Filter Bar for Deals -->
+    <!-- Category Filter Bar -->
     <div class="deals-filter-bar">
-      <button class="deal-tab-btn active" data-category="all">🔥 Sabhi Deals (11)</button>
+      <button class="deal-tab-btn active" data-category="all">🔥 All Deals (11)</button>
       <button class="deal-tab-btn" data-category="pizza">🍕 Domino's &amp; Pizza (4)</button>
       <button class="deal-tab-btn" data-category="biryani">🍗 Biryani (2)</button>
       <button class="deal-tab-btn" data-category="snacks">🥟 Momos &amp; Snacks (3)</button>
@@ -248,27 +282,34 @@
     <div class="deals-grid-container" id="hotDealsContainer">
       <!-- Rendered dynamically by deals.js & app.js -->
     </div>
+  </section>
 
-    <!-- Verified Coupons Hub -->
-    <div class="step-header" style="margin-top: 48px;" id="coupons">
-      <span class="step-number" style="background:#EC4899;">Coupons</span>
-      <h2>🏷️ Verified Promo Codes (October 2026)</h2>
-      <p>Har code ke sath uski exact shart (condition) likhi hai taaki aapko koi dhokha na lage:</p>
+  <!-- ============================================================== -->
+  <!-- SECTION 4: 100% VERIFIED PROMO CODES HUB                       -->
+  <!-- ============================================================== -->
+  <section class="content-shell" id="couponsSection">
+    <div class="step-header">
+      <div class="step-badge-wrap">
+        <span class="step-number" style="background:#EC4899;">Verified Coupons</span>
+        <span class="step-subtitle-tag" style="background:#FDF2F8; color:#BE185D;">Updated Daily</span>
+      </div>
+      <h2>🏷️ Working Promo Codes (October 2026)</h2>
+      <p>Every single coupon is verified with exact minimum order conditions, platform eligibility, and community success ratings:</p>
     </div>
 
-    <!-- Hidden Traps Reality Alert -->
+    <!-- Reality Alert: Why Codes Expire -->
     <div class="reality-alert">
       <span class="ra-icon">⚠️</span>
       <div>
-        <strong>Apps Par Code Expired Kyun Batata Hai?</strong>
-        <p>1. Domino's ke ₹99 Pizza Mania par koi code nahi lagta. 2. Swiggy par code sirf unhi restaurants par lagta hai jinke page par TRYNEW tag ho. Isliye humne niche <strong>'✨ Guaranteed Deals'</strong> di hain jisme bina code ke discount milta hai!</p>
+        <strong>Why do food apps show "Coupon Expired" or "Not Applicable"?</strong>
+        <p>1. Domino's Everyday Value items (₹99 Mania) do not accept coupons. 2. Swiggy &amp; Zomato promo codes (like TRYNEW) only work on partner restaurants displaying the deal tag. Use our <strong>'✨ Guaranteed Deals'</strong> for 100% pre-applied discounts!</p>
       </div>
     </div>
 
     <!-- Filter Tabs -->
     <div class="filter-tabs">
-      <button class="tab-btn active" data-filter="guaranteed">✨ 100% Guaranteed (No Code Needed)</button>
-      <button class="tab-btn" data-filter="universal">🔥 All-Users Codes</button>
+      <button class="tab-btn active" data-filter="guaranteed">✨ Guaranteed (No Code Needed)</button>
+      <button class="tab-btn" data-filter="universal">🔥 Universal (All Users)</button>
       <button class="tab-btn" data-filter="upi">📱 UPI &amp; Wallets</button>
       <button class="tab-btn" data-filter="bank">💳 Bank Cards</button>
       <button class="tab-btn" data-filter="all">⭐ Show All</button>
@@ -279,12 +320,12 @@
       <!-- Rendered dynamically by coupons.js & app.js -->
     </div>
 
-    <!-- Credit Card Savings -->
+    <!-- Fintech Card Cashback Hacks -->
     <div class="card-hack-box" id="cards">
       <div class="chb-header">
         <span class="chb-tag">💳 THE FOODIE FINTECH HACK</span>
-        <h3>Har Order Pe Flat 10% Extra Cashback Chahiye?</h3>
-        <p>Delivery aur platform fees se chutkara paao — India ke top food credit cards se bina kisi promo code ke har order par seedha 10% cash bachega:</p>
+        <h3>Want Flat 10% Extra Cashback On Every Single Order?</h3>
+        <p>Bypass promo code restrictions entirely — India's leading food credit cards deliver flat 5% - 10% direct statement cashback with zero coupons needed:</p>
       </div>
       <div class="card-grid-mini">
         <div class="cgm-item">
@@ -293,7 +334,7 @@
         </div>
         <div class="cgm-item">
           <strong>10% Cashback</strong>
-          <span>Airtel Axis Bank Card (Zomato &amp; Swiggy)</span>
+          <span>Airtel Axis Card (Zomato &amp; Swiggy)</span>
         </div>
         <div class="cgm-item">
           <strong>5% Cashback</strong>
@@ -301,7 +342,7 @@
         </div>
       </div>
     </div>
-  </main>
+  </section>
 
   <!-- ============================================================== -->
   <!-- MODAL 1: CASHKARO-STYLE 3-STEP ORDER ASSISTANT                -->
@@ -312,14 +353,14 @@
       
       <div class="cg-top-badge">
         <span class="cgt-pulse"></span>
-        <span id="cgActivatingLabel">⚡ Activating Best Deal...</span>
+        <span id="cgActivatingLabel">⚡ Activating Lowest Price Deal...</span>
       </div>
 
       <div class="cart-guide-header">
         <span class="cart-guide-icon" id="cartGuideIcon">🍕</span>
         <div>
           <h3 id="cartGuideTitle">Order Assistant</h3>
-          <p id="cartGuideSubtitle">Screen Rate vs Net Checkout Bill</p>
+          <p id="cartGuideSubtitle">Menu Sticker Rate vs Final Net Bill</p>
         </div>
       </div>
 
@@ -328,7 +369,7 @@
         <div class="cgb-col">
           <span class="cgb-label">Menu Sticker Price</span>
           <span class="cgb-val menu" id="cartGuideMenuPrice">₹485</span>
-          <span class="cgb-sub">Screen par yahi dikhega</span>
+          <span class="cgb-sub">App screen rate</span>
         </div>
         <div class="cgb-arrow">➔</div>
         <div class="cgb-col">
@@ -360,16 +401,16 @@
         <div class="cg-step">
           <span class="cg-num">2</span>
           <div>
-            <strong>Dish Ko Cart Mein Add Karein:</strong>
-            <p id="cartGuideStep1Text">App open hote hi menu price dikhega. Pehle dish ko <em>"Add to Cart"</em> karein.</p>
+            <strong>Add Dish to Cart in the App:</strong>
+            <p id="cartGuideStep1Text">When the app opens, menu price will be shown. First click <em>"Add to Cart"</em>.</p>
           </div>
         </div>
 
         <div class="cg-step">
           <span class="cg-num">3</span>
           <div>
-            <strong>Cart Checkout Par Code Paste Karein:</strong>
-            <p id="cartGuideStep3Text">Cart me 'Apply Coupon' me code paste karte hi bill turant kam ho jayega!</p>
+            <strong>Apply Copied Coupon at Checkout:</strong>
+            <p id="cartGuideStep3Text">Paste the coupon in 'Apply Coupon' box to instantly slash your bill!</p>
           </div>
         </div>
       </div>
@@ -384,14 +425,14 @@
   </div>
 
   <!-- ============================================================== -->
-  <!-- MODAL 2: MERI BACHAT PASSBOOK (FINTECH LEDGER)                -->
+  <!-- MODAL 2: MY SAVINGS PASSBOOK                                  -->
   <!-- ============================================================== -->
   <div class="passbook-overlay" id="passbookModal" style="display: none;">
     <div class="passbook-modal">
       <button class="passbook-close-btn" id="passbookCloseBtn" aria-label="Close Passbook">&times;</button>
       
       <div class="passbook-header">
-        <div class="pb-badge">💰 MERI BACHAT PASSBOOK</div>
+        <div class="pb-badge">💰 MY SAVINGS PASSBOOK</div>
         <div class="pb-total-amt" id="passbookTotalDisplay">₹0</div>
         <div class="pb-total-sub">Total Lifetime Savings with Foodie Hu Mai</div>
       </div>
@@ -406,13 +447,13 @@
           <span class="pb-stat-lbl">Platform Fees Saved</span>
         </div>
         <div class="pb-stat-card">
-          <span class="pb-stat-num" id="pbLevelBadge">Smart Saver 🥉</span>
+          <span class="pb-stat-num" id="pbLevelBadge">Smart Saver 🥈</span>
           <span class="pb-stat-lbl">Foodie Rank</span>
         </div>
       </div>
 
       <div class="passbook-ledger-box">
-        <div class="pb-ledger-title">📋 Recent Bachat Proofs</div>
+        <div class="pb-ledger-title">📋 Verified Savings Proofs</div>
         <div class="pb-ledger-list">
           <div class="pb-ledger-row">
             <span class="pb-icon">🍕</span>
@@ -449,55 +490,106 @@
     </div>
   </div>
 
-  <!-- Toast Notice -->
-  <div class="toast-notice" id="toastNotice">
-    <span>✅</span>
-    <span id="toastMsg">Code Copied!</span>
-  </div>
-
-  <!-- Mobile Simple 3-Tab Bottom Bar -->
-  <nav class="mobile-app-bottom-bar" id="mobileBottomBar">
-    <button type="button" class="mobile-bottom-tab active" data-tab="food">
-      <span class="tab-icon">🍕</span>
-      <span>Khana</span>
-    </button>
-    <button type="button" class="mobile-bottom-tab" data-tab="compare">
-      <span class="tab-icon">⚖️</span>
-      <span>Compare</span>
-    </button>
-    <button type="button" class="mobile-bottom-tab" data-tab="deals">
-      <span class="tab-icon">🎁</span>
-      <span>Deals</span>
-    </button>
-  </nav>
-
-  <!-- Sticky Savings Bar on Mobile -->
-  <div class="mobile-sticky-savings-bar" id="mobileStickyBar" style="display:none;">
-    <div class="sticky-bar-inner">
-      <div class="sticky-info-group">
-        <span class="sticky-sub" id="stickyWinnerBadge">👑 BEST RATE</span>
-        <span class="sticky-main-price" id="stickyPriceDisplay">₹198 Net Bill</span>
+  <!-- ============================================================== -->
+  <!-- MODAL 3: HOW IT WORKS MODAL                                   -->
+  <!-- ============================================================== -->
+  <div class="how-it-works-overlay" id="howItWorksModal" style="display: none;">
+    <div class="how-it-works-modal">
+      <button class="how-it-works-close" id="howItWorksCloseBtn" aria-label="Close modal">&times;</button>
+      
+      <div class="hiw-header">
+        <span class="hiw-badge">💡 SIMPLE &amp; 100% TRANSPARENT</span>
+        <h3>How Foodie Hu Mai Works</h3>
+        <p>Three effortless steps to never overpay for your favorite food again:</p>
       </div>
-      <a href="#tabContentFood" class="sticky-order-btn" id="stickyActionBtn">Order Now ↗</a>
+
+      <div class="hiw-steps">
+        <div class="hiw-step">
+          <div class="hiw-icon">🍕</div>
+          <div>
+            <strong>1. Pick or Search Any Food</strong>
+            <p>Tap a popular food card or type any dish. You can also enter a custom bill amount (e.g. ₹350).</p>
+          </div>
+        </div>
+
+        <div class="hiw-step">
+          <div class="hiw-icon">⚖️</div>
+          <div>
+            <strong>2. Live 6-Platform Rate Battle</strong>
+            <p>We compute live net payable bills across Swiggy, Zomato, Domino's, Magicpin, EatSure &amp; ONDC, factoring in delivery fees, taxes, and active promo codes.</p>
+          </div>
+        </div>
+
+        <div class="hiw-step">
+          <div class="hiw-icon">⚡</div>
+          <div>
+            <strong>3. One-Tap Slashed Order</strong>
+            <p>Tap the winner button to auto-copy the best coupon and proceed directly to checkout with verified savings.</p>
+          </div>
+        </div>
+      </div>
+
+      <button type="button" class="hiw-btn" id="hiwGotItBtn">Got It! Let's Find Food ➔</button>
     </div>
   </div>
 
-  <!-- Footer -->
+  <!-- Toast Notification -->
+  <div class="toast-notice" id="toastNotice">
+    <span>✅</span>
+    <span id="toastMsg">Coupon Copied!</span>
+  </div>
+
+  <!-- Mobile Bottom Floating Action Pill (Only shows on mobile when a dish is active) -->
+  <div class="mobile-sticky-savings-bar" id="mobileStickyBar" style="display:none;">
+    <div class="sticky-bar-inner">
+      <div class="sticky-info-group">
+        <span class="sticky-sub" id="stickyWinnerBadge">👑 LOWEST PRICE</span>
+        <span class="sticky-main-price" id="stickyPriceDisplay">₹198 Net Bill</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <button type="button" class="sticky-order-btn" id="stickyActionBtn">Order Now ↗</button>
+        <button type="button" class="sticky-close-btn" id="stickyCloseBtn" aria-label="Dismiss">&times;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Bottom Navigation Bar -->
+  <nav class="mobile-app-bottom-bar" id="mobileBottomBar">
+    <a href="#foodSection" class="mobile-bottom-tab active" data-target="foodSection">
+      <span class="tab-icon">🍕</span>
+      <span>Foods</span>
+    </a>
+    <a href="#compareSection" class="mobile-bottom-tab" data-target="compareSection">
+      <span class="tab-icon">⚖️</span>
+      <span>Compare</span>
+    </a>
+    <a href="#dealsSection" class="mobile-bottom-tab" data-target="dealsSection">
+      <span class="tab-icon">🔥</span>
+      <span>Deals</span>
+    </a>
+    <a href="#couponsSection" class="mobile-bottom-tab" data-target="couponsSection">
+      <span class="tab-icon">🏷️</span>
+      <span>Coupons</span>
+    </a>
+  </nav>
+
+  <!-- Site Footer -->
   <footer class="site-footer">
     <div class="footer-shell">
       <div class="footer-brand">
         <h3>Foodie Hu Mai 🍕</h3>
-        <p>India's Simplest Food Price Comparator &amp; Transparent Savings Engine.</p>
-        <p style="margin-top:6px;color:#64748B;">Made with ❤️ for smart foodies across Ludhiana, Delhi, Mumbai &amp; India.</p>
+        <p>India's transparent food price matcher &amp; factual deal aggregator.</p>
+        <p style="margin-top:6px;color:#64748B;">Built with ❤️ for food lovers across Ludhiana, Delhi NCR, Chandigarh, Mumbai, Bengaluru &amp; India.</p>
       </div>
       <div class="footer-links">
-        <a href="#" onclick="switchTab('food');return false;">🍕 Food Picker</a>
-        <a href="#" onclick="switchTab('compare');return false;">⚖️ Bill Compare</a>
-        <a href="#" onclick="switchTab('deals');return false;">🎁 50%-60% Deals</a>
+        <a href="#foodSection">🍕 Food Matcher</a>
+        <a href="#compareSection">⚖️ Bill Calculator</a>
+        <a href="#dealsSection">🔥 50%-60% Deals</a>
+        <a href="#couponsSection">🏷️ Promo Codes</a>
       </div>
     </div>
     <div class="footer-disclaimer">
-      Foodie Hu Mai is an independent price comparison and factual deal aggregator. All brand trademarks (Domino's, Swiggy, Zomato, Magicpin) belong to their respective owners and are used purely for fair comparison.
+      Foodie Hu Mai is an independent price comparison and factual deal aggregator. All trademarks (Domino's, Swiggy, Zomato, Magicpin, EatSure, ONDC) belong to their respective owners and are used purely for fair, nominative price comparison purposes.
     </div>
   </footer>
 
