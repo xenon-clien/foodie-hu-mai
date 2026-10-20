@@ -71,6 +71,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const cartGuideActionText = document.getElementById("cartGuideActionText");
   const cartGuideActionBtnBottom = document.getElementById("cartGuideActionBtnBottom");
   const cartGuideActionTextBottom = document.getElementById("cartGuideActionTextBottom");
+  const cgPlatformTip = document.getElementById("cgPlatformTip");
+  const cgTipPlatformName = document.getElementById("cgTipPlatformName");
+  const cgTipBody = document.getElementById("cgTipBody");
+  const cgTipSwitchBox = document.getElementById("cgTipSwitchBox");
+  const cgTipSwitchText = document.getElementById("cgTipSwitchText");
+  const cgTipSwitchBtn = document.getElementById("cgTipSwitchBtn");
 
   // Passbook Modal
   const passbookModal = document.getElementById("passbookModal");
@@ -307,11 +313,46 @@ document.addEventListener("DOMContentLoaded", () => {
       if (pLower.includes("domino")) {
         cartGuideStep3Text.innerHTML = `In Domino's cart, paste coupon <strong>${effectiveCode}</strong> or select the Everyday Value combo to slash your bill instantly!`;
       } else if (pLower.includes("swiggy")) {
-        cartGuideStep3Text.innerHTML = `In Swiggy checkout, paste <strong>${effectiveCode}</strong> in 'Apply Coupon'. The bill will drop from <strong>₹${menuPrice} to ₹${finalPrice}</strong>!`;
+        cartGuideStep3Text.innerHTML = `In Swiggy checkout, scroll to <strong>'SAVINGS CORNER'</strong> and tap <strong>'Apply Coupon >'</strong> to paste <strong>${effectiveCode}</strong>. (Swiggy requires manual coupon apply after login).`;
       } else if (pLower.includes("zomato")) {
-        cartGuideStep3Text.innerHTML = `In Zomato checkout, apply coupon <strong>${effectiveCode}</strong> to save ₹${discount}!`;
+        cartGuideStep3Text.innerHTML = `In Zomato checkout, tap <strong>'View All Coupons'</strong> and paste <strong>${effectiveCode}</strong> to save ₹${discount}!`;
       } else {
         cartGuideStep3Text.innerHTML = `Paste the coupon in 'Apply Coupon' box to instantly slash your bill!`;
+      }
+    }
+
+    // Platform Reality Alert & Switcher
+    if (cgPlatformTip) {
+      const restLower = (restaurant || "").toLowerCase();
+      if (pLower.includes("swiggy") || pLower.includes("zomato")) {
+        cgPlatformTip.style.display = "block";
+        if (cgTipPlatformName) cgTipPlatformName.textContent = platform;
+        if (cgTipBody) {
+          cgTipBody.innerHTML = `No website in India can auto-apply coupons inside ${platform}'s cart. When ${platform} opens, scroll to <strong>'SAVINGS CORNER'</strong> and tap <strong>'Apply Coupon >'</strong> to paste code <strong>${effectiveCode}</strong>.`;
+        }
+        if (cgTipSwitchBox && (restLower.includes("domino") || restLower.includes("pizza"))) {
+          cgTipSwitchBox.style.display = "flex";
+          if (cgTipSwitchText) {
+            cgTipSwitchText.innerHTML = `💡 <strong>Avoid ₹382 on Swiggy!</strong> Domino's Official App charges only <strong>₹198</strong> for pizzas with <strong>₹0 platform fee</strong>.`;
+          }
+          if (cgTipSwitchBtn) {
+            cgTipSwitchBtn.href = "https://www.dominos.co.in";
+            cgTipSwitchBtn.textContent = "Switch to Domino's App (Save ₹184) ↗";
+          }
+        } else if (cgTipSwitchBox && (restLower.includes("biryani") || restLower.includes("behrouz") || restLower.includes("faasos"))) {
+          cgTipSwitchBox.style.display = "flex";
+          if (cgTipSwitchText) {
+            cgTipSwitchText.innerHTML = `💡 <strong>EatSure Direct is Cheaper!</strong> EatSure gives Flat 50% - 60% OFF with ₹0 platform fee.`;
+          }
+          if (cgTipSwitchBtn) {
+            cgTipSwitchBtn.href = "https://www.eatsure.com";
+            cgTipSwitchBtn.textContent = "Switch to EatSure (Save ₹150) ↗";
+          }
+        } else if (cgTipSwitchBox) {
+          cgTipSwitchBox.style.display = "none";
+        }
+      } else {
+        cgPlatformTip.style.display = "none";
       }
     }
 
@@ -482,6 +523,9 @@ document.addEventListener("DOMContentLoaded", () => {
               <div class="breakdown-row"><span>Delivery &amp; Platform Fee</span><span><strong style="color:var(--savings-green)">₹0 FREE</strong></span></div>
               ${comparison.dominos.discount > 0 ? `<div class="breakdown-row breakdown-discount"><span>Coupon Promo</span><span>-₹${comparison.dominos.discount}</span></div>` : ''}
             </div>
+            <div class="card-winner-callout" style="background:#EFF6FF; border:1px solid #BFDBFE; border-radius:10px; padding:8px 10px; margin-bottom:12px; font-size:0.75rem; color:#1E40AF; line-height:1.4;">
+              🏆 <strong>Direct Brand Superpower:</strong> ₹0 Platform Fee &amp; Everyday Value. <strong>Saves ₹${comparison.swiggy.finalPrice - comparison.dominos.finalPrice} vs Swiggy!</strong>
+            </div>
             <button type="button" class="order-btn dominos" onclick="openOrderGuide('${comparison.dominos.promo ? comparison.dominos.promo.code : 'DOMNEW'}', '${dish.name.replace(/'/g, "\\'")}', 'Domino\'s Official App', ${comparison.dominos.base}, ${comparison.dominos.finalPrice}, '${comparison.dominos.deepLink}')">Order on Domino's (₹${comparison.dominos.finalPrice}) →</button>
           </div>
           ` : `
@@ -546,6 +590,10 @@ document.addEventListener("DOMContentLoaded", () => {
               <div class="breakdown-row"><span>Fees &amp; Delivery</span><span>₹${comparison.swiggy.gross - dish.swiggyBase}</span></div>
               ${comparison.swiggy.discount > 0 ? `<div class="breakdown-row breakdown-discount"><span>Coupon Savings</span><span>-₹${comparison.swiggy.discount}</span></div>` : ''}
             </div>
+            ${comparison.isDominos ? `
+            <div class="card-warning-callout" style="background:#FFFBEB; border:1px solid #FDE68A; border-radius:10px; padding:8px 10px; margin-bottom:12px; font-size:0.75rem; color:#92400E; line-height:1.4;">
+              ⚠️ <strong>High Swiggy Markup:</strong> Swiggy charges <strong>₹${comparison.swiggy.finalPrice}</strong> (+₹${comparison.swiggy.gross - dish.swiggyBase} extra fees). <em>Domino's Direct is only ₹${comparison.dominos.finalPrice}!</em>
+            </div>` : ''}
             <button type="button" class="order-btn swiggy" onclick="openOrderGuide('${comparison.swiggy.promo ? comparison.swiggy.promo.code : 'TRYNEW'}', '${dish.name.replace(/'/g, "\\'")}', 'Swiggy', ${dish.swiggyBase}, ${comparison.swiggy.finalPrice}, '${comparison.swiggy.deepLink}')">Order on Swiggy (₹${comparison.swiggy.finalPrice}) →</button>
           </div>
 
@@ -567,6 +615,10 @@ document.addEventListener("DOMContentLoaded", () => {
               <div class="breakdown-row"><span>Fees &amp; Delivery</span><span>₹${comparison.zomato.gross - dish.zomatoBase}</span></div>
               ${comparison.zomato.discount > 0 ? `<div class="breakdown-row breakdown-discount"><span>Coupon Savings</span><span>-₹${comparison.zomato.discount}</span></div>` : ''}
             </div>
+            ${comparison.isDominos ? `
+            <div class="card-warning-callout" style="background:#FFFBEB; border:1px solid #FDE68A; border-radius:10px; padding:8px 10px; margin-bottom:12px; font-size:0.75rem; color:#92400E; line-height:1.4;">
+              ⚠️ <strong>High Zomato Markup:</strong> Zomato charges <strong>₹${comparison.zomato.finalPrice}</strong> (+₹${comparison.zomato.gross - dish.zomatoBase} extra fees). <em>Domino's Direct is only ₹${comparison.dominos.finalPrice}!</em>
+            </div>` : ''}
             <button type="button" class="order-btn zomato" onclick="openOrderGuide('${comparison.zomato.promo ? comparison.zomato.promo.code : 'STEALDEAL'}', '${dish.name.replace(/'/g, "\\'")}', 'Zomato', ${dish.zomatoBase}, ${comparison.zomato.finalPrice}, '${comparison.zomato.deepLink}')">Order on Zomato (₹${comparison.zomato.finalPrice}) →</button>
           </div>
 

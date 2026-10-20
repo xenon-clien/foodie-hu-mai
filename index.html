@@ -345,6 +345,55 @@
   </section>
 
   <!-- ============================================================== -->
+  <!-- SECTION 5: TRANSPARENCY & CONSUMER PRICING GUIDE               -->
+  <!-- ============================================================== -->
+  <section class="content-shell" id="transparencySection">
+    <div class="step-header">
+      <div class="step-badge-wrap">
+        <span class="step-number" style="background:#2563EB;">Consumer Truth</span>
+        <span class="step-subtitle-tag" style="background:#EFF6FF; color:#1D4ED8;">100% Transparent</span>
+      </div>
+      <h2>💡 The Truth About Food Pricing: Why Did Swiggy Cart Show ₹382?</h2>
+      <p>Ever wondered why the same pizza costs ₹382 on Swiggy but only ₹198 on Domino's Direct? Here is how food delivery pricing and coupon links actually work in India:</p>
+    </div>
+
+    <div class="transparency-grid">
+      <!-- Card 1 -->
+      <div class="transparency-card">
+        <div class="tc-icon">🔒</div>
+        <div class="tc-tag">Technical Reality</div>
+        <h3>Why Carts Don't Auto-Discount on Links</h3>
+        <p>No website in India (neither <strong>CashKaro</strong>, <strong>CouponDunia</strong>, nor <strong>Foodie Hu Mai</strong>) can silently modify Swiggy's internal cart price via a web link due to browser security (Same-Origin Policy).</p>
+        <div class="tc-highlight">
+          <strong>The Necessary Step:</strong> In Swiggy checkout, you must log in and tap <em>"SAVINGS CORNER > Apply Coupon"</em> to paste the copied promo code.
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="transparency-card featured">
+        <div class="tc-icon">🍕</div>
+        <div class="tc-tag gold">The Real Superpower</div>
+        <h3>Domino's Direct (₹198) vs Swiggy (₹382)</h3>
+        <p>Swiggy adds ₹35 delivery + ₹8-10 platform fee + packaging for Domino's orders, bringing a ₹319 pizza to <strong>₹382</strong>! Domino's also disables general Swiggy coupons on small single orders.</p>
+        <div class="tc-highlight green">
+          <strong>Our Actual Winner:</strong> Foodie Hu Mai flagged <strong>Domino's Official App</strong> as the winner at <strong>₹198</strong> with ₹0 platform fee. You pocket <strong>₹184 in net savings!</strong>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="transparency-card">
+        <div class="tc-icon">⚖️</div>
+        <div class="tc-tag">Business Model</div>
+        <h3>CashKaro Wallet vs Instant Arbitrage</h3>
+        <p>CashKaro users still pay the full <strong>₹382 on Swiggy</strong> at checkout, and get only ₹20-₹30 delayed cashback in a wallet after 72 hours.</p>
+        <div class="tc-highlight blue">
+          <strong>Foodie Hu Mai Advantage:</strong> We steer you away from expensive platforms so you save ₹184 instantly without waiting days for wallet cashbacks!
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
   <!-- MODAL 1: CASHKARO-STYLE 3-STEP ORDER ASSISTANT                -->
   <!-- ============================================================== -->
   <div class="cart-guide-overlay" id="cartGuideOverlay" style="display: none;">
@@ -390,6 +439,22 @@
         <a href="#" target="_blank" class="cg-action-btn primary" id="cartGuideActionBtn">
           <span id="cartGuideActionText">⚡ Open Store &amp; Save ₹100 ↗</span>
         </a>
+      </div>
+
+      <!-- Swiggy / Platform Reality Alert & Direct Brand Switcher -->
+      <div class="cg-platform-tip" id="cgPlatformTip" style="display:none;">
+        <div class="cg-pt-title">
+          <span>⚠️</span> <strong>Important Note for <span id="cgTipPlatformName">Swiggy</span> Orders:</strong>
+        </div>
+        <p class="cg-pt-body" id="cgTipBody">
+          No website in India can auto-apply coupons inside Swiggy's cart. In Swiggy checkout, scroll to <strong>'SAVINGS CORNER'</strong> and tap <strong>'Apply Coupon >'</strong> to paste your copied code.
+        </p>
+        <div class="cg-pt-switch" id="cgTipSwitchBox" style="display:none;">
+          <div class="cg-pt-switch-text" id="cgTipSwitchText">
+            💡 <strong>Why pay ₹382?</strong> Domino's Official App charges only <strong>₹198</strong> for pizzas with ₹0 platform fee!
+          </div>
+          <a href="https://www.dominos.co.in" target="_blank" class="cg-switch-btn" id="cgTipSwitchBtn">Switch to Domino's App (Save ₹184) ↗</a>
+        </div>
       </div>
 
       <!-- Simple 3 Steps Checklist -->
@@ -593,6 +658,7 @@
         <a href="#compareSection">⚖️ Bill Calculator</a>
         <a href="#dealsSection">🔥 50%-60% Deals</a>
         <a href="#couponsSection">🏷️ Promo Codes</a>
+        <a href="#transparencySection">💡 Pricing Truth</a>
       </div>
     </div>
     <div class="footer-disclaimer">
