@@ -308,8 +308,16 @@ const ComparatorEngine = {
     const mDiscount = mPromo ? mPromo.discount : (magicpinBase >= 200 ? 50 : 25);
     const mFinal = Math.max(0, mGross - mDiscount);
 
-    // 5. EatSure (Direct Brand Platform)
-    const isEatSureServiceable = this.isMetroCity(city);
+    // 5. EatSure (Direct Brand Platform for Rebel Foods)
+    const isEatSureBrand = Boolean(dish.eatsureBase) ||
+                           dish.name.toLowerCase().includes("behrouz") ||
+                           dish.name.toLowerCase().includes("faasos") ||
+                           dish.name.toLowerCase().includes("ovenstory") ||
+                           dish.name.toLowerCase().includes("lunchbox") ||
+                           dish.name.toLowerCase().includes("firangi") ||
+                           dish.name.toLowerCase().includes("eatsure") ||
+                           (dish.keywords && dish.keywords.some(k => k.toLowerCase().includes("behrouz") || k.toLowerCase().includes("faasos") || k.toLowerCase().includes("eatsure")));
+    const isEatSureServiceable = this.isMetroCity(city) && isEatSureBrand;
     const eBase = Math.round(zomatoBase * 0.92);
     const eGST = Math.round(eBase * 0.05);
     const eGross = eBase + eGST; // Zero platform fee, zero packaging, zero delivery
@@ -317,7 +325,87 @@ const ComparatorEngine = {
     const eDiscount = ePromo ? ePromo.discount : 75;
     const eFinal = Math.max(0, eGross - eDiscount);
 
-    // 6. ONDC
+    // 6. Direct Brand Apps (KFC, Pizza Hut, Burger King, McDelivery)
+    let directBrandResult = null;
+    const isKFC = dish.name.toLowerCase().includes("kfc") || (dish.keywords && dish.keywords.includes("kfc"));
+    const isPizzaHut = dish.name.toLowerCase().includes("pizza hut") || (dish.keywords && dish.keywords.includes("pizza hut"));
+    const isBurgerKing = dish.name.toLowerCase().includes("burger king") || (dish.keywords && dish.keywords.includes("burger king"));
+    const isMcD = dish.name.toLowerCase().includes("mcdonald") || (dish.keywords && dish.keywords.includes("mcdonald"));
+
+    if (dish.directBrand) {
+      const bBase = dish.directBrand.base || Math.round(zomatoBase * 0.90);
+      const bGST = Math.round(bBase * 0.05);
+      const bGross = bBase + bGST;
+      const bDiscount = dish.directBrand.discount || 50;
+      const bFinal = Math.max(0, bGross - bDiscount);
+      directBrandResult = {
+        name: dish.directBrand.name,
+        base: bBase,
+        gross: bGross,
+        discount: bDiscount,
+        promo: { code: dish.directBrand.discountCode || "DIRECTSAVE", discount: bDiscount },
+        finalPrice: bFinal,
+        deepLink: dish.directBrand.deepLink
+      };
+    } else if (isKFC) {
+      const kBase = Math.round(zomatoBase * 0.92);
+      const kGST = Math.round(kBase * 0.05);
+      const kGross = kBase + kGST;
+      const kDiscount = 50;
+      directBrandResult = {
+        name: "KFC Direct App",
+        base: kBase,
+        gross: kGross,
+        discount: kDiscount,
+        promo: { code: "KFCLOVE", discount: kDiscount },
+        finalPrice: Math.max(0, kGross - kDiscount),
+        deepLink: "https://online.kfc.co.in"
+      };
+    } else if (isPizzaHut) {
+      const pBase = Math.round(zomatoBase * 0.90);
+      const pGST = Math.round(pBase * 0.05);
+      const pGross = pBase + pGST;
+      const pDiscount = 75;
+      directBrandResult = {
+        name: "Pizza Hut Direct",
+        base: pBase,
+        gross: pGross,
+        discount: pDiscount,
+        promo: { code: "HUT100", discount: pDiscount },
+        finalPrice: Math.max(0, pGross - pDiscount),
+        deepLink: "https://www.pizzahut.co.in"
+      };
+    } else if (isBurgerKing) {
+      const bkBase = Math.round(zomatoBase * 0.90);
+      const bkGST = Math.round(bkBase * 0.05);
+      const bkGross = bkBase + bkGST;
+      const bkDiscount = 50;
+      directBrandResult = {
+        name: "Burger King App",
+        base: bkBase,
+        gross: bkGross,
+        discount: bkDiscount,
+        promo: { code: "BK50", discount: bkDiscount },
+        finalPrice: Math.max(0, bkGross - bkDiscount),
+        deepLink: "https://www.burgerking.in"
+      };
+    } else if (isMcD) {
+      const mBase = Math.round(zomatoBase * 0.92);
+      const mGST = Math.round(mBase * 0.05);
+      const mGross = mBase + mGST;
+      const mDiscount = 50;
+      directBrandResult = {
+        name: "McDelivery App",
+        base: mBase,
+        gross: mGross,
+        discount: mDiscount,
+        promo: { code: "MCD50", discount: mDiscount },
+        finalPrice: Math.max(0, mGross - mDiscount),
+        deepLink: "https://www.mcdelivery.co.in"
+      };
+    }
+
+    // 7. ONDC
     const oBase = Math.round(zomatoBase * 0.88);
     const oGST = Math.round(oBase * 0.05);
     const oGross = oBase + oGST + 22; // Subsidized delivery
@@ -332,6 +420,7 @@ const ComparatorEngine = {
       { name: "Zomato", final: zFinal, color: "#FF385C" }
     ] : [
       ...(isEatSureServiceable ? [{ name: "EatSure (Direct)", final: eFinal, color: "#7E22CE" }] : []),
+      ...(directBrandResult ? [{ name: directBrandResult.name, final: directBrandResult.finalPrice, color: "#DC2626" }] : []),
       { name: "Magicpin", final: mFinal, color: "#10B981" },
       { name: "ONDC (Pincode)", final: oFinal, color: "#0284C7" },
       { name: "Swiggy", final: sFinal, color: "#FC8019" },
@@ -344,15 +433,152 @@ const ComparatorEngine = {
     return {
       dish,
       isDominos,
+      isEatSure: Boolean(isEatSureServiceable),
+      directBrand: directBrandResult,
       city,
       winner: options[0].name,
       totalSaved: Math.max(0, highest - options[0].final),
       dominos: { base: dBase, gross: dGross, discount: dDiscount, promo: dPromo, finalPrice: dFinal, deepLink: "https://www.dominos.co.in" },
       zomato: { base: zomatoBase, gross: zGross, discount: zDiscount, promo: zPromo, finalPrice: zFinal, deepLink: "https://www.zomato.com/search?q=" + encodeURIComponent(dish.name) },
       swiggy: { base: swiggyBase, gross: sGross, discount: sDiscount, promo: sPromo, finalPrice: sFinal, deepLink: "https://www.swiggy.com/search?query=" + encodeURIComponent(dish.name) },
-      eatsure: { base: eBase, gross: eGross, discount: eDiscount, promo: ePromo, finalPrice: eFinal, serviceable: true, serviceableNote: "Available via EatSure Direct", deepLink: "https://www.eatsure.com" },
+      eatsure: { base: eBase, gross: eGross, discount: eDiscount, promo: ePromo, finalPrice: eFinal, serviceable: Boolean(isEatSureServiceable), serviceableNote: "Available via EatSure Direct", deepLink: "https://www.eatsure.com" },
       magicpin: { base: magicpinBase, gross: mGross, discount: mDiscount, promo: mPromo, finalPrice: mFinal, deepLink: "https://www.magicpin.in/search?q=" + encodeURIComponent(dish.name) },
       ondc: { base: oBase, gross: oGross, discount: oDiscount, promo: { code: "ONDC50" }, finalPrice: oFinal, deepLink: "https://www.ondc.org" }
+    };
+  },
+
+  createDynamicDish(query) {
+    const clean = (query || "").trim();
+    const lower = clean.toLowerCase();
+
+    let category = "Popular Dish";
+    let emoji = "🍽️";
+    let basePrice = 280;
+    let packaging = 20;
+
+    if (/pizza|margherita|cheese burst|garlic bread|pepperoni/i.test(lower)) {
+      category = "Pizza & Italian";
+      emoji = "🍕";
+      basePrice = 299;
+    } else if (/burger|whopper|crispy|fries|nuggets|wrap/i.test(lower)) {
+      category = "Burgers & Fast Food";
+      emoji = "🍔";
+      basePrice = 219;
+    } else if (/biryani|pulao|mandi|dum biryani|hyderabadi/i.test(lower)) {
+      category = "Biryani & Rice Bowls";
+      emoji = "🍗";
+      basePrice = 320;
+    } else if (/thali|punjabi|dal makhani|paneer|roti|naan|curry|chole/i.test(lower)) {
+      category = "North Indian Meals";
+      emoji = "🍱";
+      basePrice = 260;
+    } else if (/momo|noodles|chowmein|manchurian|chinese|fried rice|dimsum/i.test(lower)) {
+      category = "Chinese & Asian";
+      emoji = "🥟";
+      basePrice = 230;
+    } else if (/dosa|idli|vada|uttapam|sambar/i.test(lower)) {
+      category = "South Indian";
+      emoji = "🥞";
+      basePrice = 180;
+    } else if (/roll|kathi|shawarma|frankie/i.test(lower)) {
+      category = "Rolls & Wraps";
+      emoji = "🌯";
+      basePrice = 190;
+    } else if (/chai|tea|coffee|frappe|shake|beverage|lassi/i.test(lower)) {
+      category = "Beverages & Cafe";
+      emoji = "☕";
+      basePrice = 140;
+      packaging = 15;
+    } else if (/ice cream|dessert|cake|pastry|waffle|gulab jamun|sweet/i.test(lower)) {
+      category = "Desserts & Sweets";
+      emoji = "🍨";
+      basePrice = 160;
+      packaging = 15;
+    } else if (/chicken|mutton|kebab|fish|tandoori|wings/i.test(lower)) {
+      category = "Non-Veg Starters & Grills";
+      emoji = "🍗";
+      basePrice = 340;
+    }
+
+    const formattedTitle = clean.split(/\s+/).map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+
+    let dominosBase = 0;
+    let eatsureBase = 0;
+    let directBrand = null;
+    let popularRest = clean;
+
+    if (/domino/i.test(lower)) {
+      dominosBase = Math.round(basePrice * 0.80);
+      popularRest = "Domino's Pizza (Direct App / Swiggy / Zomato / Magicpin)";
+      emoji = "🍕";
+    } else if (/behrouz|faasos|ovenstory|lunchbox|firangi|eatsure/i.test(lower)) {
+      eatsureBase = Math.round(basePrice * 0.85);
+      popularRest = `${formattedTitle} (EatSure Direct / Swiggy / Zomato / Magicpin)`;
+    } else if (/kfc/i.test(lower)) {
+      directBrand = {
+        name: "KFC Direct App",
+        deepLink: "https://online.kfc.co.in",
+        discountCode: "KFCLOVE",
+        discount: 50,
+        base: basePrice
+      };
+      popularRest = "KFC (App / Swiggy / Zomato / Magicpin)";
+      emoji = "🍗";
+    } else if (/pizza hut/i.test(lower)) {
+      directBrand = {
+        name: "Pizza Hut Direct",
+        deepLink: "https://www.pizzahut.co.in",
+        discountCode: "HUT100",
+        discount: 75,
+        base: basePrice
+      };
+      popularRest = "Pizza Hut (Direct / Swiggy / Zomato / Magicpin)";
+      emoji = "🍕";
+    } else if (/burger king/i.test(lower)) {
+      directBrand = {
+        name: "Burger King App",
+        deepLink: "https://www.burgerking.in",
+        discountCode: "BK50",
+        discount: 50,
+        base: basePrice
+      };
+      popularRest = "Burger King (Direct / Swiggy / Zomato / Magicpin)";
+      emoji = "🍔";
+    } else if (/mcdonald|mcd/i.test(lower)) {
+      directBrand = {
+        name: "McDelivery App",
+        deepLink: "https://www.mcdelivery.co.in",
+        discountCode: "MCD50",
+        discount: 50,
+        base: basePrice
+      };
+      popularRest = "McDonald's (McDelivery / Swiggy / Zomato / Magicpin)";
+      emoji = "🍔";
+    } else if (/subway/i.test(lower)) {
+      popularRest = "Subway (Magicpin / Swiggy / Zomato / ONDC)";
+      emoji = "🥪";
+    } else if (/haldiram/i.test(lower)) {
+      popularRest = "Haldiram's (Magicpin / Swiggy / Zomato / ONDC)";
+      emoji = "🍛";
+    } else {
+      popularRest = `${formattedTitle} (Magicpin, ONDC, Swiggy & Zomato)`;
+    }
+
+    return {
+      id: "dyn_" + Date.now(),
+      name: formattedTitle,
+      keywords: clean.toLowerCase().split(/\s+/),
+      category: category,
+      emoji: emoji,
+      dominosBase: dominosBase,
+      eatsureBase: eatsureBase,
+      directBrand: directBrand,
+      zomatoBase: basePrice,
+      swiggyBase: basePrice,
+      magicpinBase: Math.max(120, Math.round(basePrice * 0.85)),
+      packaging: packaging,
+      popularRest: popularRest,
+      isDynamic: true
     };
   },
 

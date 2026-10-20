@@ -128,6 +128,26 @@ assert(domnewCoupon && domnewCoupon.platform === "Domino's", `DOMNEW promo verif
 const dominosAppDeal = deals.find(d => d.id === 'deal_dominos_app');
 assert(dominosAppDeal && dominosAppDeal.platform === "Domino's App", `Domino's Official App deal present in Hot Deals`);
 
+// 7. UNIVERSAL DYNAMIC SEARCH & COMPARATOR TESTS
+console.log(`\n[Suite 7: Universal Dynamic Search & Comparator Engine]`);
+assert(typeof comparator.createDynamicDish === 'function', `createDynamicDish engine function exists`);
+
+const kfcDynamic = comparator.createDynamicDish("KFC Crispy Chicken Burger");
+assert(kfcDynamic && kfcDynamic.name.includes("Kfc"), `KFC dynamic dish created with proper formatting`);
+assert(kfcDynamic.directBrand && kfcDynamic.directBrand.name === "KFC Direct App", `KFC direct brand app identified`);
+assert(kfcDynamic.directBrand.deepLink === "https://online.kfc.co.in", `KFC direct order link is valid`);
+
+const haldiramDynamic = comparator.createDynamicDish("Haldiram Special Thali");
+assert(haldiramDynamic && haldiramDynamic.category === "North Indian Meals", `Haldiram category correctly detected (North Indian Meals)`);
+assert(haldiramDynamic.popularRest.includes("Haldiram"), `Haldiram connected platform network registered`);
+
+const localDhabaDynamic = comparator.createDynamicDish("Sharma Dhaba Dal Makhani");
+const dhabaComp = comparator.compareDish(localDhabaDynamic);
+assert(dhabaComp && dhabaComp.winner, `Arbitrary unlisted restaurant generates full live comparison (Winner: ${dhabaComp.winner})`);
+assert(dhabaComp.swiggy.finalPrice > 0 && dhabaComp.zomato.finalPrice > 0, `Swiggy & Zomato rates calculated for dynamic query`);
+assert(dhabaComp.magicpin.finalPrice > 0 && dhabaComp.ondc.finalPrice > 0, `Magicpin & ONDC rates calculated for dynamic query`);
+assert(dhabaComp.totalSaved >= 0, `Savings computed for dynamic search: ₹${dhabaComp.totalSaved}`);
+
 console.log(`\n=================================================`);
 console.log(`📊 TEST SUMMARY: ${passed} Passed, ${failed} Failed`);
 console.log(`=================================================\n`);

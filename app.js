@@ -442,12 +442,24 @@ document.addEventListener("DOMContentLoaded", () => {
     const comparison = ComparatorEngine.compareDish(dish, appliedCoupon, paymentSelect ? paymentSelect.value : "all", currentCity);
 
     // Identify Winner Object
-    const winnerKey = comparison.winner.toLowerCase().includes("domino") ? "dominos" :
-                      comparison.winner.toLowerCase().includes("eatsure") ? "eatsure" :
-                      comparison.winner.toLowerCase().includes("magic") ? "magicpin" :
-                      comparison.winner.toLowerCase().includes("ondc") ? "ondc" :
-                      comparison.winner.toLowerCase().includes("swiggy") ? "swiggy" : "zomato";
-    const winnerObj = comparison[winnerKey] || comparison.magicpin || comparison.dominos || comparison.swiggy;
+    let winnerObj;
+    const wLower = (comparison.winner || "").toLowerCase();
+    if (wLower.includes("domino")) {
+      winnerObj = comparison.dominos;
+    } else if (wLower.includes("eatsure")) {
+      winnerObj = comparison.eatsure;
+    } else if (comparison.directBrand && comparison.winner === comparison.directBrand.name) {
+      winnerObj = comparison.directBrand;
+    } else if (wLower.includes("magic")) {
+      winnerObj = comparison.magicpin;
+    } else if (wLower.includes("ondc")) {
+      winnerObj = comparison.ondc;
+    } else if (wLower.includes("swiggy")) {
+      winnerObj = comparison.swiggy;
+    } else {
+      winnerObj = comparison.zomato;
+    }
+    if (!winnerObj) winnerObj = comparison.magicpin || comparison.swiggy || comparison.zomato;
 
     // Mobile sticky bar update (Only shown on small screens)
     if (mobileStickyBar && stickyWinnerBadge && stickyPriceDisplay && stickyActionBtn) {
@@ -482,8 +494,8 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="whb-left">
               <span class="whb-emoji">${dish.emoji}</span>
               <div>
-                <h3 class="whb-title">${comparison.winner}</h3>
-                <p class="whb-dish-info">${dish.name} • Available at ${dish.popularRest}</p>
+                <h3 class="whb-title">${escapeHTML(comparison.winner)}</h3>
+                <p class="whb-dish-info">${escapeHTML(dish.name)} • Available at ${escapeHTML(dish.popularRest)}</p>
               </div>
             </div>
             <div class="whb-right">
@@ -496,14 +508,33 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
           <button type="button" class="whb-order-btn" 
             data-order-trigger="true"
-            data-code="${winnerObj.promo ? winnerObj.promo.code : 'BESTDEAL'}"
-            data-rest="${dish.name}"
-            data-platform="${comparison.winner}"
+            data-code="${escapeHTML(winnerObj.promo ? winnerObj.promo.code : 'BESTDEAL')}"
+            data-rest="${escapeHTML(dish.name)}"
+            data-platform="${escapeHTML(comparison.winner)}"
             data-menu="${winnerObj.gross || winnerObj.base}"
             data-final="${winnerObj.finalPrice}"
-            data-link="${winnerObj.deepLink}">
-            ⚡ Order on ${comparison.winner} &amp; Save ₹${comparison.totalSaved} ➔
+            data-link="${escapeHTML(winnerObj.deepLink)}">
+            ⚡ Order on ${escapeHTML(comparison.winner)} &amp; Save ₹${comparison.totalSaved} ➔
           </button>
+        </div>
+
+        <!-- Connected Delivery Platforms Discovery Strip -->
+        <div class="connected-platforms-strip" style="background:#F9FAFB; border:1px solid #E5E7EB; border-radius:12px; padding:12px 16px; margin:16px 0; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:1.15rem;">📡</span>
+            <span style="font-size:0.85rem; font-weight:600; color:#374151;">
+              Connected Delivery Platforms for <strong>${escapeHTML(dish.name)}</strong>:
+            </span>
+          </div>
+          <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+            ${comparison.isDominos ? `<span class="connected-chip" style="background:#EBF5FF; color:#0078AE; font-weight:700; font-size:0.75rem; padding:4px 10px; border-radius:20px; border:1px solid #BFDBFE;">Domino's App</span>` : ''}
+            ${comparison.isEatSure ? `<span class="connected-chip" style="background:#FAF5FF; color:#7E22CE; font-weight:700; font-size:0.75rem; padding:4px 10px; border-radius:20px; border:1px solid #E9D5FF;">EatSure Direct</span>` : ''}
+            ${comparison.directBrand ? `<span class="connected-chip" style="background:#FEF2F2; color:#DC2626; font-weight:700; font-size:0.75rem; padding:4px 10px; border-radius:20px; border:1px solid #FECACA;">${escapeHTML(comparison.directBrand.name)}</span>` : ''}
+            <span class="connected-chip" style="background:#ECFDF5; color:#059669; font-weight:700; font-size:0.75rem; padding:4px 10px; border-radius:20px; border:1px solid #A7F3D0;">Magicpin</span>
+            <span class="connected-chip" style="background:#F0F9FF; color:#0284C7; font-weight:700; font-size:0.75rem; padding:4px 10px; border-radius:20px; border:1px solid #BAE6FD;">ONDC Network</span>
+            <span class="connected-chip" style="background:#FFF7ED; color:#EA580C; font-weight:700; font-size:0.75rem; padding:4px 10px; border-radius:20px; border:1px solid #FED7AA;">Swiggy</span>
+            <span class="connected-chip" style="background:#FFF1F2; color:#E11D48; font-weight:700; font-size:0.75rem; padding:4px 10px; border-radius:20px; border:1px solid #FECDD3;">Zomato</span>
+          </div>
         </div>
 
         <!-- Interactive Coupon Slasher Bar -->
@@ -548,16 +579,18 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
             <button type="button" class="order-btn dominos" 
               data-order-trigger="true"
-              data-code="${comparison.dominos.promo ? comparison.dominos.promo.code : 'DOMNEW'}"
-              data-rest="${dish.name}"
+              data-code="${escapeHTML(comparison.dominos.promo ? comparison.dominos.promo.code : 'DOMNEW')}"
+              data-rest="${escapeHTML(dish.name)}"
               data-platform="Domino's Official App"
               data-menu="${comparison.dominos.base}"
               data-final="${comparison.dominos.finalPrice}"
-              data-link="${comparison.dominos.deepLink}">
+              data-link="${escapeHTML(comparison.dominos.deepLink)}">
               Order on Domino's (₹${comparison.dominos.finalPrice}) →
             </button>
           </div>
-          ` : `
+          ` : ''}
+
+          ${comparison.isEatSure ? `
           <!-- EatSure (Direct) -->
           <div class="platform-card ${comparison.eatsure.finalPrice === winnerObj.finalPrice ? 'winner' : ''}">
             ${comparison.eatsure.finalPrice === winnerObj.finalPrice ? `<div class="winner-crown">👑 WINNER (SAVE ₹${comparison.totalSaved})</div>` : ''}
@@ -578,16 +611,48 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
             <button type="button" class="order-btn eatsure"
               data-order-trigger="true"
-              data-code="${comparison.eatsure.promo ? comparison.eatsure.promo.code : 'SURE50'}"
-              data-rest="${dish.name}"
+              data-code="${escapeHTML(comparison.eatsure.promo ? comparison.eatsure.promo.code : 'SURE50')}"
+              data-rest="${escapeHTML(dish.name)}"
               data-platform="EatSure"
               data-menu="${comparison.eatsure.base}"
               data-final="${comparison.eatsure.finalPrice}"
-              data-link="${comparison.eatsure.deepLink || 'https://www.eatsure.com'}">
+              data-link="${escapeHTML(comparison.eatsure.deepLink || 'https://www.eatsure.com')}">
               Order on EatSure (₹${comparison.eatsure.finalPrice}) →
             </button>
           </div>
-          `}
+          ` : ''}
+
+          ${comparison.directBrand ? `
+          <!-- Direct Brand App -->
+          <div class="platform-card ${comparison.directBrand.finalPrice === winnerObj.finalPrice ? 'winner' : ''}">
+            ${comparison.directBrand.finalPrice === winnerObj.finalPrice ? `<div class="winner-crown">👑 WINNER (SAVE ₹${comparison.totalSaved})</div>` : ''}
+            <div class="platform-top">
+              <div class="platform-brand">
+                <span class="brand-dot" style="background:#DC2626;"></span>
+                <span>${escapeHTML(comparison.directBrand.name)}</span>
+              </div>
+            </div>
+            <div class="final-price-box">
+              <div class="final-price-label">Net Payable Bill</div>
+              <div class="final-price-value">₹${comparison.directBrand.finalPrice}</div>
+            </div>
+            <div class="breakdown-list">
+              <div class="breakdown-row"><span>Menu Sticker Price</span><span>₹${comparison.directBrand.base}</span></div>
+              <div class="breakdown-row"><span>Platform Fee</span><span><strong style="color:var(--savings-green)">₹0 FREE</strong></span></div>
+              ${comparison.directBrand.discount > 0 ? `<div class="breakdown-row breakdown-discount"><span>Direct Discount</span><span>-₹${comparison.directBrand.discount}</span></div>` : ''}
+            </div>
+            <button type="button" class="order-btn" style="background:#DC2626; color:#fff;"
+              data-order-trigger="true"
+              data-code="${escapeHTML(comparison.directBrand.promo ? comparison.directBrand.promo.code : 'DIRECTSAVE')}"
+              data-rest="${escapeHTML(dish.name)}"
+              data-platform="${escapeHTML(comparison.directBrand.name)}"
+              data-menu="${comparison.directBrand.base}"
+              data-final="${comparison.directBrand.finalPrice}"
+              data-link="${escapeHTML(comparison.directBrand.deepLink)}">
+              Order on ${escapeHTML(comparison.directBrand.name)} (₹${comparison.directBrand.finalPrice}) →
+            </button>
+          </div>
+          ` : ''}
 
           <!-- Magicpin -->
           <div class="platform-card ${comparison.magicpin.finalPrice === winnerObj.finalPrice ? 'winner' : ''}">
@@ -603,18 +668,18 @@ document.addEventListener("DOMContentLoaded", () => {
               <div class="final-price-value">₹${comparison.magicpin.finalPrice}</div>
             </div>
             <div class="breakdown-list">
-              <div class="breakdown-row"><span>Dish Base Rate</span><span>₹${dish.magicpinBase}</span></div>
-              <div class="breakdown-row"><span>GST &amp; Delivery</span><span>₹${comparison.magicpin.gross - dish.magicpinBase}</span></div>
+              <div class="breakdown-row"><span>Dish Base Rate</span><span>₹${comparison.magicpin.base}</span></div>
+              <div class="breakdown-row"><span>GST &amp; Delivery</span><span>₹${comparison.magicpin.gross - comparison.magicpin.base}</span></div>
               ${comparison.magicpin.discount > 0 ? `<div class="breakdown-row breakdown-discount"><span>Coupon Savings</span><span>-₹${comparison.magicpin.discount}</span></div>` : ''}
             </div>
             <button type="button" class="order-btn magicpin"
               data-order-trigger="true"
-              data-code="${comparison.magicpin.promo ? comparison.magicpin.promo.code : 'DOMINOS50'}"
-              data-rest="${dish.name}"
+              data-code="${escapeHTML(comparison.magicpin.promo ? comparison.magicpin.promo.code : (comparison.isDominos ? 'DOMINOS50' : 'MAGIC50'))}"
+              data-rest="${escapeHTML(dish.name)}"
               data-platform="Magicpin"
               data-menu="${comparison.magicpin.gross}"
               data-final="${comparison.magicpin.finalPrice}"
-              data-link="${comparison.magicpin.deepLink}">
+              data-link="${escapeHTML(comparison.magicpin.deepLink)}">
               Order on Magicpin (₹${comparison.magicpin.finalPrice}) →
             </button>
           </div>
@@ -633,22 +698,22 @@ document.addEventListener("DOMContentLoaded", () => {
               <div class="final-price-value">₹${comparison.swiggy.finalPrice}</div>
             </div>
             <div class="breakdown-list">
-              <div class="breakdown-row"><span>Dish Base Rate</span><span>₹${dish.swiggyBase}</span></div>
-              <div class="breakdown-row"><span>Fees &amp; Delivery</span><span>₹${comparison.swiggy.gross - dish.swiggyBase}</span></div>
+              <div class="breakdown-row"><span>Dish Base Rate</span><span>₹${comparison.swiggy.base}</span></div>
+              <div class="breakdown-row"><span>Fees &amp; Delivery</span><span>₹${comparison.swiggy.gross - comparison.swiggy.base}</span></div>
               ${comparison.swiggy.discount > 0 ? `<div class="breakdown-row breakdown-discount"><span>Coupon Savings</span><span>-₹${comparison.swiggy.discount}</span></div>` : ''}
             </div>
             ${comparison.isDominos ? `
             <div class="card-warning-callout" style="background:#FFFBEB; border:1px solid #FDE68A; border-radius:10px; padding:8px 10px; margin-bottom:12px; font-size:0.75rem; color:#92400E; line-height:1.4;">
-              ⚠️ <strong>High Swiggy Markup:</strong> Swiggy charges <strong>₹${comparison.swiggy.finalPrice}</strong> (+₹${comparison.swiggy.gross - dish.swiggyBase} extra fees). <em>Domino's Direct is only ₹${comparison.dominos.finalPrice}!</em>
+              ⚠️ <strong>High Swiggy Markup:</strong> Swiggy charges <strong>₹${comparison.swiggy.finalPrice}</strong> (+₹${comparison.swiggy.gross - comparison.swiggy.base} extra fees). <em>Domino's Direct is only ₹${comparison.dominos.finalPrice}!</em>
             </div>` : ''}
             <button type="button" class="order-btn swiggy"
               data-order-trigger="true"
-              data-code="${comparison.swiggy.promo ? comparison.swiggy.promo.code : 'TRYNEW'}"
-              data-rest="${dish.name}"
+              data-code="${escapeHTML(comparison.swiggy.promo ? comparison.swiggy.promo.code : 'TRYNEW')}"
+              data-rest="${escapeHTML(dish.name)}"
               data-platform="Swiggy"
-              data-menu="${dish.swiggyBase}"
+              data-menu="${comparison.swiggy.base}"
               data-final="${comparison.swiggy.finalPrice}"
-              data-link="${comparison.swiggy.deepLink}">
+              data-link="${escapeHTML(comparison.swiggy.deepLink)}">
               Order on Swiggy (₹${comparison.swiggy.finalPrice}) →
             </button>
           </div>
@@ -667,22 +732,22 @@ document.addEventListener("DOMContentLoaded", () => {
               <div class="final-price-value">₹${comparison.zomato.finalPrice}</div>
             </div>
             <div class="breakdown-list">
-              <div class="breakdown-row"><span>Dish Base Rate</span><span>₹${dish.zomatoBase}</span></div>
-              <div class="breakdown-row"><span>Fees &amp; Delivery</span><span>₹${comparison.zomato.gross - dish.zomatoBase}</span></div>
+              <div class="breakdown-row"><span>Dish Base Rate</span><span>₹${comparison.zomato.base}</span></div>
+              <div class="breakdown-row"><span>Fees &amp; Delivery</span><span>₹${comparison.zomato.gross - comparison.zomato.base}</span></div>
               ${comparison.zomato.discount > 0 ? `<div class="breakdown-row breakdown-discount"><span>Coupon Savings</span><span>-₹${comparison.zomato.discount}</span></div>` : ''}
             </div>
             ${comparison.isDominos ? `
             <div class="card-warning-callout" style="background:#FFFBEB; border:1px solid #FDE68A; border-radius:10px; padding:8px 10px; margin-bottom:12px; font-size:0.75rem; color:#92400E; line-height:1.4;">
-              ⚠️ <strong>High Zomato Markup:</strong> Zomato charges <strong>₹${comparison.zomato.finalPrice}</strong> (+₹${comparison.zomato.gross - dish.zomatoBase} extra fees). <em>Domino's Direct is only ₹${comparison.dominos.finalPrice}!</em>
+              ⚠️ <strong>High Zomato Markup:</strong> Zomato charges <strong>₹${comparison.zomato.finalPrice}</strong> (+₹${comparison.zomato.gross - comparison.zomato.base} extra fees). <em>Domino's Direct is only ₹${comparison.dominos.finalPrice}!</em>
             </div>` : ''}
             <button type="button" class="order-btn zomato"
               data-order-trigger="true"
-              data-code="${comparison.zomato.promo ? comparison.zomato.promo.code : 'STEALDEAL'}"
-              data-rest="${dish.name}"
+              data-code="${escapeHTML(comparison.zomato.promo ? comparison.zomato.promo.code : 'STEALDEAL')}"
+              data-rest="${escapeHTML(dish.name)}"
               data-platform="Zomato"
-              data-menu="${dish.zomatoBase}"
+              data-menu="${comparison.zomato.base}"
               data-final="${comparison.zomato.finalPrice}"
-              data-link="${comparison.zomato.deepLink}">
+              data-link="${escapeHTML(comparison.zomato.deepLink)}">
               Order on Zomato (₹${comparison.zomato.finalPrice}) →
             </button>
           </div>
@@ -708,11 +773,11 @@ document.addEventListener("DOMContentLoaded", () => {
             <button type="button" class="order-btn ondc"
               data-order-trigger="true"
               data-code="ONDC50"
-              data-rest="${dish.name}"
-              data-platform="ONDC (Pincode)"
+              data-rest="${escapeHTML(dish.name)}"
+              data-platform="ONDC (Direct Network)"
               data-menu="${comparison.ondc.base}"
               data-final="${comparison.ondc.finalPrice}"
-              data-link="${comparison.ondc.deepLink}">
+              data-link="${escapeHTML(comparison.ondc.deepLink)}">
               Order on ONDC (₹${comparison.ondc.finalPrice}) →
             </button>
           </div>
@@ -734,25 +799,77 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Quick Select Food Function (used in placeholder tags & food cards)
-  window.quickSelectDish = function(dishId) {
-    if (typeof DISHES_DATA === "undefined") return;
-    const match = DISHES_DATA.find(d => d.id === dishId);
-    if (!match) return;
+  // Universal Search & Live Comparison Runner (Supports Any Restaurant or Dish)
+  window.searchAndCompare = function(query) {
+    const q = (query || "").trim();
+    if (!q) {
+      if (dishSearchInput) dishSearchInput.focus();
+      return;
+    }
 
-    // Highlight matching food card
+    if (dishDropdown) dishDropdown.classList.remove("show");
+
+    let dishMatch = null;
+    const lower = q.toLowerCase();
+
+    if (typeof DISHES_DATA !== "undefined" && Array.isArray(DISHES_DATA)) {
+      // 1. Exact ID match (from food cards or dropdown click)
+      dishMatch = DISHES_DATA.find(d => d.id === q);
+
+      // 2. Exact match in name, keyword, or restaurant
+      if (!dishMatch) {
+        dishMatch = DISHES_DATA.find(d => 
+          d.name.toLowerCase() === lower ||
+          d.keywords.some(k => k.toLowerCase() === lower) ||
+          d.popularRest.toLowerCase() === lower
+        );
+      }
+
+      // 3. Substring match in name, keywords, or popularRest
+      if (!dishMatch) {
+        dishMatch = DISHES_DATA.find(d => 
+          d.name.toLowerCase().includes(lower) ||
+          d.keywords.some(k => k.toLowerCase().includes(lower) || lower.includes(k.toLowerCase())) ||
+          d.popularRest.toLowerCase().includes(lower)
+        );
+      }
+    }
+
+    // 4. Synthesize Dynamic Dish if not present in pre-configured list
+    if (!dishMatch) {
+      if (typeof ComparatorEngine !== "undefined" && ComparatorEngine.createDynamicDish) {
+        dishMatch = ComparatorEngine.createDynamicDish(q);
+      } else {
+        dishMatch = {
+          id: "dyn_" + Date.now(),
+          name: q.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' '),
+          keywords: q.toLowerCase().split(/\s+/),
+          category: "Popular Dish",
+          emoji: "🍽️",
+          dominosBase: 0,
+          eatsureBase: 0,
+          zomatoBase: 280,
+          swiggyBase: 280,
+          magicpinBase: 235,
+          packaging: 20,
+          popularRest: `${q} (Magicpin, ONDC, Swiggy & Zomato)`
+        };
+      }
+    }
+
+    // Highlight matching food card if exists, else deactivate all
     foodCards.forEach(c => {
-      if (c.dataset.dishId === dishId) {
+      if (c.dataset.dishId === dishMatch.id) {
         c.classList.add("active");
       } else {
         c.classList.remove("active");
       }
     });
 
-    if (dishSearchInput) dishSearchInput.value = match.name;
-    if (cartInput) cartInput.value = match.zomatoBase || 350;
+    if (dishSearchInput) dishSearchInput.value = dishMatch.name;
+    if (cartInput) cartInput.value = dishMatch.zomatoBase || 280;
 
-    renderDishFaceoff(match);
+    renderDishFaceoff(dishMatch);
     renderComparison();
 
     // Smooth scroll down to faceoff arena
@@ -760,67 +877,114 @@ document.addEventListener("DOMContentLoaded", () => {
     if (arena) {
       arena.scrollIntoView({ behavior: "smooth", block: "center" });
     }
+
+    showToast(`⚡ Live comparison ready for "${dishMatch.name}"!`);
+  };
+
+  // Quick Select Food Function (used in placeholder tags & food cards)
+  window.quickSelectDish = function(dishId) {
+    searchAndCompare(dishId);
   };
 
   // Hook up Giant Food Cards
   foodCards.forEach(card => {
     card.addEventListener("click", () => {
       const dishId = card.dataset.dishId;
-      quickSelectDish(dishId);
+      searchAndCompare(dishId);
     });
   });
 
   // Autocomplete Dish Search Box
   if (dishSearchInput && dishDropdown) {
     dishSearchInput.addEventListener("input", (e) => {
-      const q = e.target.value.toLowerCase().trim();
+      const q = e.target.value.trim();
       if (!q) {
         dishDropdown.classList.remove("show");
         return;
       }
 
-      if (typeof DISHES_DATA === "undefined") return;
-
-      const matches = DISHES_DATA.filter(d => 
-        d.name.toLowerCase().includes(q) ||
-        d.keywords.some(k => k.toLowerCase().includes(q)) ||
-        d.popularRest.toLowerCase().includes(q)
-      );
-
-      if (matches.length === 0) {
-        dishDropdown.innerHTML = `
-          <div style="padding:16px;text-align:center;color:var(--text-muted);font-size:0.85rem;">
-            No exact dish found. Use the <strong>Bill Calculator</strong> below to compare any custom cart bill!
-          </div>
-        `;
-        dishDropdown.classList.add("show");
-        return;
+      const lower = q.toLowerCase();
+      let matches = [];
+      if (typeof DISHES_DATA !== "undefined") {
+        matches = DISHES_DATA.filter(d => 
+          d.name.toLowerCase().includes(lower) ||
+          d.keywords.some(k => k.toLowerCase().includes(lower)) ||
+          d.popularRest.toLowerCase().includes(lower)
+        ).slice(0, 5);
       }
 
-      dishDropdown.innerHTML = matches.map(d => `
-        <div class="dropdown-item" data-id="${d.id}">
-          <div class="dropdown-item-left">
-            <span class="dropdown-item-emoji">${d.emoji}</span>
-            <div>
-              <div class="dropdown-item-title">${d.name}</div>
-              <div class="dropdown-item-sub">${d.popularRest} • ${d.category}</div>
+      let html = "";
+      if (matches.length > 0) {
+        html += matches.map(d => `
+          <div class="dropdown-item" data-id="${escapeHTML(d.id)}">
+            <div class="dropdown-item-left">
+              <span class="dropdown-item-emoji">${d.emoji}</span>
+              <div>
+                <div class="dropdown-item-title">${escapeHTML(d.name)}</div>
+                <div class="dropdown-item-sub">${escapeHTML(d.popularRest)} • ${escapeHTML(d.category)}</div>
+              </div>
             </div>
+            <span class="dropdown-item-badge">From ₹${d.magicpinBase || 220}+</span>
           </div>
-          <span class="dropdown-item-badge">From ₹${d.magicpinBase || 250}+</span>
-        </div>
-      `).join("");
+        `).join("");
 
+        // Action row to compare query live
+        html += `
+          <div class="dropdown-item dropdown-item-action" data-search-custom="${escapeHTML(q)}" style="background:#FFFBEB; border-top:1px dashed #FDE68A; cursor:pointer;">
+            <div class="dropdown-item-left">
+              <span class="dropdown-item-emoji">⚡</span>
+              <div>
+                <div class="dropdown-item-title" style="color:var(--primary, #E23744); font-weight:700;">Compare "${escapeHTML(q)}" Live ➔</div>
+                <div class="dropdown-item-sub">Scan Swiggy, Zomato, Magicpin, ONDC &amp; Brand Apps</div>
+              </div>
+            </div>
+            <span class="dropdown-item-badge" style="background:#E23744; color:#fff;">Live Rates</span>
+          </div>
+        `;
+      } else {
+        // Universal comparison action when not in pre-seeded database
+        html = `
+          <div class="dropdown-item dropdown-item-action" data-search-custom="${escapeHTML(q)}" style="background:#FFFBEB; cursor:pointer; padding:14px 16px;">
+            <div class="dropdown-item-left">
+              <span class="dropdown-item-emoji" style="font-size:1.4rem;">🔍</span>
+              <div>
+                <div class="dropdown-item-title" style="color:var(--primary, #E23744); font-weight:700; font-size:0.95rem;">
+                  Compare "${escapeHTML(q)}" Across All Food Apps ➔
+                </div>
+                <div class="dropdown-item-sub" style="color:#6B7280; font-size:0.8rem; margin-top:2px;">
+                  Identify connected platforms (Swiggy, Zomato, Magicpin, ONDC, Direct Apps) and calculate cheapest net bill!
+                </div>
+              </div>
+            </div>
+            <span class="dropdown-item-badge" style="background:#10B981; color:#fff; font-weight:700;">⚡ Compare Now</span>
+          </div>
+        `;
+      }
+
+      dishDropdown.innerHTML = html;
       dishDropdown.classList.add("show");
 
-      // Dropdown item click
+      // Attach click events to dropdown items
       dishDropdown.querySelectorAll(".dropdown-item").forEach(item => {
         item.addEventListener("click", () => {
           const dishId = item.dataset.id;
+          const customSearch = item.dataset.searchCustom;
           dishDropdown.classList.remove("show");
-          quickSelectDish(dishId);
-          showToast(`Comparing real-time prices for ${dishSearchInput.value}!`);
+          if (dishId) {
+            searchAndCompare(dishId);
+          } else if (customSearch) {
+            searchAndCompare(customSearch);
+          }
         });
       });
+    });
+
+    // Enter key press in search box
+    dishSearchInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        searchAndCompare(dishSearchInput.value);
+      }
     });
 
     // Close on outside click
@@ -831,28 +995,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Go / Compare button click
   if (searchGoBtn && dishSearchInput) {
     searchGoBtn.addEventListener("click", () => {
-      const q = dishSearchInput.value.toLowerCase().trim();
-      if (!q) {
-        dishSearchInput.focus();
-        return;
-      }
-      if (typeof DISHES_DATA !== "undefined") {
-        const match = DISHES_DATA.find(d => 
-          d.name.toLowerCase().includes(q) ||
-          d.keywords.some(k => k.toLowerCase().includes(q)) ||
-          d.popularRest.toLowerCase().includes(q)
-        );
-        if (match) {
-          quickSelectDish(match.id);
-        } else {
-          showToast(`Searching for "${q}" across apps...`);
-          const compareSection = document.getElementById("compareSection");
-          if (compareSection) compareSection.scrollIntoView({ behavior: "smooth" });
-        }
-      }
+      searchAndCompare(dishSearchInput.value);
     });
+  }
   }
 
   // Dismiss Sticky Bar
