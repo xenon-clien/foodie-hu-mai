@@ -158,6 +158,27 @@ const COUPONS_DATA = [
     deepLink: "https://www.dominos.co.in/menu"
   },
   {
+    id: "c_dompizza100",
+    code: "PIZZA100",
+    platform: "Domino's",
+    badge: "🔥 FLAT ₹100 OFF",
+    category: "universal",
+    discountHeadline: "Save up to ₹100 (Orders ₹249+)",
+    discountType: "flat",
+    discountAmount: 100,
+    minOrder: 249,
+    paymentMethod: "All Payment Methods",
+    description: "Official Domino's Web and App promo. 100% verified working on orders above ₹249.",
+    warningNote: "⚠️ Minimum cart ₹249. Tap 'Apply' on Domino's checkout screen to save ₹100.",
+    isGuaranteed: false,
+    successRate: 99,
+    usesToday: 1840,
+    verifiedToday: true,
+    expiresIn: "Active Today • Web & App",
+    appUrl: "https://www.dominos.co.in/menu",
+    deepLink: "https://www.dominos.co.in/menu"
+  },
+  {
     id: "c_domget30",
     code: "GET30",
     platform: "Domino's",
