@@ -28,7 +28,7 @@ const DISHES_DATA = [
     magicpinBase: 279,
     packaging: 0,
     popularRest: "Domino's Official App & Web (Direct Jubilant)",
-    typicalDiscount: "DOM50 (50% OFF up to ₹100)"
+    typicalDiscount: "PIZZA100 (Save up to ₹100)"
   },
   {
     id: "d_dominos_double_cheese",
