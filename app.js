@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const dishDropdown = document.getElementById("dishDropdown");
   const dishFaceoffCardContainer = document.getElementById("dishFaceoffCardContainer");
 
-  let currentFilter = "universal";
+  let currentFilter = "guaranteed";
   let currentSearchQuery = "";
   let selectedDish = (typeof DISHES_DATA !== "undefined" && DISHES_DATA.length > 0) ? DISHES_DATA[0] : null;
   let activeDishCoupon = null;
@@ -782,19 +782,26 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     couponsContainer.innerHTML = list.map(c => {
-      const platformClass = c.platform.toLowerCase();
+      const platformClass = c.platform.toLowerCase().replace(/[^a-z0-9]/g, '');
       const savedUpvotes = parseInt(localStorage.getItem(`vote_up_${c.id}`)) || c.usesToday;
+      const isGuar = !!c.isGuaranteed;
 
       return `
-        <div class="coupon-card">
+        <div class="coupon-card ${isGuar ? 'is-guaranteed' : ''}">
           <div>
             <div class="coupon-card-top">
-              <span class="coupon-badge">${c.badge}</span>
-              <span class="coupon-platform ${platformClass}">${c.platform}</span>
+              <span class="coupon-badge">${escapeHTML(c.badge)}</span>
+              <span class="coupon-platform ${platformClass}">${escapeHTML(c.platform)}</span>
             </div>
 
-            <div class="coupon-headline">${c.discountHeadline}</div>
-            <div class="coupon-desc">${c.description}</div>
+            <div class="coupon-headline">${escapeHTML(c.discountHeadline)}</div>
+            <div class="coupon-desc">${escapeHTML(c.description)}</div>
+
+            ${c.warningNote ? `
+              <div class="coupon-warning-box ${isGuar ? 'guaranteed' : ''}">
+                ${escapeHTML(c.warningNote)}
+              </div>
+            ` : ''}
 
             <div class="coupon-conditions">
               <div class="condition-item">
@@ -803,23 +810,23 @@ document.addEventListener("DOMContentLoaded", () => {
               </div>
               <div class="condition-item">
                 <span>💳</span>
-                <span>Payment: <strong>${c.paymentMethod}</strong></span>
+                <span>Payment: <strong>${escapeHTML(c.paymentMethod)}</strong></span>
               </div>
               <div class="condition-item">
                 <span>⏱️</span>
-                <span>Validity: <strong>${c.expiresIn}</strong></span>
+                <span>Validity: <strong>${escapeHTML(c.expiresIn)}</strong></span>
               </div>
             </div>
           </div>
 
           <div>
             <div class="coupon-action-row">
-              <div class="coupon-code-pill" onclick="copyCouponCode('${c.code}', '${c.platform}', ${c.discountPercent || c.discountAmount || 60})" title="Click to copy">
-                <span>${c.code}</span>
-                <span class="copy-label">📋 Copy</span>
+              <div class="coupon-code-pill" onclick="${isGuar ? `showToast('Auto-Applied Deal! Menu mein direct discount pre-applied hai.')` : `copyCouponCode('${escapeHTML(c.code)}', '${escapeHTML(c.platform)}', ${c.discountPercent || c.discountAmount || 60})`}" title="${isGuar ? 'Direct Deal - No Code Needed' : 'Click to copy code'}">
+                <span>${escapeHTML(c.code)}</span>
+                <span class="copy-label">${isGuar ? '✨ Direct Deal' : '📋 Copy'}</span>
               </div>
               <a href="${c.appUrl}" target="_blank" class="open-app-btn" onclick="addPersonalSavings(${c.discountAmount || 75})">
-                <span>Open ${c.platform}</span>
+                <span>${isGuar ? 'Avail Deal' : `Open ${escapeHTML(c.platform)}`}</span>
                 <span>↗</span>
               </a>
             </div>
@@ -830,10 +837,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 <span>${c.successRate}% Success</span>
               </div>
               <div class="vote-actions">
-                <button class="vote-btn" onclick="voteCoupon('${c.id}', 'up', this)">
+                <button class="vote-btn" onclick="voteCoupon('${c.id}', 'up', this)" title="Working">
                   👍 <span class="vote-count">${savedUpvotes}</span>
                 </button>
-                <button class="vote-btn" onclick="voteCoupon('${c.id}', 'down', this)" title="Report expired">
+                <button class="vote-btn" onclick="voteCoupon('${c.id}', 'down', this)" title="Report expired or not working">
                   👎
                 </button>
               </div>
@@ -910,10 +917,11 @@ document.addEventListener("DOMContentLoaded", () => {
       localStorage.setItem(`vote_up_${id}`, current);
       btn.style.color = "var(--savings-dark)";
       btn.style.borderColor = "var(--savings-green)";
-      showToast("Thank you! Community verification updated.");
+      showToast("✅ Shukriya! Verified working vote recorded.");
     } else {
       btn.style.color = "var(--primary-red)";
-      showToast("Reported. Our engine will re-verify this code.");
+      btn.style.borderColor = "var(--primary-red)";
+      showToast("⚠️ Reported! Tip: '✨ 100% Guaranteed Deals' dekhein jisme bina coupon code dale discount milta hai.");
     }
   };
 

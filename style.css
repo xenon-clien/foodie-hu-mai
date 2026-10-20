@@ -968,6 +968,115 @@ body {
 }
 
 /* ==========================================
+   COUPON REALITY ALERT & HIDDEN TRAPS
+   ========================================== */
+.coupon-reality-alert {
+  background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
+  border: 1px solid #FCD34D;
+  border-radius: 18px;
+  padding: 18px 22px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.08);
+}
+
+.cra-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.cra-icon {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.cra-title {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #92400E;
+  margin-bottom: 2px;
+}
+
+.cra-sub {
+  font-size: 0.85rem;
+  color: #B45309;
+  font-weight: 500;
+}
+
+.cra-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.cra-item {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  gap: 10px;
+  font-size: 0.82rem;
+  color: #78350F;
+  line-height: 1.4;
+}
+
+.cra-item.highlight {
+  background: #ECFDF5;
+  border-color: #A7F3D0;
+  color: #065F46;
+}
+
+.cra-num {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #F59E0B;
+  color: #FFF;
+  font-weight: 800;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cra-item.highlight .cra-num {
+  background: var(--savings-green);
+}
+
+.coupon-warning-box {
+  background: #FFF7ED;
+  border-left: 3px solid #F97316;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 0.76rem;
+  color: #9A3412;
+  font-weight: 600;
+  line-height: 1.35;
+  margin-bottom: 12px;
+}
+
+.coupon-warning-box.guaranteed {
+  background: #F0FDF4;
+  border-left: 3px solid #10B981;
+  color: #166534;
+}
+
+.coupon-card.is-guaranteed {
+  border: 2px solid #10B981;
+  background: linear-gradient(180deg, #FFFFFF 0%, #F0FDF4 100%);
+}
+
+.coupon-card.is-guaranteed .coupon-code-pill {
+  border-color: #10B981;
+  color: #059669;
+  background: #ECFDF5;
+}
+
+/* ==========================================
    FEATURE 3: YEARLY PLATFORM FEE EXPOSER (NEW UNIQUE FEATURE)
    ========================================== */
 .fee-exposer-card {
