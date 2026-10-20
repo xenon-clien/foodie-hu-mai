@@ -191,28 +191,43 @@ document.addEventListener("DOMContentLoaded", () => {
     addPersonalSavings(discount);
 
     // Populate modal content
-    const isDominos = platform.toLowerCase().includes("domino");
-    if (cartGuideIcon) cartGuideIcon.textContent = isDominos ? "🍕" : "🍔";
+    const pLower = (platform || "").toLowerCase();
+    let pIcon = "🍕";
+    if (pLower.includes("domino")) pIcon = "🍕";
+    else if (pLower.includes("swiggy")) pIcon = "🛵";
+    else if (pLower.includes("zomato")) pIcon = "🍅";
+    else if (pLower.includes("hut")) pIcon = "🍕";
+    else if (pLower.includes("kfc")) pIcon = "🍗";
+    else if (pLower.includes("eatsure") || pLower.includes("faasos") || pLower.includes("behrouz")) pIcon = "🍱";
+    else if (pLower.includes("magicpin")) pIcon = "🛍️";
+    else if (pLower.includes("ondc")) pIcon = "🇮🇳";
+    else pIcon = "🍔";
+
+    if (cartGuideIcon) cartGuideIcon.textContent = pIcon;
     if (cartGuideTitle) cartGuideTitle.textContent = `${platform} Cart Discount Guide`;
     if (cartGuideSubtitle) cartGuideSubtitle.textContent = `${restaurant} • Real Menu Price vs Cart Checkout`;
     if (cartGuideMenuPrice) cartGuideMenuPrice.textContent = `₹${menuPrice}`;
     if (cartGuideDiscount) cartGuideDiscount.textContent = `-₹${discount}`;
-    if (cartGuideCodePill) cartGuideCodePill.textContent = code ? `Code: ${code}` : "GET30";
+    if (cartGuideCodePill) cartGuideCodePill.textContent = code ? `Code: ${code}` : "BESTDEAL";
     if (cartGuideFinalPrice) cartGuideFinalPrice.textContent = `₹${finalPrice}`;
-    if (cartGuideCouponText) cartGuideCouponText.textContent = code || (isDominos ? "GET30" : "STEALDEAL");
+    if (cartGuideCouponText) cartGuideCouponText.textContent = code || "BESTDEAL";
 
     if (cartGuideStep1Text) {
       cartGuideStep1Text.innerHTML = `${platform} open hone par official menu price (<strong>₹${menuPrice}</strong>) dikhega. Pehle dish ko <em>"Add to Cart"</em> karein.`;
     }
     if (cartGuideStep3Text) {
-      if (isDominos) {
-        cartGuideStep3Text.innerHTML = `Domino's Web par 'Best Offers' me se <strong>GET30</strong> select karein (₹30 OFF). Naye user mobile app par <strong>DOMNEW</strong> lagakar ₹100 bacha sakte hain!`;
+      if (pLower.includes("domino")) {
+        cartGuideStep3Text.innerHTML = `Domino's Cart me 'Apply Coupon' me <strong>${code || 'CART50'}</strong> paste karein, ya 2 Pizzas @ ₹99 Everyday Value deal chunein!`;
+      } else if (pLower.includes("swiggy")) {
+        cartGuideStep3Text.innerHTML = `Swiggy cart me jakar 'Apply Coupon' me <strong>${code || 'TRYNEW'}</strong> paste karein. Bill turant <strong>₹${menuPrice} se girkar ₹${finalPrice}</strong> ho jayega!`;
+      } else if (pLower.includes("zomato")) {
+        cartGuideStep3Text.innerHTML = `Zomato checkout par promo code <strong>${code || 'STEALDEAL'}</strong> lagayein aur ₹${discount} bachat paayein!`;
       } else {
         cartGuideStep3Text.innerHTML = `Apply karte hi bill turant <strong>₹${menuPrice} se girkar ₹${finalPrice}</strong> ho jayega!`;
       }
     }
     if (cartGuideActionText) cartGuideActionText.textContent = `Proceed to ${platform} (Save ₹${discount})`;
-    if (cartGuideActionBtn) cartGuideActionBtn.href = deepLink || (isDominos ? "https://www.dominos.co.in/menu" : "#");
+    if (cartGuideActionBtn) cartGuideActionBtn.href = deepLink || "#";
 
     cartGuideOverlay.style.display = "flex";
   };
@@ -242,30 +257,67 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Universal Guided Ordering Engine (CashKaro-Style Activation)
   window.directAutoOrder = function(code, restaurant, platform, savings, menuPrice = 0, finalPrice = 0, deepLink = '') {
-    // 1. Copy code
-    if (code && code !== "None" && code.trim() !== "") {
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(code).catch(() => {});
-      }
-    }
+    const mPrice = menuPrice || (finalPrice ? finalPrice + savings : 350);
+    const fPrice = finalPrice || Math.max(0, mPrice - (savings || 75));
+    const effectiveCode = (code && code !== "None" && code.trim() !== "") ? code : "BESTDEAL";
 
-    // 2. Personal savings tracker
-    addPersonalSavings(savings);
-
-    // 3. Open guide or toast
-    if (platform && platform.toLowerCase().includes("domino")) {
-      const mPrice = menuPrice || 485;
-      const fPrice = finalPrice || 385;
-      const link = deepLink || "https://www.dominos.co.in/menu";
-      openOrderGuide(code || "DOMNEW", restaurant || "Domino's Pizza", platform, mPrice, fPrice, link);
-      showToast(`📋 Code "${code || 'DOMNEW'}" copied! Screen pe ₹${mPrice} dikhega, Cart me lagate hi bill ₹${fPrice} ho jayega!`);
-    } else if (code && code !== "None" && code.trim() !== "") {
-      showToast(`📋 Code "${code}" copied! Opening ${platform}... Cart checkout par Paste karein aur ₹${savings} bachayein!`);
-    } else {
-      showToast(`Opening ${platform}... Best direct rate applied! Saved ₹${savings}!`);
-    }
+    openOrderGuide(effectiveCode, restaurant || "Your Dish", platform || "Food App", mPrice, fPrice, deepLink);
   };
+
+  // Passbook Modal Elements & Wiring
+  const passbookModal = document.getElementById("passbookModal");
+  const passbookCloseBtn = document.getElementById("passbookCloseBtn");
+  const passbookTotalDisplay = document.getElementById("passbookTotalDisplay");
+  const pbOrdersCount = document.getElementById("pbOrdersCount");
+  const pbFeeSaved = document.getElementById("pbFeeSaved");
+  const pbLevelBadge = document.getElementById("pbLevelBadge");
+  const passbookShareBtn = document.getElementById("passbookShareBtn");
+
+  function openPassbookModal() {
+    if (!passbookModal) return;
+    const currentSavings = parseInt(localStorage.getItem("personal_savings_amt")) || 120;
+    const ordersCount = Math.max(1, Math.floor(currentSavings / 60));
+    const feeSaved = ordersCount * 10;
+
+    if (passbookTotalDisplay) passbookTotalDisplay.textContent = `₹${currentSavings}`;
+    if (pbOrdersCount) pbOrdersCount.textContent = ordersCount;
+    if (pbFeeSaved) pbFeeSaved.textContent = `₹${feeSaved}`;
+
+    if (pbLevelBadge) {
+      if (currentSavings > 1000) pbLevelBadge.textContent = "VIP Foodie 🥇";
+      else if (currentSavings > 300) pbLevelBadge.textContent = "Smart Saver 🥈";
+      else pbLevelBadge.textContent = "Foodie Starter 🥉";
+    }
+
+    if (passbookShareBtn) {
+      const shareText = `Maine Foodie Hu Mai app se apne food orders par ₹${currentSavings} bachaye! Check karo yahan: https://foodie-hu-mai.vercel.app`;
+      passbookShareBtn.href = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`;
+    }
+
+    passbookModal.style.display = "flex";
+  }
+
+  if (personalBachatBadge) {
+    personalBachatBadge.style.cursor = "pointer";
+    personalBachatBadge.title = "Click to open Meri Bachat Passbook";
+    personalBachatBadge.addEventListener("click", openPassbookModal);
+  }
+
+  if (passbookCloseBtn) {
+    passbookCloseBtn.addEventListener("click", () => {
+      passbookModal.style.display = "none";
+    });
+  }
+
+  if (passbookModal) {
+    passbookModal.addEventListener("click", (e) => {
+      if (e.target === passbookModal) {
+        passbookModal.style.display = "none";
+      }
+    });
+  }
 
   dealTabBtns.forEach(btn => {
     btn.addEventListener("click", () => {

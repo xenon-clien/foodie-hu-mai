@@ -102,6 +102,126 @@
   </header>
 
   <!-- ============================================================== -->
+  <!-- TOP PARTNER STORES & DIRECT SAVINGS BAR (CASHKARO-STYLE)        -->
+  <!-- ============================================================== -->
+  <section class="top-stores-showcase" id="topStoresBar">
+    <div class="tss-container">
+      <div class="tss-header">
+        <div class="tss-title-wrap">
+          <span class="tss-live-pulse"></span>
+          <span class="tss-tag">⚡ TOP DIRECT BRAND SAVINGS</span>
+          <h3 class="tss-title">Direct Brands vs Delivery Apps: Kahan Kitni Bachat?</h3>
+        </div>
+        <p class="tss-sub">Swiggy &amp; Zomato ke menu markup aur platform fee se bacho — Direct brand order pe flat discount:</p>
+      </div>
+
+      <div class="stores-scroll-grid">
+        <!-- 1. Domino's Direct -->
+        <div class="store-card highlight" onclick="switchAppSection('dominosSpotlight', true)">
+          <div class="store-card-badge green">👑 Flat ₹119 Sasta</div>
+          <div class="store-card-body">
+            <div class="store-logo-box" style="background:#EFF6FF;color:#0078AE;">🍕</div>
+            <div class="store-details">
+              <h4 class="store-name">Domino's Direct</h4>
+              <p class="store-deal">2 Pizzas @ ₹99 each • Free Del</p>
+              <div class="store-meta">Code: <strong>CART50 / EDV99</strong></div>
+            </div>
+          </div>
+          <div class="store-card-footer">
+            <span>Explore Domino's Deals</span>
+            <span class="store-arrow">➔</span>
+          </div>
+        </div>
+
+        <!-- 2. Swiggy Hub -->
+        <div class="store-card" onclick="switchAppSection('foodSearchSection', true)">
+          <div class="store-card-badge orange">🔥 Up to 50% Deals</div>
+          <div class="store-card-body">
+            <div class="store-logo-box" style="background:#FFF7ED;color:#FC8019;">🛵</div>
+            <div class="store-details">
+              <h4 class="store-name">Swiggy Hub</h4>
+              <p class="store-deal">Verified TRYNEW &amp; SwiggyIt</p>
+              <div class="store-meta">Code: <strong>WELCOME50</strong></div>
+            </div>
+          </div>
+          <div class="store-card-footer">
+            <span>Search Dishes on Swiggy</span>
+            <span class="store-arrow">➔</span>
+          </div>
+        </div>
+
+        <!-- 3. Zomato Radar -->
+        <div class="store-card" onclick="switchAppSection('foodSearchSection', true)">
+          <div class="store-card-badge red">⚡ Steal Deals</div>
+          <div class="store-card-body">
+            <div class="store-logo-box" style="background:#FEF2F2;color:#E23744;">🍅</div>
+            <div class="store-details">
+              <h4 class="store-name">Zomato Radar</h4>
+              <p class="store-deal">Cafe Special &amp; Card Discounts</p>
+              <div class="store-meta">Code: <strong>PARTY (₹300)</strong></div>
+            </div>
+          </div>
+          <div class="store-card-footer">
+            <span>Compare Zomato Rates</span>
+            <span class="store-arrow">➔</span>
+          </div>
+        </div>
+
+        <!-- 4. Pizza Hut -->
+        <div class="store-card" onclick="switchAppSection('coupons', true)">
+          <div class="store-card-badge purple">🍕 2 Pan @ ₹299</div>
+          <div class="store-card-body">
+            <div class="store-logo-box" style="background:#FDF2F8;color:#DB2777;">🍕</div>
+            <div class="store-details">
+              <h4 class="store-name">Pizza Hut</h4>
+              <p class="store-deal">Flat ₹125 OFF on ₹499+</p>
+              <div class="store-meta">Code: <strong>HUT125</strong></div>
+            </div>
+          </div>
+          <div class="store-card-footer">
+            <span>View Pizza Hut Offers</span>
+            <span class="store-arrow">➔</span>
+          </div>
+        </div>
+
+        <!-- 5. KFC India -->
+        <div class="store-card" onclick="switchAppSection('coupons', true)">
+          <div class="store-card-badge red">🍗 Flat ₹100 OFF</div>
+          <div class="store-card-body">
+            <div class="store-logo-box" style="background:#FEF2F2;color:#DC2626;">🍗</div>
+            <div class="store-details">
+              <h4 class="store-name">KFC India</h4>
+              <p class="store-deal">Hot &amp; Crispy Bucket Special</p>
+              <div class="store-meta">Code: <strong>KFCHOME</strong></div>
+            </div>
+          </div>
+          <div class="store-card-footer">
+            <span>View KFC Codes</span>
+            <span class="store-arrow">➔</span>
+          </div>
+        </div>
+
+        <!-- 6. EatSure Network -->
+        <div class="store-card" onclick="switchAppSection('hotDealsSection', true)">
+          <div class="store-card-badge green">✨ ₹0 Delivery Forever</div>
+          <div class="store-card-body">
+            <div class="store-logo-box" style="background:#ECFDF5;color:#10B981;">🍱</div>
+            <div class="store-details">
+              <h4 class="store-name">EatSure Network</h4>
+              <p class="store-deal">Faasos, Behrouz &amp; Oven Story</p>
+              <div class="store-meta">Zero Platform Fee</div>
+            </div>
+          </div>
+          <div class="store-card-footer">
+            <span>Explore EatSure Deals</span>
+            <span class="store-arrow">➔</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
   <!-- SWIGGY-STYLE MODULAR HUB (VISIBLE ON HOME SCREEN)               -->
   <!-- ============================================================== -->
   <section class="swiggy-hub-section" id="swiggyHomeHub">
@@ -628,6 +748,72 @@
   <div class="toast-notice" id="toastNotice">
     <span>✅</span>
     <span id="toastMsg">Code Copied!</span>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- FINTECH REWARD: MERI BACHAT PASSBOOK MODAL (CASHKARO-STYLE)    -->
+  <!-- ============================================================== -->
+  <div class="passbook-overlay" id="passbookModal" style="display: none;">
+    <div class="passbook-modal">
+      <button class="passbook-close-btn" id="passbookCloseBtn" aria-label="Close Passbook">&times;</button>
+      
+      <div class="passbook-header">
+        <div class="pb-badge">💰 MERI BACHAT PASSBOOK</div>
+        <div class="pb-total-amt" id="passbookTotalDisplay">₹0</div>
+        <div class="pb-total-sub">Total Lifetime Savings with Foodie Hu Mai</div>
+      </div>
+
+      <div class="passbook-stats-grid">
+        <div class="pb-stat-card">
+          <span class="pb-stat-num" id="pbOrdersCount">0</span>
+          <span class="pb-stat-lbl">Orders Optimized</span>
+        </div>
+        <div class="pb-stat-card">
+          <span class="pb-stat-num" id="pbFeeSaved">₹0</span>
+          <span class="pb-stat-lbl">Platform Fees Saved</span>
+        </div>
+        <div class="pb-stat-card">
+          <span class="pb-stat-num" id="pbLevelBadge">Smart Saver 🥉</span>
+          <span class="pb-stat-lbl">Foodie Rank</span>
+        </div>
+      </div>
+
+      <div class="passbook-ledger-box">
+        <div class="pb-ledger-title">📋 Savings Activity &amp; Live Proofs</div>
+        <div class="pb-ledger-list" id="passbookLedgerList">
+          <div class="pb-ledger-row">
+            <span class="pb-icon">🍕</span>
+            <div class="pb-row-info">
+              <strong>Domino's Direct Ordering</strong>
+              <small>Saved vs Swiggy Markup + Platform Fee</small>
+            </div>
+            <span class="pb-row-savings">+₹119</span>
+          </div>
+          <div class="pb-ledger-row">
+            <span class="pb-icon">🏷️</span>
+            <div class="pb-row-info">
+              <strong>Verified Promo Code Applied</strong>
+              <small>Cart discount successfully redeemed</small>
+            </div>
+            <span class="pb-row-savings">+₹75</span>
+          </div>
+          <div class="pb-ledger-row">
+            <span class="pb-icon">✨</span>
+            <div class="pb-row-info">
+              <strong>EatSure Zero Delivery Fee Hack</strong>
+              <small>Saved 100% on Swiggy delivery charges</small>
+            </div>
+            <span class="pb-row-savings">+₹45</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="passbook-actions">
+        <a href="#" id="passbookShareBtn" target="_blank" class="pb-share-btn">
+          <span>📲 Share My Savings on WhatsApp</span>
+        </a>
+      </div>
+    </div>
   </div>
 
   <!-- Step-by-Step Cart Guidance Modal -->
