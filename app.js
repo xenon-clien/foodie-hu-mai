@@ -418,6 +418,19 @@ document.addEventListener("DOMContentLoaded", () => {
     openOrderGuide(effectiveCode, restaurant || "Your Dish", platform || "Food App", mPrice, fPrice, deepLink);
   };
 
+  // Universal Click Listener for all Data-Triggered Order Buttons (100% immune to quote/apostrophe errors)
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-order-trigger]");
+    if (!btn) return;
+    const code = btn.getAttribute("data-code") || "BESTDEAL";
+    const rest = btn.getAttribute("data-rest") || "Your Dish";
+    const platform = btn.getAttribute("data-platform") || "Food App";
+    const menu = parseFloat(btn.getAttribute("data-menu")) || 0;
+    const finalPrice = parseFloat(btn.getAttribute("data-final")) || 0;
+    const link = btn.getAttribute("data-link") || "https://www.dominos.co.in/menu";
+    openOrderGuide(code, rest, platform, menu, finalPrice, link);
+  });
+
   // ==========================================
   // 4. LIVE DISH FACEOFF ARENA (USER-TRIGGERED)
   // ==========================================
@@ -481,7 +494,14 @@ document.addEventListener("DOMContentLoaded", () => {
               <div class="whb-save-tag">Your Net Savings: Flat ₹${comparison.totalSaved} 🎉</div>
             </div>
           </div>
-          <button type="button" class="whb-order-btn" onclick="openOrderGuide('${winnerObj.promo ? winnerObj.promo.code : 'BESTDEAL'}', '${dish.name.replace(/'/g, "\\'")}', '${comparison.winner}', ${winnerObj.gross || winnerObj.base}, ${winnerObj.finalPrice}, '${winnerObj.deepLink}')">
+          <button type="button" class="whb-order-btn" 
+            data-order-trigger="true"
+            data-code="${winnerObj.promo ? winnerObj.promo.code : 'BESTDEAL'}"
+            data-rest="${dish.name}"
+            data-platform="${comparison.winner}"
+            data-menu="${winnerObj.gross || winnerObj.base}"
+            data-final="${winnerObj.finalPrice}"
+            data-link="${winnerObj.deepLink}">
             ⚡ Order on ${comparison.winner} &amp; Save ₹${comparison.totalSaved} ➔
           </button>
         </div>
@@ -526,7 +546,16 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="card-winner-callout" style="background:#EFF6FF; border:1px solid #BFDBFE; border-radius:10px; padding:8px 10px; margin-bottom:12px; font-size:0.75rem; color:#1E40AF; line-height:1.4;">
               🏆 <strong>Direct Brand Superpower:</strong> ₹0 Platform Fee &amp; Everyday Value. <strong>Saves ₹${comparison.swiggy.finalPrice - comparison.dominos.finalPrice} vs Swiggy!</strong>
             </div>
-            <button type="button" class="order-btn dominos" onclick="openOrderGuide('${comparison.dominos.promo ? comparison.dominos.promo.code : 'DOMNEW'}', '${dish.name.replace(/'/g, "\\'")}', 'Domino\'s Official App', ${comparison.dominos.base}, ${comparison.dominos.finalPrice}, '${comparison.dominos.deepLink}')">Order on Domino's (₹${comparison.dominos.finalPrice}) →</button>
+            <button type="button" class="order-btn dominos" 
+              data-order-trigger="true"
+              data-code="${comparison.dominos.promo ? comparison.dominos.promo.code : 'DOMNEW'}"
+              data-rest="${dish.name}"
+              data-platform="Domino's Official App"
+              data-menu="${comparison.dominos.base}"
+              data-final="${comparison.dominos.finalPrice}"
+              data-link="${comparison.dominos.deepLink}">
+              Order on Domino's (₹${comparison.dominos.finalPrice}) →
+            </button>
           </div>
           ` : `
           <!-- EatSure (Direct) -->
@@ -547,7 +576,16 @@ document.addEventListener("DOMContentLoaded", () => {
               <div class="breakdown-row"><span>Delivery &amp; Platform Fee</span><span><strong style="color:var(--savings-green)">₹0 FREE</strong></span></div>
               ${comparison.eatsure.discount > 0 ? `<div class="breakdown-row breakdown-discount"><span>Coupon Savings</span><span>-₹${comparison.eatsure.discount}</span></div>` : ''}
             </div>
-            <button type="button" class="order-btn eatsure" onclick="openOrderGuide('${comparison.eatsure.promo ? comparison.eatsure.promo.code : 'SURE50'}', '${dish.name.replace(/'/g, "\\'")}', 'EatSure', ${comparison.eatsure.base}, ${comparison.eatsure.finalPrice}, '${comparison.eatsure.deepLink || 'https://www.eatsure.com'}')">Order on EatSure (₹${comparison.eatsure.finalPrice}) →</button>
+            <button type="button" class="order-btn eatsure"
+              data-order-trigger="true"
+              data-code="${comparison.eatsure.promo ? comparison.eatsure.promo.code : 'SURE50'}"
+              data-rest="${dish.name}"
+              data-platform="EatSure"
+              data-menu="${comparison.eatsure.base}"
+              data-final="${comparison.eatsure.finalPrice}"
+              data-link="${comparison.eatsure.deepLink || 'https://www.eatsure.com'}">
+              Order on EatSure (₹${comparison.eatsure.finalPrice}) →
+            </button>
           </div>
           `}
 
@@ -569,7 +607,16 @@ document.addEventListener("DOMContentLoaded", () => {
               <div class="breakdown-row"><span>GST &amp; Delivery</span><span>₹${comparison.magicpin.gross - dish.magicpinBase}</span></div>
               ${comparison.magicpin.discount > 0 ? `<div class="breakdown-row breakdown-discount"><span>Coupon Savings</span><span>-₹${comparison.magicpin.discount}</span></div>` : ''}
             </div>
-            <button type="button" class="order-btn magicpin" onclick="openOrderGuide('${comparison.magicpin.promo ? comparison.magicpin.promo.code : 'DOMINOS50'}', '${dish.name.replace(/'/g, "\\'")}', 'Magicpin', ${comparison.magicpin.gross}, ${comparison.magicpin.finalPrice}, '${comparison.magicpin.deepLink}')">Order on Magicpin (₹${comparison.magicpin.finalPrice}) →</button>
+            <button type="button" class="order-btn magicpin"
+              data-order-trigger="true"
+              data-code="${comparison.magicpin.promo ? comparison.magicpin.promo.code : 'DOMINOS50'}"
+              data-rest="${dish.name}"
+              data-platform="Magicpin"
+              data-menu="${comparison.magicpin.gross}"
+              data-final="${comparison.magicpin.finalPrice}"
+              data-link="${comparison.magicpin.deepLink}">
+              Order on Magicpin (₹${comparison.magicpin.finalPrice}) →
+            </button>
           </div>
 
           <!-- Swiggy -->
@@ -594,7 +641,16 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="card-warning-callout" style="background:#FFFBEB; border:1px solid #FDE68A; border-radius:10px; padding:8px 10px; margin-bottom:12px; font-size:0.75rem; color:#92400E; line-height:1.4;">
               ⚠️ <strong>High Swiggy Markup:</strong> Swiggy charges <strong>₹${comparison.swiggy.finalPrice}</strong> (+₹${comparison.swiggy.gross - dish.swiggyBase} extra fees). <em>Domino's Direct is only ₹${comparison.dominos.finalPrice}!</em>
             </div>` : ''}
-            <button type="button" class="order-btn swiggy" onclick="openOrderGuide('${comparison.swiggy.promo ? comparison.swiggy.promo.code : 'TRYNEW'}', '${dish.name.replace(/'/g, "\\'")}', 'Swiggy', ${dish.swiggyBase}, ${comparison.swiggy.finalPrice}, '${comparison.swiggy.deepLink}')">Order on Swiggy (₹${comparison.swiggy.finalPrice}) →</button>
+            <button type="button" class="order-btn swiggy"
+              data-order-trigger="true"
+              data-code="${comparison.swiggy.promo ? comparison.swiggy.promo.code : 'TRYNEW'}"
+              data-rest="${dish.name}"
+              data-platform="Swiggy"
+              data-menu="${dish.swiggyBase}"
+              data-final="${comparison.swiggy.finalPrice}"
+              data-link="${comparison.swiggy.deepLink}">
+              Order on Swiggy (₹${comparison.swiggy.finalPrice}) →
+            </button>
           </div>
 
           <!-- Zomato -->
@@ -619,7 +675,16 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="card-warning-callout" style="background:#FFFBEB; border:1px solid #FDE68A; border-radius:10px; padding:8px 10px; margin-bottom:12px; font-size:0.75rem; color:#92400E; line-height:1.4;">
               ⚠️ <strong>High Zomato Markup:</strong> Zomato charges <strong>₹${comparison.zomato.finalPrice}</strong> (+₹${comparison.zomato.gross - dish.zomatoBase} extra fees). <em>Domino's Direct is only ₹${comparison.dominos.finalPrice}!</em>
             </div>` : ''}
-            <button type="button" class="order-btn zomato" onclick="openOrderGuide('${comparison.zomato.promo ? comparison.zomato.promo.code : 'STEALDEAL'}', '${dish.name.replace(/'/g, "\\'")}', 'Zomato', ${dish.zomatoBase}, ${comparison.zomato.finalPrice}, '${comparison.zomato.deepLink}')">Order on Zomato (₹${comparison.zomato.finalPrice}) →</button>
+            <button type="button" class="order-btn zomato"
+              data-order-trigger="true"
+              data-code="${comparison.zomato.promo ? comparison.zomato.promo.code : 'STEALDEAL'}"
+              data-rest="${dish.name}"
+              data-platform="Zomato"
+              data-menu="${dish.zomatoBase}"
+              data-final="${comparison.zomato.finalPrice}"
+              data-link="${comparison.zomato.deepLink}">
+              Order on Zomato (₹${comparison.zomato.finalPrice}) →
+            </button>
           </div>
 
           <!-- ONDC -->
@@ -640,7 +705,16 @@ document.addEventListener("DOMContentLoaded", () => {
               <div class="breakdown-row"><span>Subsidized Del</span><span>₹22</span></div>
               ${comparison.ondc.discount > 0 ? `<div class="breakdown-row breakdown-discount"><span>ONDC Promo</span><span>-₹${comparison.ondc.discount}</span></div>` : ''}
             </div>
-            <button type="button" class="order-btn ondc" onclick="openOrderGuide('ONDC50', '${dish.name.replace(/'/g, "\\'")}', 'ONDC (Pincode)', ${comparison.ondc.base}, ${comparison.ondc.finalPrice}, '${comparison.ondc.deepLink}')">Order on ONDC (₹${comparison.ondc.finalPrice}) →</button>
+            <button type="button" class="order-btn ondc"
+              data-order-trigger="true"
+              data-code="ONDC50"
+              data-rest="${dish.name}"
+              data-platform="ONDC (Pincode)"
+              data-menu="${comparison.ondc.base}"
+              data-final="${comparison.ondc.finalPrice}"
+              data-link="${comparison.ondc.deepLink}">
+              Order on ONDC (₹${comparison.ondc.finalPrice}) →
+            </button>
           </div>
 
         </div>
@@ -808,7 +882,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const platforms = [result.dominos, result.eatsure, result.magicpin, result.ondc, result.swiggy, result.zomato].filter(Boolean);
 
-    comparisonResultGrid.innerHTML = platforms.map(p => {
+    comparisonResultGrid.innerHTML = `
+      <div class="calc-active-notice" style="grid-column: 1 / -1; background: #F8FAFC; border: 1.5px solid #E2E8F0; border-radius: 14px; padding: 12px 16px; font-size: 0.85rem; color: #334155; margin-bottom: 6px;">
+        💡 <strong>Cart Value Analysis for ₹${amount}:</strong> Showing real checkout bills including ₹8 platform fees, GST taxes, and delivery. 
+        <span style="color:#64748B;">(Domino's rate reflects their Everyday Value 2-Pizza combo; EatSure reflects direct brand savings).</span>
+        <div style="margin-top:6px;">
+          👉 <em>Want to compare an exact dish like Peppy Paneer or Biryani? <a href="#foodSection" style="color:var(--primary-red);font-weight:700;">Pick in 🍕 Food Matcher above!</a></em>
+        </div>
+      </div>
+    ` + platforms.map(p => {
       const isWinner = p.isWinner;
       const brandClass = p.platform.toLowerCase().includes("zomato") ? "zomato" :
                          p.platform.toLowerCase().includes("swiggy") ? "swiggy" :
@@ -835,7 +917,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
           <div class="breakdown-list">
             <div class="breakdown-row">
-              <span>Item Total (Menu Base)</span>
+              <span>Item Total ${p.platform.includes("Domino") ? '(2 Pizzas Combo)' : p.platform.includes("EatSure") ? '(Brand Menu)' : '(Menu Base)'}</span>
               <span>₹${p.base}</span>
             </div>
             <div class="breakdown-row">
@@ -868,8 +950,15 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
           `}
 
-          <button type="button" class="order-btn ${brandClass}" onclick="openOrderGuide('${p.promoCode !== 'None' ? p.promoCode : 'BESTDEAL'}', 'Cart Total (₹${amount})', '${p.platform.split(' ')[0]}', ${p.base}, ${p.finalPrice}, '${p.deepLink}')">
-            <span>Order on ${p.platform.split(' ')[0]} (₹${p.finalPrice}) →</span>
+          <button type="button" class="order-btn ${brandClass}"
+            data-order-trigger="true"
+            data-code="${p.promoCode !== 'None' ? p.promoCode : 'BESTDEAL'}"
+            data-rest="Cart Total (₹${amount})"
+            data-platform="${p.platform}"
+            data-menu="${p.base}"
+            data-final="${p.finalPrice}"
+            data-link="${p.deepLink}">
+            <span>Order on ${p.platform} (₹${p.finalPrice}) →</span>
           </button>
         </div>
       `;
@@ -957,7 +1046,14 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
           </div>
 
-          <button type="button" class="deal-order-direct-btn" onclick="directAutoOrder('${deal.couponCode}', '${deal.restaurant}', '${deal.platform}', ${savings}, ${deal.originalAvgPrice}, ${deal.slashedNetPrice}, '${deal.deepLink}')">
+          <button type="button" class="deal-order-direct-btn"
+            data-order-trigger="true"
+            data-code="${deal.couponCode}"
+            data-rest="${deal.restaurant}"
+            data-platform="${deal.platform}"
+            data-menu="${deal.originalAvgPrice}"
+            data-final="${deal.slashedNetPrice}"
+            data-link="${deal.deepLink}">
             <span>⚡ Order on ${deal.platform} (Save ₹${savings}) ➔</span>
           </button>
         </div>

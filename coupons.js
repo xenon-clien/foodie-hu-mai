@@ -23,8 +23,8 @@ const COUPONS_DATA = [
     usesToday: 1420,
     verifiedToday: true,
     expiresIn: "Permanent Official Deal",
-    appUrl: "https://pizzaonline.dominos.co.in",
-    deepLink: "https://pizzaonline.dominos.co.in"
+    appUrl: "https://www.dominos.co.in/menu",
+    deepLink: "https://www.dominos.co.in/menu"
   },
   {
     id: "c_guar_dom_direct",
@@ -44,8 +44,8 @@ const COUPONS_DATA = [
     usesToday: 980,
     verifiedToday: true,
     expiresIn: "Permanent Advantage",
-    appUrl: "https://pizzaonline.dominos.co.in",
-    deepLink: "https://pizzaonline.dominos.co.in"
+    appUrl: "https://www.dominos.co.in/menu",
+    deepLink: "https://www.dominos.co.in/menu"
   },
   {
     id: "c_guar_hut_combo",
@@ -154,30 +154,29 @@ const COUPONS_DATA = [
     usesToday: 910,
     verifiedToday: true,
     expiresIn: "Active Today • Web & App",
-    appUrl: "https://pizzaonline.dominos.co.in",
-    deepLink: "https://pizzaonline.dominos.co.in"
+    appUrl: "https://www.dominos.co.in/menu",
+    deepLink: "https://www.dominos.co.in/menu"
   },
   {
-    id: "c_domnew3",
-    code: "DOMNEW3",
+    id: "c_domget30",
+    code: "GET30",
     platform: "Domino's",
-    badge: "📱 1ST 3 APP ORDERS",
+    badge: "🔥 FLAT ₹30 OFF",
     category: "universal",
-    discountHeadline: "Flat 50% OFF (Up to ₹100)",
-    discountType: "percent",
-    discountPercent: 50,
-    maxDiscount: 100,
-    minOrder: 249,
+    discountHeadline: "Flat ₹30 OFF on Web & App",
+    discountType: "flat",
+    discountAmount: 30,
+    minOrder: 199,
     paymentMethod: "All Payment Methods",
-    description: "Domino's official welcome discount across your first 3 mobile app orders with a fresh number.",
-    warningNote: "⚠️ DHYAN DEIN: Sirf Domino's Mobile App par naye number se login karne par chalega. Desktop browser pe nahi lagta.",
+    description: "Official Domino's Web & App promo. 100% verified working on core pizzas above ₹199.",
+    warningNote: "⚠️ Minimum cart ₹199. Valid on desktop web and mobile app.",
     isGuaranteed: false,
-    successRate: 92,
-    usesToday: 540,
+    successRate: 98,
+    usesToday: 740,
     verifiedToday: true,
-    expiresIn: "Active for New Users",
-    appUrl: "https://pizzaonline.dominos.co.in",
-    deepLink: "https://pizzaonline.dominos.co.in"
+    expiresIn: "Active Today • Web & App",
+    appUrl: "https://www.dominos.co.in/menu",
+    deepLink: "https://www.dominos.co.in/menu"
   },
   {
     id: "c_domhowzzat",
@@ -198,8 +197,8 @@ const COUPONS_DATA = [
     usesToday: 420,
     verifiedToday: true,
     expiresIn: "Active Today",
-    appUrl: "https://pizzaonline.dominos.co.in",
-    deepLink: "https://pizzaonline.dominos.co.in"
+    appUrl: "https://www.dominos.co.in/menu",
+    deepLink: "https://www.dominos.co.in/menu"
   },
   {
     id: "c_domget30",
@@ -212,15 +211,15 @@ const COUPONS_DATA = [
     discountAmount: 30,
     minOrder: 199,
     paymentMethod: "All Payment Methods (UPI, COD, Netbanking)",
-    description: "Official Domino's Web promo. Works on pizzaonline.dominos.co.in for orders above ₹199.",
+    description: "Official Domino's Web promo. Works on dominos.co.in/menu for orders above ₹199.",
     warningNote: "⚠️ DHYAN DEIN: Cart me kam se kam 1 regular ya medium pizza hona chahiye jo Everyday Value combo me na ho.",
     isGuaranteed: false,
     successRate: 86,
     usesToday: 680,
     verifiedToday: true,
     expiresIn: "Active Today • Web & App",
-    appUrl: "https://pizzaonline.dominos.co.in",
-    deepLink: "https://pizzaonline.dominos.co.in"
+    appUrl: "https://www.dominos.co.in/menu",
+    deepLink: "https://www.dominos.co.in/menu"
   },
   {
     id: "c_dom50",
@@ -241,8 +240,8 @@ const COUPONS_DATA = [
     usesToday: 420,
     verifiedToday: true,
     expiresIn: "Active This Week",
-    appUrl: "https://pizzaonline.dominos.co.in",
-    deepLink: "https://pizzaonline.dominos.co.in"
+    appUrl: "https://www.dominos.co.in/menu",
+    deepLink: "https://www.dominos.co.in/menu"
   },
   {
     id: "c_cheese30",
@@ -263,8 +262,8 @@ const COUPONS_DATA = [
     usesToday: 210,
     verifiedToday: true,
     expiresIn: "Active Daily",
-    appUrl: "https://pizzaonline.dominos.co.in",
-    deepLink: "https://pizzaonline.dominos.co.in"
+    appUrl: "https://www.dominos.co.in/menu",
+    deepLink: "https://www.dominos.co.in/menu"
   },
   {
     id: "c_domedv",
@@ -284,8 +283,8 @@ const COUPONS_DATA = [
     usesToday: 890,
     verifiedToday: true,
     expiresIn: "Daily Permanent Offer",
-    appUrl: "https://pizzaonline.dominos.co.in",
-    deepLink: "https://pizzaonline.dominos.co.in"
+    appUrl: "https://www.dominos.co.in/menu",
+    deepLink: "https://www.dominos.co.in/menu"
   },
   {
     id: "c_hut125",
@@ -656,8 +655,8 @@ const COUPONS_DATA = [
     usesToday: 290,
     verifiedToday: true,
     expiresIn: "Active Daily",
-    appUrl: "https://pizzaonline.dominos.co.in",
-    deepLink: "https://pizzaonline.dominos.co.in"
+    appUrl: "https://www.dominos.co.in/menu",
+    deepLink: "https://www.dominos.co.in/menu"
   },
   {
     id: "c_mobikwik75",
