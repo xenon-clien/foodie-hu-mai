@@ -801,9 +801,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Universal Search & Live Comparison Runner (Supports Any Restaurant or Dish)
   window.searchAndCompare = function(query) {
-    const q = (query || "").trim();
+    const rawVal = (typeof query === "string" && query.trim().length > 0) ? query : (dishSearchInput ? dishSearchInput.value : "");
+    const q = (rawVal || "").trim();
     if (!q) {
       if (dishSearchInput) dishSearchInput.focus();
+      showToast("Please enter a food item or restaurant (e.g. Pizza, KFC, Biryani)!");
       return;
     }
 
@@ -995,12 +997,20 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Go / Compare button click
-  if (searchGoBtn && dishSearchInput) {
-    searchGoBtn.addEventListener("click", () => {
-      searchAndCompare(dishSearchInput.value);
+  // Form submit & Go/Compare button click
+  const dishSearchForm = document.getElementById("dishSearchForm");
+  if (dishSearchForm) {
+    dishSearchForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      searchAndCompare(dishSearchInput ? dishSearchInput.value : "");
     });
   }
+
+  if (searchGoBtn && dishSearchInput) {
+    searchGoBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      searchAndCompare(dishSearchInput.value);
+    });
   }
 
   // Dismiss Sticky Bar
