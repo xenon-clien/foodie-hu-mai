@@ -69,6 +69,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const cartGuideCopyBtn = document.getElementById("cartGuideCopyBtn");
   const cartGuideActionBtn = document.getElementById("cartGuideActionBtn");
   const cartGuideActionText = document.getElementById("cartGuideActionText");
+  const cartGuideActionBtnBottom = document.getElementById("cartGuideActionBtnBottom");
+  const cartGuideActionTextBottom = document.getElementById("cartGuideActionTextBottom");
 
   // Passbook Modal
   const passbookModal = document.getElementById("passbookModal");
@@ -314,9 +316,30 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (cartGuideActionText) {
-      cartGuideActionText.textContent = `Proceed to ${platform} (Save ₹${discount > 0 ? discount : 60}) ↗`;
+      cartGuideActionText.textContent = `⚡ Open ${platform} & Save ₹${discount > 0 ? discount : 60} ↗`;
     }
-    if (cartGuideActionBtn) cartGuideActionBtn.href = deepLink || "#";
+    if (cartGuideActionBtn) {
+      cartGuideActionBtn.href = deepLink || "#";
+      cartGuideActionBtn.onclick = (e) => {
+        if (deepLink && deepLink !== "#") {
+          window.open(deepLink, "_blank");
+          e.preventDefault();
+        }
+      };
+    }
+
+    if (cartGuideActionTextBottom) {
+      cartGuideActionTextBottom.textContent = `Proceed to ${platform} (₹${finalPrice}) ↗`;
+    }
+    if (cartGuideActionBtnBottom) {
+      cartGuideActionBtnBottom.href = deepLink || "#";
+      cartGuideActionBtnBottom.onclick = (e) => {
+        if (deepLink && deepLink !== "#") {
+          window.open(deepLink, "_blank");
+          e.preventDefault();
+        }
+      };
+    }
 
     cartGuideOverlay.style.display = "flex";
   };
