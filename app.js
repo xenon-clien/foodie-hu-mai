@@ -293,7 +293,6 @@ document.addEventListener("DOMContentLoaded", () => {
     else if (pLower.includes("zomato")) pIcon = "🍅";
     else if (pLower.includes("eatsure") || pLower.includes("faasos") || pLower.includes("behrouz")) pIcon = "🍱";
     else if (pLower.includes("magicpin")) pIcon = "🛍️";
-    else if (pLower.includes("ondc")) pIcon = "🇮🇳";
     else pIcon = "🍔";
 
     if (cartGuideIcon) cartGuideIcon.textContent = pIcon;
@@ -456,8 +455,6 @@ document.addEventListener("DOMContentLoaded", () => {
       winnerObj = comparison.directBrand;
     } else if (wLower.includes("magic")) {
       winnerObj = comparison.magicpin;
-    } else if (wLower.includes("ondc")) {
-      winnerObj = comparison.ondc;
     } else if (wLower.includes("swiggy")) {
       winnerObj = comparison.swiggy;
     } else {
@@ -535,7 +532,6 @@ document.addEventListener("DOMContentLoaded", () => {
             ${comparison.isEatSure ? `<span class="connected-chip" style="background:#FAF5FF; color:#7E22CE; font-weight:700; font-size:0.75rem; padding:4px 10px; border-radius:20px; border:1px solid #E9D5FF;">EatSure Direct</span>` : ''}
             ${comparison.directBrand ? `<span class="connected-chip" style="background:#FEF2F2; color:#DC2626; font-weight:700; font-size:0.75rem; padding:4px 10px; border-radius:20px; border:1px solid #FECACA;">${escapeHTML(comparison.directBrand.name)}</span>` : ''}
             <span class="connected-chip" style="background:#ECFDF5; color:#059669; font-weight:700; font-size:0.75rem; padding:4px 10px; border-radius:20px; border:1px solid #A7F3D0;">Magicpin</span>
-            <span class="connected-chip" style="background:#F0F9FF; color:#0284C7; font-weight:700; font-size:0.75rem; padding:4px 10px; border-radius:20px; border:1px solid #BAE6FD;">ONDC Network</span>
             <span class="connected-chip" style="background:#FFF7ED; color:#EA580C; font-weight:700; font-size:0.75rem; padding:4px 10px; border-radius:20px; border:1px solid #FED7AA;">Swiggy</span>
             <span class="connected-chip" style="background:#FFF1F2; color:#E11D48; font-weight:700; font-size:0.75rem; padding:4px 10px; border-radius:20px; border:1px solid #FECDD3;">Zomato</span>
           </div>
@@ -775,36 +771,6 @@ document.addEventListener("DOMContentLoaded", () => {
             </button>
           </div>
 
-          <!-- ONDC -->
-          <div class="platform-card ${comparison.ondc.finalPrice === winnerObj.finalPrice ? 'winner' : ''}">
-            ${comparison.ondc.finalPrice === winnerObj.finalPrice ? `<div class="winner-crown">👑 WINNER (SAVE ₹${comparison.totalSaved})</div>` : ''}
-            <div class="platform-top">
-              <div class="platform-brand">
-                <span class="brand-dot ondc"></span>
-                <span>ONDC (Direct Network)</span>
-              </div>
-            </div>
-            <div class="final-price-box">
-              <div class="final-price-label">Net Payable Bill</div>
-              <div class="final-price-value">₹${comparison.ondc.finalPrice}</div>
-            </div>
-            <div class="breakdown-list">
-              <div class="breakdown-row"><span>Dish Base Rate</span><span>₹${comparison.ondc.base}</span></div>
-              <div class="breakdown-row"><span>Subsidized Del</span><span>₹22</span></div>
-              ${comparison.ondc.discount > 0 ? `<div class="breakdown-row breakdown-discount"><span>ONDC Promo</span><span>-₹${comparison.ondc.discount}</span></div>` : ''}
-            </div>
-            <button type="button" class="order-btn ondc"
-              data-order-trigger="true"
-              data-code="ONDC50"
-              data-rest="${escapeHTML(dish.name)}"
-              data-platform="ONDC (Direct Network)"
-              data-menu="${comparison.ondc.base}"
-              data-final="${comparison.ondc.finalPrice}"
-              data-link="${escapeHTML(comparison.ondc.deepLink)}">
-              Order on ONDC (₹${comparison.ondc.finalPrice}) →
-            </button>
-          </div>
-
         </div>
       </div>
     `;
@@ -900,7 +866,7 @@ document.addEventListener("DOMContentLoaded", () => {
           swiggyBase: 280,
           magicpinBase: 235,
           packaging: 20,
-          popularRest: `${q} (Magicpin, ONDC, Swiggy & Zomato)`
+          popularRest: `${q} (Magicpin, Swiggy & Zomato)`
         };
       }
     }
@@ -983,7 +949,7 @@ document.addEventListener("DOMContentLoaded", () => {
               <span class="dropdown-item-emoji">⚡</span>
               <div>
                 <div class="dropdown-item-title" style="color:var(--primary, #E23744); font-weight:700;">Compare "${escapeHTML(q)}" Live ➔</div>
-                <div class="dropdown-item-sub">Scan Swiggy, Zomato, Magicpin, ONDC &amp; Brand Apps</div>
+                <div class="dropdown-item-sub">Scan Swiggy, Zomato, Magicpin &amp; Brand Apps</div>
               </div>
             </div>
             <span class="dropdown-item-badge" style="background:#E23744; color:#fff;">Live Rates</span>
@@ -1000,7 +966,7 @@ document.addEventListener("DOMContentLoaded", () => {
                   Compare "${escapeHTML(q)}" Across All Food Apps ➔
                 </div>
                 <div class="dropdown-item-sub" style="color:#6B7280; font-size:0.8rem; margin-top:2px;">
-                  Identify connected platforms (Swiggy, Zomato, Magicpin, ONDC, Direct Apps) and calculate cheapest net bill!
+                  Identify connected platforms (Swiggy, Zomato, Magicpin, Direct Apps) and calculate cheapest net bill!
                 </div>
               </div>
             </div>
@@ -1084,7 +1050,7 @@ document.addEventListener("DOMContentLoaded", () => {
       whatsappShareBtn.href = ComparatorEngine.generateWhatsAppShare(result);
     }
 
-    const platforms = [result.dominos, result.eatsure, result.magicpin, result.ondc, result.swiggy, result.zomato].filter(Boolean);
+    const platforms = [result.dominos, result.eatsure, result.magicpin, result.swiggy, result.zomato].filter(Boolean);
 
     comparisonResultGrid.innerHTML = `
       <div class="calc-active-notice" style="grid-column: 1 / -1; background: #F8FAFC; border: 1.5px solid #E2E8F0; border-radius: 14px; padding: 12px 16px; font-size: 0.85rem; color: #334155; margin-bottom: 6px;">
@@ -1099,8 +1065,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const brandClass = p.platform.toLowerCase().includes("zomato") ? "zomato" :
                          p.platform.toLowerCase().includes("swiggy") ? "swiggy" :
                          p.platform.toLowerCase().includes("domino") ? "dominos" :
-                         p.platform.toLowerCase().includes("eatsure") ? "eatsure" :
-                         p.platform.toLowerCase().includes("ondc") ? "ondc" : "magicpin";
+                         p.platform.toLowerCase().includes("eatsure") ? "eatsure" : "magicpin";
 
       return `
         <div class="platform-card ${isWinner ? 'winner' : ''}">

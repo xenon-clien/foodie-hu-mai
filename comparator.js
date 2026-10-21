@@ -36,9 +36,8 @@ const ComparatorEngine = {
     const swiggyDiscount = swiggyPromo ? swiggyPromo.discount : 0;
     const swiggyFinal = Math.max(0, swiggyGross - swiggyDiscount);
 
-    // 3. MAGICPIN / ONDC DIRECT CALCULATION
-    // ONDC / Magicpin does not inflate menu prices by 15-25% like delivery giants
     // 3. MAGICPIN CALCULATION
+    // Magicpin offers direct merchant discounts and ₹0 platform fee
     const magicpinBase = Math.round(base * 0.90);
     const magicpinGST = Math.round(magicpinBase * 0.05);
     const magicpinPlatform = 0; // ₹0 platform fee
@@ -59,17 +58,7 @@ const ComparatorEngine = {
     const eatsureDiscount = Math.min(150, Math.round(eatsureBase * 0.50)); // SURE50
     const eatsureFinal = Math.max(0, eatsureGross - eatsureDiscount);
 
-    // 5. ONDC / PINCODE (GOVERNMENT OPEN NETWORK)
-    const ondcBase = Math.round(base * 0.88);
-    const ondcGST = Math.round(ondcBase * 0.05);
-    const ondcPlatform = 0;
-    const ondcPackaging = 12;
-    const ondcDelivery = 22; // Subsidized delivery
-    const ondcGross = ondcBase + ondcGST + ondcPlatform + ondcPackaging + ondcDelivery;
-    const ondcDiscount = ondcBase >= 199 ? 50 : 25; // ONDC50
-    const ondcFinal = Math.max(0, ondcGross - ondcDiscount);
-
-    // 6. DOMINO'S OFFICIAL APP (DIRECT JUBILANT - EVERYDAY VALUE)
+    // 5. DOMINO'S OFFICIAL APP (DIRECT JUBILANT - EVERYDAY VALUE)
     const dominosBase = Math.round(base * 0.82); // Direct everyday value baseline
     const dominosGST = Math.round(dominosBase * 0.05);
     const dominosPlatform = 0; // ₹0 Platform Fee on Domino's
@@ -85,7 +74,6 @@ const ComparatorEngine = {
       { name: "Domino's App (Direct)", final: dominosFinal, discount: dominosDiscount, promo: dominosPromo || { code: "EDV99", headline: "2 Pizzas @ ₹99 Each" }, color: "#0078AE" },
       ...(isEatSureServiceable ? [{ name: "EatSure (Direct Brand)", final: eatsureFinal, discount: eatsureDiscount, promo: { code: "SURE50", headline: "Flat 50% OFF + Free Delivery" }, color: "#7E22CE" }] : []),
       { name: "Magicpin", final: magicpinFinal, discount: magicpinDiscount, promo: magicpinPromo, color: "#10B981" },
-      { name: "ONDC / Pincode", final: ondcFinal, discount: ondcDiscount, promo: { code: "ONDC50", headline: "Govt Subsidized Rate" }, color: "#0284C7" },
       { name: "Swiggy", final: swiggyFinal, discount: swiggyDiscount, promo: swiggyPromo, color: "#FC8019" },
       { name: "Zomato", final: zomatoFinal, discount: zomatoDiscount, promo: zomatoPromo, color: "#FF385C" }
     ];
@@ -174,20 +162,6 @@ const ComparatorEngine = {
         finalPrice: magicpinFinal,
         isWinner: winner.name === "Magicpin",
         deepLink: "https://www.magicpin.in"
-      },
-      ondc: {
-        platform: "ONDC (Pincode)",
-        base: ondcBase,
-        gst: ondcGST,
-        platformFee: ondcPlatform,
-        packaging: ondcPackaging,
-        delivery: ondcDelivery,
-        discount: ondcDiscount,
-        promoCode: "ONDC50",
-        promoHeadline: "Govt Subsidized Delivery",
-        finalPrice: ondcFinal,
-        isWinner: winner.name.includes("ONDC"),
-        deepLink: "https://www.ondc.org"
       }
     };
   },
@@ -251,7 +225,6 @@ const ComparatorEngine = {
     const winnerKey = calcResult.winner.toLowerCase().includes('domino') ? 'dominos' :
                       calcResult.winner.toLowerCase().includes('eatsure') ? 'eatsure' :
                       calcResult.winner.toLowerCase().includes('magic') ? 'magicpin' :
-                      calcResult.winner.toLowerCase().includes('ondc') ? 'ondc' :
                       calcResult.winner.toLowerCase().includes('swiggy') ? 'swiggy' : 'zomato';
     const winnerFinalPrice = calcResult[winnerKey] ? calcResult[winnerKey].finalPrice : 0;
 
@@ -405,24 +378,15 @@ const ComparatorEngine = {
       };
     }
 
-    // 7. ONDC
-    const oBase = Math.round(zomatoBase * 0.88);
-    const oGST = Math.round(oBase * 0.05);
-    const oGross = oBase + oGST + 22; // Subsidized delivery
-    const oDiscount = oBase >= 199 ? 50 : 25;
-    const oFinal = Math.max(0, oGross - oDiscount);
-
     const options = isDominos ? [
       { name: "Domino's App (Direct)", final: dFinal, color: "#0078AE" },
       { name: "Magicpin", final: mFinal, color: "#10B981" },
-      { name: "ONDC (Pincode)", final: oFinal, color: "#0284C7" },
       { name: "Swiggy", final: sFinal, color: "#FC8019" },
       { name: "Zomato", final: zFinal, color: "#FF385C" }
     ] : [
       ...(isEatSureServiceable ? [{ name: "EatSure (Direct)", final: eFinal, color: "#7E22CE" }] : []),
       ...(directBrandResult ? [{ name: directBrandResult.name, final: directBrandResult.finalPrice, color: "#DC2626" }] : []),
       { name: "Magicpin", final: mFinal, color: "#10B981" },
-      { name: "ONDC (Pincode)", final: oFinal, color: "#0284C7" },
       { name: "Swiggy", final: sFinal, color: "#FC8019" },
       { name: "Zomato", final: zFinal, color: "#FF385C" }
     ];
@@ -443,8 +407,7 @@ const ComparatorEngine = {
       zomato: { base: zomatoBase, gross: zGross, discount: zDiscount, promo: zPromo, finalPrice: zFinal, deepLink: "https://www.zomato.com/search?q=" + encodeURIComponent(cleanSearch) },
       swiggy: { base: swiggyBase, gross: sGross, discount: sDiscount, promo: sPromo, finalPrice: sFinal, deepLink: "https://www.swiggy.com/search?query=" + encodeURIComponent(cleanSearch) },
       eatsure: { base: eBase, gross: eGross, discount: eDiscount, promo: ePromo, finalPrice: eFinal, serviceable: Boolean(isEatSureServiceable), serviceableNote: "Available via EatSure Direct", deepLink: "https://www.eatsure.com" },
-      magicpin: { base: magicpinBase, gross: mGross, discount: mDiscount, promo: mPromo, finalPrice: mFinal, deepLink: "https://www.magicpin.in/search?q=" + encodeURIComponent(cleanSearch) },
-      ondc: { base: oBase, gross: oGross, discount: oDiscount, promo: { code: "ONDC50" }, finalPrice: oFinal, deepLink: "https://www.ondc.org" }
+      magicpin: { base: magicpinBase, gross: mGross, discount: mDiscount, promo: mPromo, finalPrice: mFinal, deepLink: "https://www.magicpin.in/search?q=" + encodeURIComponent(cleanSearch) }
     };
   },
 
@@ -570,13 +533,13 @@ const ComparatorEngine = {
       popularRest = "McDonald's (McDelivery / Swiggy / Zomato / Magicpin)";
       emoji = "🍔";
     } else if (/subway/i.test(lower)) {
-      popularRest = "Subway (Magicpin / Swiggy / Zomato / ONDC)";
+      popularRest = "Subway (Magicpin / Swiggy / Zomato)";
       emoji = "🥪";
     } else if (/haldiram/i.test(lower)) {
-      popularRest = "Haldiram's (Magicpin / Swiggy / Zomato / ONDC)";
+      popularRest = "Haldiram's (Magicpin / Swiggy / Zomato)";
       emoji = "🍛";
     } else {
-      popularRest = `${formattedTitle} (Magicpin, ONDC, Swiggy & Zomato)`;
+      popularRest = `${formattedTitle} (Magicpin, Swiggy & Zomato)`;
     }
 
     return {

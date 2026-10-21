@@ -1,5 +1,5 @@
 // Foodie Hu Mai - Popular Indian Dishes Database
-// Real-world baseline pricing across Zomato, Swiggy, and Magicpin/ONDC
+// Real-world baseline pricing across Zomato, Swiggy, Magicpin, and Direct Brand Apps
 
 const DISHES_DATA = [
   {

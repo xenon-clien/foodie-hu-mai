@@ -50,7 +50,6 @@ assert(compDefault.zomato.finalPrice > 0, `Zomato final price calculated (₹${c
 assert(compDefault.swiggy.finalPrice > 0, `Swiggy final price calculated (₹${compDefault.swiggy.finalPrice})`);
 assert(compDefault.magicpin.finalPrice > 0, `Magicpin final price calculated (₹${compDefault.magicpin.finalPrice})`);
 assert(compDefault.eatsure.finalPrice > 0, `EatSure final price calculated (₹${compDefault.eatsure.finalPrice})`);
-assert(compDefault.ondc.finalPrice > 0, `ONDC final price calculated (₹${compDefault.ondc.finalPrice})`);
 assert(typeof compDefault.winner === 'string' && compDefault.winner.length > 0, `Winner identified: ${compDefault.winner}`);
 assert(compDefault.totalSaved >= 0, `Total savings computed correctly: ₹${compDefault.totalSaved}`);
 
@@ -145,7 +144,7 @@ const localDhabaDynamic = comparator.createDynamicDish("Sharma Dhaba Dal Makhani
 const dhabaComp = comparator.compareDish(localDhabaDynamic);
 assert(dhabaComp && dhabaComp.winner, `Arbitrary unlisted restaurant generates full live comparison (Winner: ${dhabaComp.winner})`);
 assert(dhabaComp.swiggy.finalPrice > 0 && dhabaComp.zomato.finalPrice > 0, `Swiggy & Zomato rates calculated for dynamic query`);
-assert(dhabaComp.magicpin.finalPrice > 0 && dhabaComp.ondc.finalPrice > 0, `Magicpin & ONDC rates calculated for dynamic query`);
+assert(dhabaComp.magicpin.finalPrice > 0, `Magicpin rate calculated for dynamic query`);
 assert(dhabaComp.totalSaved >= 0, `Savings computed for dynamic search: ₹${dhabaComp.totalSaved}`);
 
 console.log(`\n=================================================`);
