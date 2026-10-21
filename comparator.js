@@ -429,6 +429,7 @@ const ComparatorEngine = {
 
     options.sort((a, b) => a.final - b.final);
     const highest = Math.max(zFinal, sFinal);
+    const cleanSearch = this.getCleanSearchQuery(dish);
 
     return {
       dish,
@@ -439,12 +440,26 @@ const ComparatorEngine = {
       winner: options[0].name,
       totalSaved: Math.max(0, highest - options[0].final),
       dominos: { base: dBase, gross: dGross, discount: dDiscount, promo: dPromo, finalPrice: dFinal, deepLink: "https://www.dominos.co.in" },
-      zomato: { base: zomatoBase, gross: zGross, discount: zDiscount, promo: zPromo, finalPrice: zFinal, deepLink: "https://www.zomato.com/search?q=" + encodeURIComponent(dish.name) },
-      swiggy: { base: swiggyBase, gross: sGross, discount: sDiscount, promo: sPromo, finalPrice: sFinal, deepLink: "https://www.swiggy.com/search?query=" + encodeURIComponent(dish.name) },
+      zomato: { base: zomatoBase, gross: zGross, discount: zDiscount, promo: zPromo, finalPrice: zFinal, deepLink: "https://www.zomato.com/search?q=" + encodeURIComponent(cleanSearch) },
+      swiggy: { base: swiggyBase, gross: sGross, discount: sDiscount, promo: sPromo, finalPrice: sFinal, deepLink: "https://www.swiggy.com/search?query=" + encodeURIComponent(cleanSearch) },
       eatsure: { base: eBase, gross: eGross, discount: eDiscount, promo: ePromo, finalPrice: eFinal, serviceable: Boolean(isEatSureServiceable), serviceableNote: "Available via EatSure Direct", deepLink: "https://www.eatsure.com" },
-      magicpin: { base: magicpinBase, gross: mGross, discount: mDiscount, promo: mPromo, finalPrice: mFinal, deepLink: "https://www.magicpin.in/search?q=" + encodeURIComponent(dish.name) },
+      magicpin: { base: magicpinBase, gross: mGross, discount: mDiscount, promo: mPromo, finalPrice: mFinal, deepLink: "https://www.magicpin.in/search?q=" + encodeURIComponent(cleanSearch) },
       ondc: { base: oBase, gross: oGross, discount: oDiscount, promo: { code: "ONDC50" }, finalPrice: oFinal, deepLink: "https://www.ondc.org" }
     };
+  },
+
+  getCleanSearchQuery(dish) {
+    if (!dish) return "food";
+    if (dish.searchQuery) return dish.searchQuery;
+    let name = dish.name || "";
+    // Remove parentheses & brackets like (2 Pcs with Chutney), (500ml), (Medium)
+    name = name.replace(/\([^)]*\)/g, "").replace(/\[[^\]]*\]/g, "");
+    // Remove descriptive fluff words that break search matching on Swiggy/Zomato
+    name = name.replace(/\b(Special|Deluxe|Thick|Classic|Signature|Authentic|Plate|Bowl|Combo|Meal)\b/gi, "");
+    // Remove symbols and extra whitespace
+    name = name.replace(/[-+/,]+/g, " ");
+    name = name.replace(/\s+/g, " ").trim();
+    return name || dish.name || "food";
   },
 
   createDynamicDish(query) {

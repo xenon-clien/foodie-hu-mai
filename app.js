@@ -306,16 +306,20 @@ document.addEventListener("DOMContentLoaded", () => {
     if (cartGuideCouponText) cartGuideCouponText.textContent = effectiveCode;
 
     if (cartGuideStep1Text) {
-      cartGuideStep1Text.innerHTML = `When ${platform} opens, the menu rate (<strong>₹${menuPrice}</strong>) will be shown. First click <em>"Add to Cart"</em>.`;
+      if (pLower.includes("domino")) {
+        cartGuideStep1Text.innerHTML = `Domino's menu opens directly. Select your favorite pizza and tap <em>"Add to Cart"</em>.`;
+      } else {
+        cartGuideStep1Text.innerHTML = `When ${platform} opens, pick your preferred outlet for <strong>${escapeHTML(restaurant)}</strong> and tap <em>"Add to Cart"</em>. (Menu rates vary slightly by outlet, benchmark ~₹${menuPrice}).`;
+      }
     }
 
     if (cartGuideStep3Text) {
       if (pLower.includes("domino")) {
-        cartGuideStep3Text.innerHTML = `In Domino's cart, paste coupon <strong>${effectiveCode}</strong> or select the Everyday Value combo to slash your bill instantly!`;
+        cartGuideStep3Text.innerHTML = `In Domino's cart, paste coupon <strong>${effectiveCode}</strong> or select Everyday Value combo to slash your bill instantly!`;
       } else if (pLower.includes("swiggy")) {
-        cartGuideStep3Text.innerHTML = `In Swiggy checkout, scroll to <strong>'SAVINGS CORNER'</strong> and tap <strong>'Apply Coupon >'</strong> to paste <strong>${effectiveCode}</strong>. (Swiggy requires manual coupon apply after login).`;
+        cartGuideStep3Text.innerHTML = `In Swiggy checkout, scroll to <strong>'SAVINGS CORNER'</strong> and tap <strong>'Apply Coupon >'</strong> to paste <strong>${effectiveCode}</strong> to save up to ₹${discount}!`;
       } else if (pLower.includes("zomato")) {
-        cartGuideStep3Text.innerHTML = `In Zomato checkout, tap <strong>'View All Coupons'</strong> and paste <strong>${effectiveCode}</strong> to save ₹${discount}!`;
+        cartGuideStep3Text.innerHTML = `In Zomato checkout, tap <strong>'View All Coupons'</strong> and paste <strong>${effectiveCode}</strong> to save up to ₹${discount}!`;
       } else {
         cartGuideStep3Text.innerHTML = `Paste the coupon in 'Apply Coupon' box to instantly slash your bill!`;
       }
@@ -328,7 +332,7 @@ document.addEventListener("DOMContentLoaded", () => {
         cgPlatformTip.style.display = "block";
         if (cgTipPlatformName) cgTipPlatformName.textContent = platform;
         if (cgTipBody) {
-          cgTipBody.innerHTML = `No website in India can auto-apply coupons inside ${platform}'s cart. When ${platform} opens, scroll to <strong>'SAVINGS CORNER'</strong> and tap <strong>'Apply Coupon >'</strong> to paste code <strong>${effectiveCode}</strong>.`;
+          cgTipBody.innerHTML = `No food delivery app in India auto-applies coupons without user login. When ${platform} opens, add items to cart, head to checkout, and tap <strong>'Apply Coupon'</strong> to paste code <strong>${effectiveCode}</strong>!`;
         }
         if (cgTipSwitchBox && (restLower.includes("domino") || restLower.includes("pizza"))) {
           cgTipSwitchBox.style.display = "flex";
@@ -519,7 +523,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
 
         <!-- Connected Delivery Platforms Discovery Strip -->
-        <div class="connected-platforms-strip" style="background:#F9FAFB; border:1px solid #E5E7EB; border-radius:12px; padding:12px 16px; margin:16px 0; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+        <div class="connected-platforms-strip" style="background:#F9FAFB; border:1px solid #E5E7EB; border-radius:12px; padding:12px 16px; margin:16px 0 10px 0; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
           <div style="display:flex; align-items:center; gap:8px;">
             <span style="font-size:1.15rem;">📡</span>
             <span style="font-size:0.85rem; font-weight:600; color:#374151;">
@@ -534,6 +538,25 @@ document.addEventListener("DOMContentLoaded", () => {
             <span class="connected-chip" style="background:#F0F9FF; color:#0284C7; font-weight:700; font-size:0.75rem; padding:4px 10px; border-radius:20px; border:1px solid #BAE6FD;">ONDC Network</span>
             <span class="connected-chip" style="background:#FFF7ED; color:#EA580C; font-weight:700; font-size:0.75rem; padding:4px 10px; border-radius:20px; border:1px solid #FED7AA;">Swiggy</span>
             <span class="connected-chip" style="background:#FFF1F2; color:#E11D48; font-weight:700; font-size:0.75rem; padding:4px 10px; border-radius:20px; border:1px solid #FECDD3;">Zomato</span>
+          </div>
+        </div>
+
+        <!-- Benchmark Rate Explanation & Live Price Adjuster -->
+        <div class="rate-clarification-banner" style="background:#FFFBEB; border:1px solid #FDE68A; border-radius:12px; padding:12px 16px; margin:10px 0 16px 0; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+          <div style="display:flex; align-items:center; gap:10px; flex:1; min-width:260px;">
+            <span style="font-size:1.3rem;">📊</span>
+            <div style="font-size:0.84rem; color:#92400E; line-height:1.45;">
+              <strong>Benchmark Menu Rate: ₹${dish.swiggyBase || dish.zomatoBase || 180}</strong> (Average price for popular outlets like <em>${escapeHTML(dish.popularRest || 'Haldiram\'s / Bikanervala')}</em>).<br>
+              <span style="color:#78350F; font-size:0.78rem;">💡 Rates vary slightly per outlet. Want to compare for a different menu rate or cart bill? Change rate here:</span>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px; background:#FEF3C7; padding:6px 10px; border-radius:10px; border:1px solid #FCD34D;">
+            <span style="font-size:0.8rem; font-weight:700; color:#92400E;">Menu Rate:</span>
+            <div style="display:flex; align-items:center; background:#FFF; border:1px solid #D97706; border-radius:6px; padding:2px 6px;">
+              <span style="font-size:0.85rem; font-weight:700; color:#B45309;">₹</span>
+              <input type="number" id="dishBaseAdjuster" value="${dish.swiggyBase || dish.zomatoBase || 180}" min="30" max="5000" style="width:65px; border:none; outline:none; font-weight:700; font-size:0.9rem; padding:3px; color:#1F2937;">
+            </div>
+            <button type="button" id="recalcDishBaseBtn" style="background:#D97706; color:#FFF; border:none; border-radius:6px; padding:6px 12px; font-weight:700; font-size:0.8rem; cursor:pointer;">Update ↻</button>
           </div>
         </div>
 
@@ -785,6 +808,29 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
       </div>
     `;
+
+    // Hook up base rate adjuster
+    const dishBaseAdjuster = document.getElementById("dishBaseAdjuster");
+    const recalcDishBaseBtn = document.getElementById("recalcDishBaseBtn");
+    if (recalcDishBaseBtn && dishBaseAdjuster) {
+      recalcDishBaseBtn.addEventListener("click", () => {
+        const newBase = parseFloat(dishBaseAdjuster.value);
+        if (newBase && newBase > 0) {
+          selectedDish.zomatoBase = newBase;
+          selectedDish.swiggyBase = newBase;
+          selectedDish.magicpinBase = Math.max(40, Math.round(newBase * 0.85));
+          if (cartInput) cartInput.value = newBase;
+          renderDishFaceoff(selectedDish, appliedCoupon);
+          showToast(`Recalculated comparison for ₹${newBase} menu bill!`);
+        }
+      });
+      dishBaseAdjuster.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          recalcDishBaseBtn.click();
+        }
+      });
+    }
 
     // Hook up coupon apply button
     const dishCouponSelector = document.getElementById("dishCouponSelector");
