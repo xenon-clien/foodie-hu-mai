@@ -5,6 +5,7 @@ const DISHES_DATA = [
   {
     id: "d_dominos_pizza",
     name: "Domino's Peppy Paneer Pizza (Medium)",
+    searchQuery: "dominos peppy paneer pizza",
     keywords: ["dominos", "domino's", "dominos pizza", "peppy paneer", "pizza", "paneer pizza", "cheese"],
     category: "Pizza & Fast Food",
     emoji: "🍕",
@@ -19,6 +20,7 @@ const DISHES_DATA = [
   {
     id: "d_dominos_margherita",
     name: "Domino's Classic Margherita (Medium)",
+    searchQuery: "dominos margherita pizza",
     keywords: ["dominos margherita", "margherita", "cheese pizza", "dominos"],
     category: "Pizza & Fast Food",
     emoji: "🍕",
@@ -33,6 +35,7 @@ const DISHES_DATA = [
   {
     id: "d_dominos_double_cheese",
     name: "Domino's Double Cheese Margherita (Medium)",
+    searchQuery: "dominos double cheese margherita",
     keywords: ["double cheese", "double cheese margherita", "margherita", "dominos double cheese", "pizza", "dominos"],
     category: "Pizza & Fast Food",
     emoji: "🍕",
@@ -47,6 +50,7 @@ const DISHES_DATA = [
   {
     id: "d_dominos_mania",
     name: "Domino's Pizza Mania (Golden Corn / Capsicum)",
+    searchQuery: "dominos pizza mania",
     keywords: ["dominos 99", "pizza mania", "99 pizza", "dominos mania"],
     category: "Pizza & Fast Food",
     emoji: "🍕",
@@ -61,6 +65,7 @@ const DISHES_DATA = [
   {
     id: "d_biryani",
     name: "Behrouz Shahi Chicken Dum Biryani",
+    searchQuery: "behrouz biryani",
     keywords: ["biryani", "chicken biryani", "dum biryani", "behrouz", "rice"],
     category: "Main Course",
     emoji: "🍗",
@@ -75,6 +80,7 @@ const DISHES_DATA = [
   {
     id: "d_butter_chicken",
     name: "Butter Chicken with 2 Butter Naan",
+    searchQuery: "butter chicken",
     keywords: ["butter chicken", "chicken", "naan", "curry", "punjabi", "murgh"],
     category: "North Indian",
     emoji: "🍲",
@@ -88,6 +94,7 @@ const DISHES_DATA = [
   {
     id: "d_burger",
     name: "Burger King Crispy Veg Burger Peri Peri Meal (R)",
+    searchQuery: "burger king burger",
     keywords: ["burger", "crispy veg", "peri peri meal", "burger king", "whopper", "mcdonalds", "fries", "coke"],
     category: "Fast Food",
     emoji: "🍔",
@@ -101,6 +108,7 @@ const DISHES_DATA = [
   {
     id: "d_paneer_tikka",
     name: "Paneer Butter Masala + Garlic Naan",
+    searchQuery: "paneer butter masala",
     keywords: ["paneer", "paneer butter masala", "kadai paneer", "veg", "shahi paneer"],
     category: "North Indian",
     emoji: "🧀",
@@ -114,6 +122,7 @@ const DISHES_DATA = [
   {
     id: "d_momos",
     name: "Crispy Kurkure Momos (Natural 2 / Wow! Momo)",
+    searchQuery: "kurkure momos",
     keywords: ["momos", "dimsum", "kurkure momos", "kurkure", "natural 2", "chinese", "snacks"],
     category: "Snacks",
     emoji: "🥟",
@@ -127,6 +136,7 @@ const DISHES_DATA = [
   {
     id: "d_chole_bhature",
     name: "Special Chole Bhature (2 Pcs with Chutney)",
+    searchQuery: "chole bhature",
     keywords: ["chole bhature", "chhole", "bhature", "breakfast", "punjabi"],
     category: "Breakfast & Lunch",
     emoji: "🍳",
@@ -140,6 +150,7 @@ const DISHES_DATA = [
   {
     id: "d_cold_coffee",
     name: "Thick Chocolate Cold Coffee / Frappe",
+    searchQuery: "cold coffee",
     keywords: ["cold coffee", "coffee", "shake", "frappe", "beverage", "beverages"],
     category: "Beverages",
     emoji: "🧋",
@@ -153,6 +164,7 @@ const DISHES_DATA = [
   {
     id: "d_dosa",
     name: "Masala Dosa with Sambhar & Coconut Chutney",
+    searchQuery: "masala dosa",
     keywords: ["dosa", "masala dosa", "south indian", "idli", "vada", "sambhar"],
     category: "South Indian",
     emoji: "🥞",
@@ -166,6 +178,7 @@ const DISHES_DATA = [
   {
     id: "d_noodles",
     name: "Veg Hakka Noodles & Manchurian Combo",
+    searchQuery: "hakka noodles",
     keywords: ["noodles", "hakka noodles", "manchurian", "chinese", "fried rice"],
     category: "Chinese",
     emoji: "🍜",
@@ -178,20 +191,23 @@ const DISHES_DATA = [
   },
   {
     id: "d_roll",
-    name: "Double Egg Chicken Kathi Roll",
-    keywords: ["roll", "kathi roll", "chicken roll", "egg roll", "shawarma"],
-    category: "Snacks",
+    name: "Classic Chicken Roll / Kathi Roll",
+    searchQuery: "chicken roll",
+    keywords: ["chicken roll", "roll", "kathi roll", "chicken kathi roll", "egg roll", "egg chicken roll", "shawarma"],
+    category: "Rolls & Fast Food",
     emoji: "🌯",
-    zomatoBase: 190,
-    swiggyBase: 185,
-    magicpinBase: 150,
-    packaging: 12,
-    popularRest: "Rolls King / Faasos / Khan Chacha",
-    typicalDiscount: "SWIGGYIT (25% OFF)"
+    zomatoBase: 179,
+    swiggyBase: 175,
+    magicpinBase: 145,
+    eatsureBase: 159,
+    packaging: 10,
+    popularRest: "Rolls King / Kathi Junction / Local Roll Corner",
+    typicalDiscount: "TRYNEW (40% OFF)"
   },
   {
     id: "d_thali",
     name: "Deluxe Punjabi Thali (Dal Makhani, Shahi Paneer, Rice, 3 Roti, Gulab Jamun)",
+    searchQuery: "punjabi thali",
     keywords: ["thali", "punjabi thali", "deluxe thali", "lunch", "meal"],
     category: "Lunch & Dinner",
     emoji: "🍱",
@@ -205,6 +221,7 @@ const DISHES_DATA = [
   {
     id: "d_biryani_badshah",
     name: "Biryani Badshah - Lucknowi Chicken Biryani Bowl (500ml)",
+    searchQuery: "chicken biryani",
     keywords: ["biryani badshah", "badshah", "lucknowi biryani", "chicken biryani", "biryani bowl", "lucknowi chicken"],
     category: "Biryani & Mughlai",
     emoji: "🍗",
@@ -218,6 +235,7 @@ const DISHES_DATA = [
   {
     id: "d_kfc",
     name: "KFC - Hot & Crispy Chicken Bucket (4 Pcs)",
+    searchQuery: "kfc chicken",
     keywords: ["kfc", "kfc chicken", "fried chicken", "chicken bucket", "wings", "hot crispy"],
     category: "Fast Food",
     emoji: "🍗",
@@ -231,6 +249,7 @@ const DISHES_DATA = [
   {
     id: "d_subway",
     name: "Subway - Paneer Tikka / Veggie Delite Sub (6-inch)",
+    searchQuery: "subway sandwich",
     keywords: ["subway", "sub", "sandwich", "paneer sub", "veggie delite", "healthy"],
     category: "Healthy & Subs",
     emoji: "🥪",
@@ -244,6 +263,7 @@ const DISHES_DATA = [
   {
     id: "d_mcdonalds",
     name: "McDonald's - McAloo Tikki Meal (Burger + Fries + Coke)",
+    searchQuery: "mcdonalds burger meal",
     keywords: ["mcdonalds", "mcd", "mcaloo tikki", "mcspicy", "mcd burger", "fries"],
     category: "Burgers & Meals",
     emoji: "🍔",
@@ -257,6 +277,7 @@ const DISHES_DATA = [
   {
     id: "d_pizza_hut",
     name: "Pizza Hut - 2 Medium Pan Pizzas Everyday Combo",
+    searchQuery: "pizza hut pizza",
     keywords: ["pizza hut", "pizzahut", "pan pizza", "hut", "pizza combo", "garlic bread"],
     category: "Pizza & Fast Food",
     emoji: "🍕",
@@ -270,6 +291,7 @@ const DISHES_DATA = [
   {
     id: "d_haldirams",
     name: "Haldiram's - Chole Bhature with Special Sweet Lassi",
+    searchQuery: "haldirams chole bhature",
     keywords: ["haldiram", "haldirams", "chole bhature", "raj kachori", "mithai", "lassi"],
     category: "North Indian & Sweets",
     emoji: "🥘",
@@ -283,6 +305,7 @@ const DISHES_DATA = [
   {
     id: "d_faasos",
     name: "Faasos - Signature Paneer & Chicken Jumbo Wrap Combo",
+    searchQuery: "faasos wrap",
     keywords: ["faasos", "wrap", "roll", "kathi roll", "jumbo roll", "eatsure"],
     category: "Wraps & Rolls",
     emoji: "🌯",
@@ -297,6 +320,7 @@ const DISHES_DATA = [
   {
     id: "d_ovenstory",
     name: "Ovenstory Pizza - Standout 4-Cheese Burst Pizza (Medium)",
+    searchQuery: "ovenstory pizza",
     keywords: ["ovenstory", "oven story", "cheese burst", "pizza", "eatsure"],
     category: "Pizza & Italian",
     emoji: "🍕",
@@ -311,6 +335,7 @@ const DISHES_DATA = [
   {
     id: "d_chai_point",
     name: "Chai Point - Ginger Chai Flask (500ml) & 2 Samosas",
+    searchQuery: "chai point tea",
     keywords: ["chai point", "tea", "chai", "samosa", "ginger tea", "snack"],
     category: "Tea & Snacks",
     emoji: "☕",
@@ -324,6 +349,7 @@ const DISHES_DATA = [
   {
     id: "d_la_pinoz",
     name: "La Pino'z Pizza - 7 Cheese Giant Slice / Medium Pizza",
+    searchQuery: "la pinoz pizza",
     keywords: ["la pinoz", "lapinoz", "la pino'z", "giant slice", "7 cheese"],
     category: "Pizza & Fast Food",
     emoji: "🍕",
@@ -337,6 +363,7 @@ const DISHES_DATA = [
   {
     id: "d_bikanervala",
     name: "Bikanervala - Special Executive Thali with Gulab Jamun",
+    searchQuery: "bikanervala thali",
     keywords: ["bikanervala", "bikaner", "thali", "sweets", "dal makhani", "paneer"],
     category: "North Indian Meals",
     emoji: "🍱",
@@ -350,6 +377,7 @@ const DISHES_DATA = [
   {
     id: "d_barbeque_nation",
     name: "Barbeque Nation - Royal Chicken / Veg Biryani Box",
+    searchQuery: "barbeque nation biryani",
     keywords: ["barbeque nation", "bbq", "bbq nation", "biryani box", "buffet"],
     category: "Biryani & Platters",
     emoji: "🍖",

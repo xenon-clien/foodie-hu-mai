@@ -297,7 +297,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (cartGuideIcon) cartGuideIcon.textContent = pIcon;
     if (cartGuideTitle) cartGuideTitle.textContent = `${platform} Order Assistant`;
-    if (cartGuideSubtitle) cartGuideSubtitle.textContent = `${restaurant} • Menu Sticker Rate vs Final Net Bill`;
+    if (cartGuideSubtitle) cartGuideSubtitle.textContent = `${restaurant} • Direct Menu Rate: ₹${menuPrice} (App Screen)`;
     if (cartGuideMenuPrice) cartGuideMenuPrice.textContent = `₹${menuPrice}`;
     if (cartGuideDiscount) cartGuideDiscount.textContent = discount > 0 ? `-₹${discount}` : "Pre-Applied";
     if (cartGuideCodePill) cartGuideCodePill.textContent = effectiveCode ? `Code: ${effectiveCode}` : "✨ Auto-Discount";
@@ -306,21 +306,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (cartGuideStep1Text) {
       if (pLower.includes("domino")) {
-        cartGuideStep1Text.innerHTML = `Domino's menu opens directly. Select your favorite pizza and tap <em>"Add to Cart"</em>.`;
+        cartGuideStep1Text.innerHTML = `Domino's menu khulega. Direct price ~<strong>₹${menuPrice}</strong> dikhega. Dish ko <em>"Add to Cart"</em> karein.`;
       } else {
-        cartGuideStep1Text.innerHTML = `When ${platform} opens, pick your preferred outlet for <strong>${escapeHTML(restaurant)}</strong> and tap <em>"Add to Cart"</em>. (Menu rates vary slightly by outlet, benchmark ~₹${menuPrice}).`;
+        cartGuideStep1Text.innerHTML = `Jab ${platform} khulega, screen par direct menu price <strong>₹${menuPrice}</strong> dikhega. Pehle <strong>${escapeHTML(restaurant)}</strong> ko <em>"Add to Cart"</em> karein.`;
       }
     }
 
     if (cartGuideStep3Text) {
       if (pLower.includes("domino")) {
-        cartGuideStep3Text.innerHTML = `In Domino's cart, paste coupon <strong>${effectiveCode}</strong> or select Everyday Value combo to slash your bill instantly!`;
+        cartGuideStep3Text.innerHTML = `Domino's cart me coupon <strong>${effectiveCode}</strong> paste karein ya Everyday Value se bill slash karein!`;
       } else if (pLower.includes("swiggy")) {
-        cartGuideStep3Text.innerHTML = `In Swiggy checkout, scroll to <strong>'SAVINGS CORNER'</strong> and tap <strong>'Apply Coupon >'</strong> to paste <strong>${effectiveCode}</strong> to save up to ₹${discount}!`;
+        cartGuideStep3Text.innerHTML = `<strong>Offer checkout par lagega:</strong> Swiggy checkout me <strong>'Apply Coupon >'</strong> tap karke <strong>${effectiveCode}</strong> paste karein aur bill <strong>~₹${finalPrice}</strong> ho jayega (Save ₹${discount})!`;
       } else if (pLower.includes("zomato")) {
-        cartGuideStep3Text.innerHTML = `In Zomato checkout, tap <strong>'View All Coupons'</strong> and paste <strong>${effectiveCode}</strong> to save up to ₹${discount}!`;
+        cartGuideStep3Text.innerHTML = `<strong>Offer checkout par lagega:</strong> Zomato checkout me <strong>'View All Coupons'</strong> tap karke <strong>${effectiveCode}</strong> paste karein aur bill <strong>~₹${finalPrice}</strong> ho jayega (Save ₹${discount})!`;
       } else {
-        cartGuideStep3Text.innerHTML = `Paste the coupon in 'Apply Coupon' box to instantly slash your bill!`;
+        cartGuideStep3Text.innerHTML = `Cart checkout me 'Apply Coupon' box me <strong>${effectiveCode}</strong> paste karein aur bill <strong>~₹${finalPrice}</strong> ho jayega!`;
       }
     }
 
@@ -331,7 +331,7 @@ document.addEventListener("DOMContentLoaded", () => {
         cgPlatformTip.style.display = "block";
         if (cgTipPlatformName) cgTipPlatformName.textContent = platform;
         if (cgTipBody) {
-          cgTipBody.innerHTML = `No food delivery app in India auto-applies coupons without user login. When ${platform} opens, add items to cart, head to checkout, and tap <strong>'Apply Coupon'</strong> to paste code <strong>${effectiveCode}</strong>!`;
+          cgTipBody.innerHTML = `📌 <strong>Direct Price vs Offer:</strong> Jab ${platform} khulega to restaurant screen par direct menu price <strong>₹${menuPrice}</strong> hi dikhega. Offer checkout par apply hota hai — dish add karke checkout me <strong>'Apply Coupon'</strong> par code <strong>${effectiveCode}</strong> paste karein!`;
         }
         if (cgTipSwitchBox && (restLower.includes("domino") || restLower.includes("pizza"))) {
           cgTipSwitchBox.style.display = "flex";
@@ -360,7 +360,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (cartGuideActionText) {
-      cartGuideActionText.textContent = `⚡ Open ${platform} & Save ₹${discount > 0 ? discount : 60} ↗`;
+      cartGuideActionText.textContent = `⚡ Open ${platform} (₹${menuPrice} Direct Menu Price) ↗`;
     }
     if (cartGuideActionBtn) {
       cartGuideActionBtn.href = deepLink || "#";
@@ -373,7 +373,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (cartGuideActionTextBottom) {
-      cartGuideActionTextBottom.textContent = `Proceed to ${platform} (₹${finalPrice}) ↗`;
+      cartGuideActionTextBottom.textContent = `Proceed to ${platform} (₹${menuPrice} Direct Price) ↗`;
     }
     if (cartGuideActionBtnBottom) {
       cartGuideActionBtnBottom.href = deepLink || "#";
@@ -468,9 +468,9 @@ document.addEventListener("DOMContentLoaded", () => {
         mobileStickyBar.style.display = "block";
       }
       stickyWinnerBadge.textContent = `👑 LOWEST: ${comparison.winner.toUpperCase()}`;
-      stickyPriceDisplay.textContent = `₹${winnerObj.finalPrice} Net Bill (Save ₹${comparison.totalSaved})`;
+      stickyPriceDisplay.textContent = `₹${winnerObj.base} Direct Price (Pay ~₹${winnerObj.finalPrice} at checkout)`;
       stickyActionBtn.onclick = () => {
-        openOrderGuide(winnerObj.promo ? winnerObj.promo.code : "BESTDEAL", dish.name, comparison.winner, winnerObj.gross || winnerObj.base, winnerObj.finalPrice, winnerObj.deepLink);
+        openOrderGuide(winnerObj.promo ? winnerObj.promo.code : "BESTDEAL", dish.name, comparison.winner, winnerObj.base, winnerObj.finalPrice, winnerObj.deepLink);
       };
     }
 
@@ -501,10 +501,10 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
             <div class="whb-right">
               <div class="whb-price-box">
-                <span class="whb-strike">Screen Rate: ₹${winnerObj.gross || winnerObj.base}</span>
-                <span class="whb-final">₹${winnerObj.finalPrice} <small>Net Bill</small></span>
+                <span class="whb-strike">App Menu Rate: ₹${winnerObj.base}</span>
+                <span class="whb-final">₹${winnerObj.base} <small>Direct Price</small></span>
               </div>
-              <div class="whb-save-tag">Your Net Savings: Flat ₹${comparison.totalSaved} 🎉</div>
+              <div class="whb-save-tag">Pay ~₹${winnerObj.finalPrice} with coupon at checkout (Save ₹${comparison.totalSaved}) 🎉</div>
             </div>
           </div>
           <button type="button" class="whb-order-btn" 
@@ -512,10 +512,10 @@ document.addEventListener("DOMContentLoaded", () => {
             data-code="${escapeHTML(winnerObj.promo ? winnerObj.promo.code : 'BESTDEAL')}"
             data-rest="${escapeHTML(dish.name)}"
             data-platform="${escapeHTML(comparison.winner)}"
-            data-menu="${winnerObj.gross || winnerObj.base}"
+            data-menu="${winnerObj.base}"
             data-final="${winnerObj.finalPrice}"
             data-link="${escapeHTML(winnerObj.deepLink)}">
-            ⚡ Order on ${escapeHTML(comparison.winner)} &amp; Save ₹${comparison.totalSaved} ➔
+            ⚡ Open ${escapeHTML(comparison.winner)} (₹${winnerObj.base} Direct Price) ➔
           </button>
         </div>
 
@@ -585,13 +585,19 @@ document.addEventListener("DOMContentLoaded", () => {
               </div>
             </div>
             <div class="final-price-box">
-              <div class="final-price-label">Net Payable Bill</div>
-              <div class="final-price-value">₹${comparison.dominos.finalPrice}</div>
+              <div class="final-price-label">📌 Direct Menu Price</div>
+              <div class="final-price-value">₹${comparison.dominos.base}</div>
+              <div class="direct-price-note" style="font-size:0.75rem; color:#64748B; font-weight:600; margin-top:2px;">(App screen direct rate)</div>
+              ${comparison.dominos.discount > 0 ? `
+              <div class="checkout-offer-pill" style="margin-top:6px; display:inline-block; background:#DCFCE7; color:#15803D; font-size:0.75rem; font-weight:700; padding:3px 8px; border-radius:12px;">
+                🏷️ Offer at checkout: Save ₹${comparison.dominos.discount} (Pay ~₹${comparison.dominos.finalPrice})
+              </div>` : ''}
             </div>
             <div class="breakdown-list">
-              <div class="breakdown-row"><span>Menu Sticker Price</span><span>₹${comparison.dominos.base}</span></div>
+              <div class="breakdown-row" style="font-weight:700;"><span>Direct Menu Price (App)</span><span>₹${comparison.dominos.base}</span></div>
               <div class="breakdown-row"><span>Delivery &amp; Platform Fee</span><span><strong style="color:var(--savings-green)">₹0 FREE</strong></span></div>
-              ${comparison.dominos.discount > 0 ? `<div class="breakdown-row breakdown-discount"><span>Coupon Promo</span><span>-₹${comparison.dominos.discount}</span></div>` : ''}
+              ${comparison.dominos.discount > 0 ? `<div class="breakdown-row breakdown-discount"><span>Offer at Checkout (${comparison.dominos.promo ? comparison.dominos.promo.code : 'DOMNEW'})</span><span>-₹${comparison.dominos.discount}</span></div>` : ''}
+              <div class="breakdown-row" style="border-top:1px dashed #CBD5E1; padding-top:6px; font-weight:700; color:#0F172A;"><span>Est. Net Bill at Checkout</span><span>₹${comparison.dominos.finalPrice}</span></div>
             </div>
             <div class="card-winner-callout" style="background:#EFF6FF; border:1px solid #BFDBFE; border-radius:10px; padding:8px 10px; margin-bottom:12px; font-size:0.75rem; color:#1E40AF; line-height:1.4;">
               🏆 <strong>Direct Brand Superpower:</strong> ₹0 Platform Fee &amp; Everyday Value. <strong>Saves ₹${comparison.swiggy.finalPrice - comparison.dominos.finalPrice} vs Swiggy!</strong>
@@ -604,7 +610,7 @@ document.addEventListener("DOMContentLoaded", () => {
               data-menu="${comparison.dominos.base}"
               data-final="${comparison.dominos.finalPrice}"
               data-link="${escapeHTML(comparison.dominos.deepLink)}">
-              Order on Domino's (₹${comparison.dominos.finalPrice}) →
+              Open Domino's (₹${comparison.dominos.base} Direct Price) →
             </button>
           </div>
           ` : ''}
@@ -620,13 +626,19 @@ document.addEventListener("DOMContentLoaded", () => {
               </div>
             </div>
             <div class="final-price-box">
-              <div class="final-price-label">Net Payable Bill</div>
-              <div class="final-price-value">₹${comparison.eatsure.finalPrice}</div>
+              <div class="final-price-label">📌 Direct Menu Price</div>
+              <div class="final-price-value">₹${comparison.eatsure.base}</div>
+              <div class="direct-price-note" style="font-size:0.75rem; color:#64748B; font-weight:600; margin-top:2px;">(App screen direct rate)</div>
+              ${comparison.eatsure.discount > 0 ? `
+              <div class="checkout-offer-pill" style="margin-top:6px; display:inline-block; background:#DCFCE7; color:#15803D; font-size:0.75rem; font-weight:700; padding:3px 8px; border-radius:12px;">
+                🏷️ Offer at checkout: Save ₹${comparison.eatsure.discount} (Pay ~₹${comparison.eatsure.finalPrice})
+              </div>` : ''}
             </div>
             <div class="breakdown-list">
-              <div class="breakdown-row"><span>Menu Sticker Price</span><span>₹${comparison.eatsure.base}</span></div>
+              <div class="breakdown-row" style="font-weight:700;"><span>Direct Menu Price (App)</span><span>₹${comparison.eatsure.base}</span></div>
               <div class="breakdown-row"><span>Delivery &amp; Platform Fee</span><span><strong style="color:var(--savings-green)">₹0 FREE</strong></span></div>
-              ${comparison.eatsure.discount > 0 ? `<div class="breakdown-row breakdown-discount"><span>Coupon Savings</span><span>-₹${comparison.eatsure.discount}</span></div>` : ''}
+              ${comparison.eatsure.discount > 0 ? `<div class="breakdown-row breakdown-discount"><span>Offer at Checkout (${comparison.eatsure.promo ? comparison.eatsure.promo.code : 'SURE50'})</span><span>-₹${comparison.eatsure.discount}</span></div>` : ''}
+              <div class="breakdown-row" style="border-top:1px dashed #CBD5E1; padding-top:6px; font-weight:700; color:#0F172A;"><span>Est. Net Bill at Checkout</span><span>₹${comparison.eatsure.finalPrice}</span></div>
             </div>
             <button type="button" class="order-btn eatsure"
               data-order-trigger="true"
@@ -636,7 +648,7 @@ document.addEventListener("DOMContentLoaded", () => {
               data-menu="${comparison.eatsure.base}"
               data-final="${comparison.eatsure.finalPrice}"
               data-link="${escapeHTML(comparison.eatsure.deepLink || 'https://www.eatsure.com')}">
-              Order on EatSure (₹${comparison.eatsure.finalPrice}) →
+              Open EatSure (₹${comparison.eatsure.base} Direct Price) →
             </button>
           </div>
           ` : ''}
@@ -652,13 +664,19 @@ document.addEventListener("DOMContentLoaded", () => {
               </div>
             </div>
             <div class="final-price-box">
-              <div class="final-price-label">Net Payable Bill</div>
-              <div class="final-price-value">₹${comparison.directBrand.finalPrice}</div>
+              <div class="final-price-label">📌 Direct Menu Price</div>
+              <div class="final-price-value">₹${comparison.directBrand.base}</div>
+              <div class="direct-price-note" style="font-size:0.75rem; color:#64748B; font-weight:600; margin-top:2px;">(App screen direct rate)</div>
+              ${comparison.directBrand.discount > 0 ? `
+              <div class="checkout-offer-pill" style="margin-top:6px; display:inline-block; background:#DCFCE7; color:#15803D; font-size:0.75rem; font-weight:700; padding:3px 8px; border-radius:12px;">
+                🏷️ Offer at checkout: Save ₹${comparison.directBrand.discount} (Pay ~₹${comparison.directBrand.finalPrice})
+              </div>` : ''}
             </div>
             <div class="breakdown-list">
-              <div class="breakdown-row"><span>Menu Sticker Price</span><span>₹${comparison.directBrand.base}</span></div>
+              <div class="breakdown-row" style="font-weight:700;"><span>Direct Menu Price (App)</span><span>₹${comparison.directBrand.base}</span></div>
               <div class="breakdown-row"><span>Platform Fee</span><span><strong style="color:var(--savings-green)">₹0 FREE</strong></span></div>
-              ${comparison.directBrand.discount > 0 ? `<div class="breakdown-row breakdown-discount"><span>Direct Discount</span><span>-₹${comparison.directBrand.discount}</span></div>` : ''}
+              ${comparison.directBrand.discount > 0 ? `<div class="breakdown-row breakdown-discount"><span>Offer at Checkout</span><span>-₹${comparison.directBrand.discount}</span></div>` : ''}
+              <div class="breakdown-row" style="border-top:1px dashed #CBD5E1; padding-top:6px; font-weight:700; color:#0F172A;"><span>Est. Net Bill at Checkout</span><span>₹${comparison.directBrand.finalPrice}</span></div>
             </div>
             <button type="button" class="order-btn" style="background:#DC2626; color:#fff;"
               data-order-trigger="true"
@@ -668,7 +686,7 @@ document.addEventListener("DOMContentLoaded", () => {
               data-menu="${comparison.directBrand.base}"
               data-final="${comparison.directBrand.finalPrice}"
               data-link="${escapeHTML(comparison.directBrand.deepLink)}">
-              Order on ${escapeHTML(comparison.directBrand.name)} (₹${comparison.directBrand.finalPrice}) →
+              Open ${escapeHTML(comparison.directBrand.name)} (₹${comparison.directBrand.base} Direct Price) →
             </button>
           </div>
           ` : ''}
@@ -683,23 +701,29 @@ document.addEventListener("DOMContentLoaded", () => {
               </div>
             </div>
             <div class="final-price-box">
-              <div class="final-price-label">Net Payable Bill</div>
-              <div class="final-price-value">₹${comparison.magicpin.finalPrice}</div>
+              <div class="final-price-label">📌 Direct Menu Price</div>
+              <div class="final-price-value">₹${comparison.magicpin.base}</div>
+              <div class="direct-price-note" style="font-size:0.75rem; color:#64748B; font-weight:600; margin-top:2px;">(App screen direct rate)</div>
+              ${comparison.magicpin.discount > 0 ? `
+              <div class="checkout-offer-pill" style="margin-top:6px; display:inline-block; background:#DCFCE7; color:#15803D; font-size:0.75rem; font-weight:700; padding:3px 8px; border-radius:12px;">
+                🏷️ Offer at checkout: Save ₹${comparison.magicpin.discount} (Pay ~₹${comparison.magicpin.finalPrice})
+              </div>` : ''}
             </div>
             <div class="breakdown-list">
-              <div class="breakdown-row"><span>Dish Base Rate</span><span>₹${comparison.magicpin.base}</span></div>
+              <div class="breakdown-row" style="font-weight:700;"><span>Direct Menu Price (App)</span><span>₹${comparison.magicpin.base}</span></div>
               <div class="breakdown-row"><span>GST &amp; Delivery</span><span>₹${comparison.magicpin.gross - comparison.magicpin.base}</span></div>
-              ${comparison.magicpin.discount > 0 ? `<div class="breakdown-row breakdown-discount"><span>Coupon Savings</span><span>-₹${comparison.magicpin.discount}</span></div>` : ''}
+              ${comparison.magicpin.discount > 0 ? `<div class="breakdown-row breakdown-discount"><span>Offer at Checkout (${comparison.magicpin.promo ? comparison.magicpin.promo.code : 'MAGIC50'})</span><span>-₹${comparison.magicpin.discount}</span></div>` : ''}
+              <div class="breakdown-row" style="border-top:1px dashed #CBD5E1; padding-top:6px; font-weight:700; color:#0F172A;"><span>Est. Net Bill at Checkout</span><span>₹${comparison.magicpin.finalPrice}</span></div>
             </div>
             <button type="button" class="order-btn magicpin"
               data-order-trigger="true"
               data-code="${escapeHTML(comparison.magicpin.promo ? comparison.magicpin.promo.code : (comparison.isDominos ? 'DOMINOS50' : 'MAGIC50'))}"
               data-rest="${escapeHTML(dish.name)}"
               data-platform="Magicpin"
-              data-menu="${comparison.magicpin.gross}"
+              data-menu="${comparison.magicpin.base}"
               data-final="${comparison.magicpin.finalPrice}"
               data-link="${escapeHTML(comparison.magicpin.deepLink)}">
-              Order on Magicpin (₹${comparison.magicpin.finalPrice}) →
+              Open Magicpin (₹${comparison.magicpin.base} Direct Price) →
             </button>
           </div>
 
@@ -713,13 +737,19 @@ document.addEventListener("DOMContentLoaded", () => {
               </div>
             </div>
             <div class="final-price-box">
-              <div class="final-price-label">Net Payable Bill</div>
-              <div class="final-price-value">₹${comparison.swiggy.finalPrice}</div>
+              <div class="final-price-label">📌 Direct Menu Price</div>
+              <div class="final-price-value">₹${comparison.swiggy.base}</div>
+              <div class="direct-price-note" style="font-size:0.75rem; color:#64748B; font-weight:600; margin-top:2px;">(App screen direct rate)</div>
+              ${comparison.swiggy.discount > 0 ? `
+              <div class="checkout-offer-pill" style="margin-top:6px; display:inline-block; background:#DCFCE7; color:#15803D; font-size:0.75rem; font-weight:700; padding:3px 8px; border-radius:12px;">
+                🏷️ Offer at checkout: Save ₹${comparison.swiggy.discount} (Pay ~₹${comparison.swiggy.finalPrice})
+              </div>` : ''}
             </div>
             <div class="breakdown-list">
-              <div class="breakdown-row"><span>Dish Base Rate</span><span>₹${comparison.swiggy.base}</span></div>
-              <div class="breakdown-row"><span>Fees &amp; Delivery</span><span>₹${comparison.swiggy.gross - comparison.swiggy.base}</span></div>
-              ${comparison.swiggy.discount > 0 ? `<div class="breakdown-row breakdown-discount"><span>Coupon Savings</span><span>-₹${comparison.swiggy.discount}</span></div>` : ''}
+              <div class="breakdown-row" style="font-weight:700;"><span>Direct Menu Price (App)</span><span>₹${comparison.swiggy.base}</span></div>
+              <div class="breakdown-row"><span>Fees &amp; Delivery</span><span>+₹${comparison.swiggy.gross - comparison.swiggy.base}</span></div>
+              ${comparison.swiggy.discount > 0 ? `<div class="breakdown-row breakdown-discount"><span>Offer at Checkout (${comparison.swiggy.promo ? comparison.swiggy.promo.code : 'TRYNEW'})</span><span>-₹${comparison.swiggy.discount}</span></div>` : ''}
+              <div class="breakdown-row" style="border-top:1px dashed #CBD5E1; padding-top:6px; font-weight:700; color:#0F172A;"><span>Est. Net Bill at Checkout</span><span>₹${comparison.swiggy.finalPrice}</span></div>
             </div>
             ${comparison.isDominos ? `
             <div class="card-warning-callout" style="background:#FFFBEB; border:1px solid #FDE68A; border-radius:10px; padding:8px 10px; margin-bottom:12px; font-size:0.75rem; color:#92400E; line-height:1.4;">
@@ -733,7 +763,7 @@ document.addEventListener("DOMContentLoaded", () => {
               data-menu="${comparison.swiggy.base}"
               data-final="${comparison.swiggy.finalPrice}"
               data-link="${escapeHTML(comparison.swiggy.deepLink)}">
-              Order on Swiggy (₹${comparison.swiggy.finalPrice}) →
+              Open Swiggy (₹${comparison.swiggy.base} Direct Price) →
             </button>
           </div>
 
@@ -747,13 +777,19 @@ document.addEventListener("DOMContentLoaded", () => {
               </div>
             </div>
             <div class="final-price-box">
-              <div class="final-price-label">Net Payable Bill</div>
-              <div class="final-price-value">₹${comparison.zomato.finalPrice}</div>
+              <div class="final-price-label">📌 Direct Menu Price</div>
+              <div class="final-price-value">₹${comparison.zomato.base}</div>
+              <div class="direct-price-note" style="font-size:0.75rem; color:#64748B; font-weight:600; margin-top:2px;">(App screen direct rate)</div>
+              ${comparison.zomato.discount > 0 ? `
+              <div class="checkout-offer-pill" style="margin-top:6px; display:inline-block; background:#DCFCE7; color:#15803D; font-size:0.75rem; font-weight:700; padding:3px 8px; border-radius:12px;">
+                🏷️ Offer at checkout: Save ₹${comparison.zomato.discount} (Pay ~₹${comparison.zomato.finalPrice})
+              </div>` : ''}
             </div>
             <div class="breakdown-list">
-              <div class="breakdown-row"><span>Dish Base Rate</span><span>₹${comparison.zomato.base}</span></div>
-              <div class="breakdown-row"><span>Fees &amp; Delivery</span><span>₹${comparison.zomato.gross - comparison.zomato.base}</span></div>
-              ${comparison.zomato.discount > 0 ? `<div class="breakdown-row breakdown-discount"><span>Coupon Savings</span><span>-₹${comparison.zomato.discount}</span></div>` : ''}
+              <div class="breakdown-row" style="font-weight:700;"><span>Direct Menu Price (App)</span><span>₹${comparison.zomato.base}</span></div>
+              <div class="breakdown-row"><span>Fees &amp; Delivery</span><span>+₹${comparison.zomato.gross - comparison.zomato.base}</span></div>
+              ${comparison.zomato.discount > 0 ? `<div class="breakdown-row breakdown-discount"><span>Offer at Checkout (${comparison.zomato.promo ? comparison.zomato.promo.code : 'STEALDEAL'})</span><span>-₹${comparison.zomato.discount}</span></div>` : ''}
+              <div class="breakdown-row" style="border-top:1px dashed #CBD5E1; padding-top:6px; font-weight:700; color:#0F172A;"><span>Est. Net Bill at Checkout</span><span>₹${comparison.zomato.finalPrice}</span></div>
             </div>
             ${comparison.isDominos ? `
             <div class="card-warning-callout" style="background:#FFFBEB; border:1px solid #FDE68A; border-radius:10px; padding:8px 10px; margin-bottom:12px; font-size:0.75rem; color:#92400E; line-height:1.4;">
@@ -767,7 +803,7 @@ document.addEventListener("DOMContentLoaded", () => {
               data-menu="${comparison.zomato.base}"
               data-final="${comparison.zomato.finalPrice}"
               data-link="${escapeHTML(comparison.zomato.deepLink)}">
-              Order on Zomato (₹${comparison.zomato.finalPrice}) →
+              Open Zomato (₹${comparison.zomato.base} Direct Price) →
             </button>
           </div>
 
@@ -857,18 +893,26 @@ document.addEventListener("DOMContentLoaded", () => {
         dishMatch = {
           id: "dyn_" + Date.now(),
           name: q.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' '),
+          searchQuery: q,
+          userSearchQuery: q,
           keywords: q.toLowerCase().split(/\s+/),
           category: "Popular Dish",
           emoji: "🍽️",
           dominosBase: 0,
           eatsureBase: 0,
-          zomatoBase: 280,
-          swiggyBase: 280,
-          magicpinBase: 235,
-          packaging: 20,
+          zomatoBase: 179,
+          swiggyBase: 175,
+          magicpinBase: 145,
+          packaging: 15,
           popularRest: `${q} (Magicpin, Swiggy & Zomato)`
         };
       }
+    }
+
+    // Preserve user typed search term for 100% deep search accuracy
+    dishMatch = Object.assign({}, dishMatch);
+    if (!q.startsWith("d_") && !q.startsWith("deal_")) {
+      dishMatch.userSearchQuery = q;
     }
 
     // Highlight matching food card if exists, else deactivate all
@@ -881,7 +925,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     if (dishSearchInput) dishSearchInput.value = dishMatch.name;
-    if (cartInput) cartInput.value = dishMatch.zomatoBase || 280;
+    if (cartInput) cartInput.value = dishMatch.zomatoBase || 179;
 
     renderDishFaceoff(dishMatch);
     renderComparison();

@@ -147,6 +147,24 @@ assert(dhabaComp.swiggy.finalPrice > 0 && dhabaComp.zomato.finalPrice > 0, `Swig
 assert(dhabaComp.magicpin.finalPrice > 0, `Magicpin rate calculated for dynamic query`);
 assert(dhabaComp.totalSaved >= 0, `Savings computed for dynamic search: ₹${dhabaComp.totalSaved}`);
 
+// 8. CHICKEN ROLL & DIRECT MENU PRICE TRANSPARENCY TESTS
+console.log(`\n[Suite 8: Chicken Roll & Direct Menu Price Accuracy]`);
+const rollDish = dishes.find(d => d.id === 'd_roll');
+assert(rollDish && rollDish.name.includes("Chicken Roll"), `Chicken Roll dish clearly identified (${rollDish.name})`);
+assert(rollDish.zomatoBase === 179, `Zomato direct menu price for Chicken Roll is exactly ₹179`);
+assert(rollDish.searchQuery === "chicken roll", `Curated search query for roll is clean ("chicken roll")`);
+
+const rollComp = comparator.compareDish(rollDish);
+assert(rollComp.zomato.base === 179, `Zomato base reflects exact direct menu price (₹${rollComp.zomato.base})`);
+assert(rollComp.zomato.deepLink.includes("chicken%20roll"), `Zomato deep link searches "chicken roll" directly (URL: ${rollComp.zomato.deepLink})`);
+assert(rollComp.swiggy.deepLink.includes("chicken%20roll"), `Swiggy deep link searches "chicken roll" directly`);
+assert(rollComp.magicpin.deepLink.includes("chicken%20roll"), `Magicpin deep link searches "chicken roll" directly`);
+
+// Test user search query preservation
+const userCustomRoll = Object.assign({}, rollDish, { userSearchQuery: "chicken roll" });
+const cleanCustomQuery = comparator.getCleanSearchQuery(userCustomRoll);
+assert(cleanCustomQuery === "chicken roll", `Exact user search query preserved for deep linking: "${cleanCustomQuery}"`);
+
 console.log(`\n=================================================`);
 console.log(`📊 TEST SUMMARY: ${passed} Passed, ${failed} Failed`);
 console.log(`=================================================\n`);

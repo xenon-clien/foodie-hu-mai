@@ -413,12 +413,19 @@ const ComparatorEngine = {
 
   getCleanSearchQuery(dish) {
     if (!dish) return "food";
-    if (dish.searchQuery) return dish.searchQuery;
+    // 1. If user typed an explicit query in search bar, ALWAYS prioritize that exact query!
+    if (dish.userSearchQuery && typeof dish.userSearchQuery === "string" && dish.userSearchQuery.trim()) {
+      return dish.userSearchQuery.trim();
+    }
+    // 2. If dish has a curated clean searchQuery, use it!
+    if (dish.searchQuery && typeof dish.searchQuery === "string" && dish.searchQuery.trim()) {
+      return dish.searchQuery.trim();
+    }
     let name = dish.name || "";
     // Remove parentheses & brackets like (2 Pcs with Chutney), (500ml), (Medium)
     name = name.replace(/\([^)]*\)/g, "").replace(/\[[^\]]*\]/g, "");
     // Remove descriptive fluff words that break search matching on Swiggy/Zomato
-    name = name.replace(/\b(Special|Deluxe|Thick|Classic|Signature|Authentic|Plate|Bowl|Combo|Meal)\b/gi, "");
+    name = name.replace(/\b(Special|Deluxe|Thick|Classic|Signature|Authentic|Plate|Bowl|Combo|Meal|Double Egg)\b/gi, "");
     // Remove symbols and extra whitespace
     name = name.replace(/[-+/,]+/g, " ");
     name = name.replace(/\s+/g, " ").trim();
@@ -461,7 +468,7 @@ const ComparatorEngine = {
     } else if (/roll|kathi|shawarma|frankie/i.test(lower)) {
       category = "Rolls & Wraps";
       emoji = "🌯";
-      basePrice = 190;
+      basePrice = 179;
     } else if (/chai|tea|coffee|frappe|shake|beverage|lassi/i.test(lower)) {
       category = "Beverages & Cafe";
       emoji = "☕";
@@ -545,6 +552,8 @@ const ComparatorEngine = {
     return {
       id: "dyn_" + Date.now(),
       name: formattedTitle,
+      searchQuery: clean,
+      userSearchQuery: clean,
       keywords: clean.toLowerCase().split(/\s+/),
       category: category,
       emoji: emoji,
