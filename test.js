@@ -165,6 +165,30 @@ const userCustomRoll = Object.assign({}, rollDish, { userSearchQuery: "chicken r
 const cleanCustomQuery = comparator.getCleanSearchQuery(userCustomRoll);
 assert(cleanCustomQuery === "chicken roll", `Exact user search query preserved for deep linking: "${cleanCustomQuery}"`);
 
+// 9. UNIVERSAL FOOD ITEMS SEARCH & DIRECT PRICING TESTS
+console.log(`\n[Suite 9: Universal Food Items Search & Direct Pricing for All Dishes]`);
+const paneerRollDyn = comparator.createDynamicDish("paneer roll");
+assert(paneerRollDyn.category === "Rolls & Wraps", `Paneer Roll correctly categorized as Rolls & Wraps`);
+assert(paneerRollDyn.zomatoBase === 179, `Paneer roll base direct rate is ₹179`);
+const paneerRollComp = comparator.compareDish(paneerRollDyn);
+assert(paneerRollComp.zomato.deepLink.includes("paneer%20roll"), `Paneer roll deep link searches "paneer roll" directly`);
+assert(paneerRollComp.swiggy.deepLink.includes("paneer%20roll"), `Swiggy deep link searches "paneer roll" directly`);
+
+const soupDyn = comparator.createDynamicDish("chicken soup");
+assert(soupDyn.category === "Soups & Starters", `Chicken soup categorized as Soups & Starters`);
+const soupComp = comparator.compareDish(soupDyn);
+assert(soupComp.zomato.deepLink.includes("chicken%20soup"), `Chicken soup deep link searches "chicken soup" directly`);
+
+const pavBhajiDyn = comparator.createDynamicDish("pav bhaji");
+assert(pavBhajiDyn.category === "Chaat & Street Food", `Pav Bhaji categorized as Chaat & Street Food`);
+const pavBhajiComp = comparator.compareDish(pavBhajiDyn);
+assert(pavBhajiComp.zomato.deepLink.includes("pav%20bhaji"), `Pav Bhaji deep link searches "pav bhaji" directly`);
+
+const pastaDyn = comparator.createDynamicDish("white sauce pasta");
+assert(pastaDyn.category === "Pasta & Italian", `Pasta categorized as Pasta & Italian`);
+const pastaComp = comparator.compareDish(pastaDyn);
+assert(pastaComp.zomato.deepLink.includes("white%20sauce%20pasta"), `Pasta deep link searches "white sauce pasta" directly`);
+
 console.log(`\n=================================================`);
 console.log(`📊 TEST SUMMARY: ${passed} Passed, ${failed} Failed`);
 console.log(`=================================================\n`);

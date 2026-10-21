@@ -875,11 +875,11 @@ document.addEventListener("DOMContentLoaded", () => {
         );
       }
 
-      // 3. Substring match in name, keywords, or popularRest
+      // 3. Substring match in name, keywords, or popularRest (safe direction: dish name or keyword contains user query)
       if (!dishMatch) {
         dishMatch = DISHES_DATA.find(d => 
           d.name.toLowerCase().includes(lower) ||
-          d.keywords.some(k => k.toLowerCase().includes(lower) || lower.includes(k.toLowerCase())) ||
+          d.keywords.some(k => k.toLowerCase().includes(lower)) ||
           d.popularRest.toLowerCase().includes(lower)
         );
       }

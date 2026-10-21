@@ -445,44 +445,55 @@ const ComparatorEngine = {
       category = "Pizza & Italian";
       emoji = "🍕";
       basePrice = 299;
-    } else if (/burger|whopper|crispy|fries|nuggets|wrap/i.test(lower)) {
+    } else if (/burger|whopper|crispy|fries|nuggets/i.test(lower)) {
       category = "Burgers & Fast Food";
       emoji = "🍔";
       basePrice = 219;
+    } else if (/roll|kathi|shawarma|frankie|wrap/i.test(lower)) {
+      category = "Rolls & Wraps";
+      emoji = "🌯";
+      basePrice = 179;
     } else if (/biryani|pulao|mandi|dum biryani|hyderabadi/i.test(lower)) {
       category = "Biryani & Rice Bowls";
       emoji = "🍗";
       basePrice = 320;
-    } else if (/thali|punjabi|dal makhani|paneer|roti|naan|curry|chole/i.test(lower)) {
+    } else if (/thali|punjabi|dal makhani|paneer|roti|naan|curry/i.test(lower)) {
       category = "North Indian Meals";
       emoji = "🍱";
       basePrice = 260;
-    } else if (/momo|noodles|chowmein|manchurian|chinese|fried rice|dimsum/i.test(lower)) {
-      category = "Chinese & Asian";
-      emoji = "🥟";
-      basePrice = 230;
-    } else if (/dosa|idli|vada|uttapam|sambar/i.test(lower)) {
-      category = "South Indian";
-      emoji = "🥞";
-      basePrice = 180;
-    } else if (/roll|kathi|shawarma|frankie/i.test(lower)) {
-      category = "Rolls & Wraps";
-      emoji = "🌯";
-      basePrice = 179;
-    } else if (/chai|tea|coffee|frappe|shake|beverage|lassi/i.test(lower)) {
-      category = "Beverages & Cafe";
-      emoji = "☕";
-      basePrice = 140;
+    } else if (/pav bhaji|chaat|samosa|kachori|chole|bhature|tikki|bhel|street/i.test(lower)) {
+      category = "Chaat & Street Food";
+      emoji = "🍳";
+      basePrice = 150;
       packaging = 15;
-    } else if (/ice cream|dessert|cake|pastry|waffle|gulab jamun|sweet/i.test(lower)) {
-      category = "Desserts & Sweets";
-      emoji = "🍨";
+    } else if (/soup|manchow|hot and sour|sweet corn/i.test(lower)) {
+      category = "Soups & Starters";
+      emoji = "🥣";
+      basePrice = 130;
+      packaging = 15;
+    } else if (/pasta|lasagna|macaroni/i.test(lower)) {
+      category = "Pasta & Italian";
+      emoji = "🍝";
+      basePrice = 220;
+    } else if (/sandwich|sub|toast/i.test(lower)) {
+      category = "Sandwiches & Snacks";
+      emoji = "🥪";
       basePrice = 160;
       packaging = 15;
-    } else if (/chicken|mutton|kebab|fish|tandoori|wings/i.test(lower)) {
+    } else if (/chai|tea|coffee|frappe|shake|beverage|lassi|smoothie/i.test(lower)) {
+      category = "Beverages & Cafe";
+      emoji = "☕";
+      basePrice = 130;
+      packaging = 15;
+    } else if (/ice cream|dessert|cake|pastry|waffle|gulab jamun|sweet|jalebi|halwa/i.test(lower)) {
+      category = "Desserts & Sweets";
+      emoji = "🍨";
+      basePrice = 150;
+      packaging = 15;
+    } else if (/chicken|mutton|kebab|fish|tandoori|wings|tikka/i.test(lower)) {
       category = "Non-Veg Starters & Grills";
       emoji = "🍗";
-      basePrice = 340;
+      basePrice = 320;
     }
 
     const formattedTitle = clean.split(/\s+/).map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
